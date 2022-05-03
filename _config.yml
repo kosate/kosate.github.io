@@ -104,7 +104,7 @@ analytics:
 author:
   name             : "Kitae Kim"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "개발하고 있는(되고픈), 데이터베이스 관리자"
+  bio              : "개발하고 있는(사람이 되고픈), 데이터베이스 관리자"
   location         : "South Korea"
   email            : #kosate@gmail.com
   links:
