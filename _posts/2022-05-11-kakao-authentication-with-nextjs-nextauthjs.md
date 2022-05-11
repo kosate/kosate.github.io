@@ -1,7 +1,7 @@
 ---
-layout: post
+layout: single
 title: NextAuth.js로 카카오인증하기
-date: 2022-05-11 21:58
+date: 2022-05-10 21:58
 category: 
   - Frontend
 author: 
@@ -10,6 +10,7 @@ summary:
 toc : true
 ---
 
+(테스트중입니다.)
 
 환경 
 
@@ -92,15 +93,16 @@ export default function Home() {
 }
 ```
 
+
 카카오 개발자 사이트에가서 앱생성하고 client 및 rest_api secret 만들기
 
 https://developers.kakao.com/
 
 ```text
 NEXTAUTH_URL=http:/localhost:3000/api/auth
-KAKAO_CLIENT_ID=9c57230dcf9e781a41029363d7c880e8
-KAKAO_CLIENT_SECRET=MFvL8Fio9lSwsT8fskgoVDfzpQgylyly
-NEXTAUTH_SECRET=rGL5NwxLNIFcWg8mM9tJGY/fODiH9rFd+tc9FiKCtGg=
+KAKAO_CLIENT_ID=xx
+KAKAO_CLIENT_SECRET=xx
+NEXTAUTH_SECRET=xx
 ```
 
 

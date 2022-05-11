@@ -1,6 +1,6 @@
 ---
 
-layout: post
+layout: single
 title: Spring Boot에서 basePackageClasses를 이용하여 @ComponentScan하기
 date: 2022-05-06 22:01
 category: Spring-boot
@@ -9,6 +9,9 @@ tags: ['spring-boot','component-scan']
 summary: '@ComponentScan시 basePackageClasses을 사용하면 하위 패키지에서 상위 패키지에 있는 @Component들을 읽을수 있습니다.'
 
 ---
+
+(테스트중입니다.)
+
 
 Spring Boot에서 basePackageClasses를 이용하여 @ComponentScan하기
 ===
