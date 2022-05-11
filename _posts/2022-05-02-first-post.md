@@ -1,12 +1,11 @@
 ---
-layout: single
-title: 첫번째 포스트입니다.
-date: 2022-05-02 16:46
+layout: post
+title: 
+date: 2022-05-02 23:00
 category: 
 author: 
 tags: []
 summary: 
+comments: true
 ---
 
-
-#1 첫번째 포스트입니다.
