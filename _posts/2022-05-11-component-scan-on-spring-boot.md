@@ -15,7 +15,7 @@ comments: true
 @ComponentScan 어노테이션 동작방식
 -
 
-Spring에서는 **@ComponentScan 어노테이션이 선언된 클래스의 패키지**부터 scan을 시작합니다. basePackageClasses() or basePackages() 을 사용할 경우 scan의 위치를 지정할수 있습니다. 
+Spring에서는  @ComponentScan을 사용할 경우 **@ComponentScan 어노테이션이 선언된 클래스의 패키지**부터 scan을 시작합니다. basePackageClasses() or basePackages() 을 사용할 경우 scan의 위치를 지정할수 있습니다. 
 
 ```java
 @ComponentScan(basePackages = "com.example1.project1.service") 
