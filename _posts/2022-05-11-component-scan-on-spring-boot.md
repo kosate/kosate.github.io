@@ -17,10 +17,15 @@ comments: true
 
 Spring에서는 **@ComponentScan 어노테이션이 선언된 클래스의 패키지**부터 scan을 시작합니다. basePackageClasses() or basePackages() 을 사용할 경우 scan의 위치를 지정할수 있습니다. 
 
+```java
 @ComponentScan(basePackages = "com.example1.project1.service") 
+```
 > basePackages를 사용할 경우 설정된 패키지부터 scan을 수행합니다. 그러나 string값으로 패키지를 지정하므로 값을 잘못설정하면 scan을 오류가 발생될수 있습니다. 
 
+```java
 @ComponentScan(basePackageClasses = com.example1.project1.service.exampleTest.class) 
+``` 
+
 > basePackageClasses을 사용할 경우 지정된 class에 있는 패키지부터 scan을 수행합니다. class명를 직접 지정하여 소스관리(Refactoring, typesafe)가 용이합니다. 
 
 
