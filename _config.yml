@@ -102,10 +102,10 @@ analytics:
 
 # Site Author
 author:
-  name             : "kosate"
+  name             : "버그대왕(bugdevil)"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "개발하고 있는(사람이 되고픈), 데이터베이스 관리자"
-  location         : "South Korea"
+  bio              : "시스템 엔지니어"
+  location         : "Korea republic of"
   email            : #kosate@gmail.com
   links:
     - label: "Email"
@@ -220,6 +220,9 @@ paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: #"Asia/Seoul" # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+# google Chars
+head_scripts:
+- "https://www.gstatic.com/charts/loader.js"
 
 # Plugins (previously gems:)
 plugins:
