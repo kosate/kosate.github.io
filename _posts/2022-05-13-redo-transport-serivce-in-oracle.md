@@ -128,6 +128,8 @@ Oracle Data Guard는 소스DB와 물리적으로 동일한 데이터 크기를 �
 
 구성방법은 동일하나 어느단계에서 Redo apply가 수행되는지에 따라서 구분됩니다.
 
+> Oracle Database(Primary) -> Oracle (Active) DataGuard(Standby)
+
 ### 실시간 데이터 추출 - Oracle GoldenGate Downstream Capture Database
 
 Oracle product중에는 CDC솔루션으로 Oracle GoldeGate가 있습니다. Oracle GoldenGate는 여러개의 데이터 캡쳐 모델을 제공하고 있으며 그중 하나의 방식이 Downstream Caputre방식입니다. 이는 Source Database에서 데이터 추출하는것이아니라 Downstream Mining Database라는 별도의 Oracle database에서 데이터 추출 작업이 수행됩니다. 보통 CDC솔루션을 고려할때 제일 먼저 Source Database의 업무 영향도에 대해서 고민을 하게 됩니다. Downstream Capture방식으로 데이터를 추출할 경우는 데이터 추출와 솔루션 자체의 부하가 Source Database에서 발생되지 않고, Downstream Mining Database에서 발생되므로 Source Database에 발생되는 CDC솔루션 부하를 원천적으로 방지 할수 있습니다. 
@@ -139,6 +141,7 @@ Downstream Mining Database는 Redo Transporrt Service를 이용하여 Source Dat
 
 Oracle Product중에는 데이터 보호를 위한 백업 솔루션으로 ZDLRA(Zero Data Loss Recovery Appliance) 가 있습니다. 데이터 보호를 위해서 백업해야하는 대상 파일은 두가지가 있습니다. Data file, archive log입니다. 반대로 데이터 복구 방법도 두단계로 구분됩니다. 먼저 데이터파일을 복구하고(restore) archive log로 최신 데이터까지 Recovery합니다. Data Loss를 줄이기 위해서는 online redolog의 백업본(archive log)이 아니라 현재 마지막 데이터변경분까지 지정되어 있는 online redo가 필요합니다. ZDLRA는 online Redo를 real-time으로 전송받기 때문에, 현재 운영중인 마지막 트랜잭션데이터까지 복구할수 있습니다. 그래서 제품명에서 나왔듯이 Zero Data Loss 가 가능합니다.
 
+> Oracle Database(Source)  -> ZDLRA(Redo Data받는 백업전용서버)
 
 기술 자료
 - 
