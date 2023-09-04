@@ -54,13 +54,13 @@ toc : true
 
 - RAC환경에서 애플리케이션 분산을 하고 싶을때 - RAC환경에서는 서비스할수 있는 여러개의 인스턴스가 존재하게 되는데, A업무를 1번 인스턴스, B업무는 2번 인스턴스에서 접속해서 리소스를 잘 사용할수 있는 환경을 구성할수 있겠죠. DB_NAME는 모든 인스턴스에서 접속이 가능한 Default Service이므로 업무를 분리하기에는 적합하지 않는 서비스입니다.(DB_NAME으로 인스턴스를 분리한다면 TNS 정보에서 접속 아이피 순서를 조정해서 할수는 있습니다). User-Defined Service를 생성할때 A서비스를 1번 인스턴스에, B서비스는 2번 인스턴스에 띄우도록 생성할수 있습니다. 애플리케이션들은 생성된 서비스명(A, B)을 가지고 자동으로 인스턴스에 분산 시킬수 있습니다. 그리고 만약에 한쪽 인스턴스가 장애가 나거나, 혹은 한쪽 인스턴스에서 관리작업이 있어 재기동해야하는 일이 발생되면 애플리케이션 영향도를 최소화하기 위하여 작업하려는 인스턴스에 있는 서비스를 다른 인스턴스로 임의적으로 Failover시킬수 있습니다.   
   
-- Active DataGuard 환경이 추가되었을때 - Priamry 운영환경이 있는 Active DataGuard구성을 통해서 Standby 환경이 구성될수 있습니다. 이럴때 어떻게 TNS정보를 관리할수 있을까요? DB_NAME을 서비스명으로 사용하는 애플리케이션인경우 Primary DB가 장애가 발생되어 Standby DB로 접속하기 위해서는 TNS정보를 수정해야합니다. 왜냐하면 DB_NAME은 Primary DB, Standby DB모두 접속이 가능한 서비스이기 때문입니다.(Standby DB는 Priamry DB와 동일한 DB_NAME을 가집니다.). 그게 무슨 의미이냐면, 평소에 Primary DB에 접속하기 위해서는 Primary DB 접속 아이피 + DB_NAME로 TNS정보를  설정하고 Standby DB 접속 아이피를 같이 넣을수가 없습니다. User-Defined Service를 생성할때 DB role(Primary Role, Standby Role)을 같이 지정할수 있습니다. DB Role에 따라서 서비스가 기동되므로 Primary DB에서만 서비스기동이 가능한 환경구성이 가능합니다 그렇기 때문에 TNS정보에 Primary DB, Stanby DB 접속아이피를 모두 설정하여도 상관없으며 결국 Primary DB가 장애가 발생되어 Standby DB로 운영이 될때 자동으로 Standby DB는 Primary Role을 가지게 되므로 TNS접속 정보없이 정상적으로 서비스가 가능합니다.
+- Active DataGuard 환경이 추가되었을때 - Priamry 운영환경에서 Active DataGuard구성을 통해서 Standby 환경이 구성될수 있습니다. 이럴때 어떻게 TNS정보를 관리할수 있을까요? DB_NAME을 서비스명으로 사용하는 애플리케이션인경우 Primary DB가 장애가 발생되어 Standby DB로 접속하기 위해서는 TNS정보를 수정해야합니다. 왜냐하면 DB_NAME은 Primary DB, Standby DB모두 접속이 가능한 서비스이기 때문입니다.(Standby DB는 Priamry DB와 동일한 DB_NAME을 가집니다.). 그게 무슨 의미이냐면, 평소에 Primary DB에 접속하기 위해서는 Primary DB 접속 아이피 + DB_NAME로 TNS정보를  설정하고 Standby DB 접속 아이피를 같이 넣을수가 없습니다. User-Defined Service를 생성할때 DB role(Primary Role, Standby Role)을 같이 지정할수 있습니다. DB Role에 따라서 서비스가 기동되므로 Primary DB에서만 서비스기동이 가능한 환경구성이 가능합니다 그렇기 때문에 TNS정보에 Primary DB, Stanby DB 접속아이피를 모두 설정하여도 상관없으며 결국 Primary DB가 장애가 발생되어 Standby DB로 운영이 될때 자동으로 Standby DB는 Primary Role을 가지게 되므로 TNS접속 정보없이 정상적으로 서비스가 가능합니다.
   
 - Multitenant 환경으로 DB가 운영될때 - Multitenant 환경에서는 하나의 인스턴스에서 여러개의 PDB(Pluggable DB)를 관리하는 오라클 데이터베이스의 새로운 아키텍쳐입니다. 여러개의 PDB를 만들게 되면 자동으로 PDB_NAME으로 서비스명이 Default로 생성이 됩니다. 일반 DB보다 한계층 가상화된 개념으로 PDB의 이동 및 복제라는 기술이 추가되므로 Default Service보다는 새로운 User-Defined Service를 만들어서 사용하도록 메뉴얼에 가이드 되어 있습니다. 
 
 ### Default Service는 언제 사용할까요?
 
-Default Service는 Mount만 되어도 접속이 가능한 서비스입니다. 그렇기 때문에 as sysdba권한이 있으면 원격에서도 접속이 가능합니다.
+Default Service는 Mount만 되어도 접속이 가능한 서비스입니다. sysdba권한이 있으면 원격에서도 접속이 가능합니다.
 그렇기 때문에, RMAN을 통해서 백업/복구작업을 할때, 혹은 Standby DB를 구성하거나 복구할때 사용됩니다. 작업대부분들은 일반적인 데이터 작업이 아니라 관리적인 작업임을 알수 있습니다. 데이터베이스 관리자가 특수한 상황에서 사용하는 용도로 이해하면 좋을것 같습니다. 
 
 
