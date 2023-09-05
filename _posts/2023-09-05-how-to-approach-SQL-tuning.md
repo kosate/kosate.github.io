@@ -1,7 +1,7 @@
 ---
 layout: single
 title: SQL 튜닝 어떻게 접근하고 있나요?
-date: 2023-09-05 11:00
+date: 2023-09-05 08:00
 categories: 
   - oracle
 author: 
