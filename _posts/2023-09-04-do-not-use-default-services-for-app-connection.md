@@ -1,7 +1,7 @@
 ---
 layout: single
 title: 애플리케이션에서 오라클에 접속시 Default Service를 사용하면 안되는 이유
-date: 2022-09-04 18:00
+date: 2023-09-04 18:00
 categories: 
   - oracle
 author: 
