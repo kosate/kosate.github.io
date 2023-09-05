@@ -1,7 +1,7 @@
 ---
 layout: single
 title: 오라클에 접속할때 어떤 접속방식을 사용하고 있나요? (CTF, TAF, TAC)
-date: 2023-09-05 14:00
+date: 2023-09-04 14:00
 categories: 
   - oracle
 author: 
