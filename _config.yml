@@ -294,6 +294,7 @@ defaults:
       share: true
       related: true
       sidebar_main: true
+      classes: true
   # _pages
   - scope:
       path: "_pages"
