@@ -12,7 +12,7 @@ summary: SQL 튜닝할때 접근하는 방법에 대해서 다시 생각해봅�
 toc : true
 ---
 
-![SQL튜닝접근?](https://github.com/kosate/kosate.github.io/blob/f2983d5d99ee075ca22bc338902d15cfda98d21d/assets/images/blog/sql-tuning-approch.jpg?raw=true)
+![SQL튜닝접근?](https://github.com/kosate/kosate.github.io/blob/736974f01d1e3c21e1e8e1558505e87128f72856/assets/images/blog/sql-tuning-approch.jpg?raw=true)
 *Created by Bing Image Creator*
 
 ## 목적
