@@ -14,7 +14,7 @@ toc : true
 toc_sticky: true
 ---
 
-![분산환경에서 LOCK처리](../_site/assets/images/blog/lock_dstributed.jpg)
+![분산환경에서 LOCK처리](https://github.com/kosate/kosate.github.io/tree/main/assets/images/blog/lock_dstributed.jpg)
 
 ## 목적 
 
