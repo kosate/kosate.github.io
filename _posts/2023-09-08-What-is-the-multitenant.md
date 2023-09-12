@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 미래의 데이터베이스 아키텍처 - Multitenant
+title: 새로운 오라클 데이터베이스 아키텍처(Multitenant)
 date: 2023-09-08 12:00
 categories: 
   - oracle
@@ -12,6 +12,11 @@ summary: 오라클이 제공하는 새로운 데이터베이스 아키텍처인 
 toc : true  
 toc_sticky: true
 ---
+
+
+![Multitenant 아키텍쳐](https://github.com/kosate/kosate.github.io/blob/766c1ed283a36eb399685c5ae5c6af2d02201f6d/assets/images/blog/multitenant.jpg?raw=true)
+*Created by Bing Image Creator*
+
 
 ## 목적
 
@@ -53,7 +58,7 @@ toc_sticky: true
 이러한 변화는 오라클이 기업으로서 수익 창출을 위한 선택과 집중을 하고 있다는 것으로 생각됩니다. 
 과연 올바른  선택일까요?
 
-## 개발 플랫폼 변화에 따라 어떻게 지원할수 있는가?
+## 데이터베이스는 어떻게 변화될까요?
 
 개발 프로세스에 따라 개발 아키텍쳐도 변화하고 있습니다. DevOps를 위해서 MSA가 주목받고 있습니다. MSA를 지원하기 위한 인프라 환경은 어떤 것이 필요할까요? 
 최근에는 Container 환경이 많이 사용되며, 이것이 개발의 트렌드로 자리 잡고 있습니다. (일단 프로젝트가 시작되면 Kubernetes 환경에서 MSA 아키텍처로 개발한다는 문구가 자주 보입니다.)
@@ -91,16 +96,20 @@ toc_sticky: true
 
 Multitenant 아키텍처는 하나의 Container DB에서 여러 개의 Pluggable DB를 관리하는 형태로 나타납니다. 
 이것이 의미하는 것은 데이터베이스통합(Consolidation)을 목적으로 하는 것일까요? 
-하나의 Container DB에 올릴 수 있는 Pluggable DB의 개수가 200개를 넘어서는데요..
+하나의 Container DB에 올릴 수 있는 Pluggable DB의 개수가 200개를 넘게 만들수 있습니다.
 
-### DB 통합관점에서 보면 
+### DB의 통합 운영 환경을 제공
 
-비교적 중요하지 않는 업무는 DB 통합이 가능할지 모르지만, 중요한 업무는 모두 하나의 DB로 운영하려고 합니다. 왜냐하면 DB 운영 시 첫 번째, 두 번째로 고려하는 것이 안정성이기 때문입니다. 안정적인 환경을 유지하기 위해서는 많은 자원과 독립적인 환경이 필요합니다. 
-그런데 DB를 통합한다면 오히려 여러 개의 DB 간에 경합이 발생하고, SLA가 낮아질 수 있습니다.
+Multitenant 아키텍쳐는 기본적으로 여러개의 데이터베이스를 통합으로 관리하는데 목적이 있습니다. Container DB는 리소스 풀를 관리하고 그위에 애플리케이션에서 접근하여 데이터가 엑세스 되는 Pluggable DB간 리소스 경합을 줄이고 SLA 유지를 위해서 기능들이 필수적입니다. 
 
-그렇기 때문에 인프라 이중화 및 재해 복구(DR) 정책을 함께 수립하여 더 견고한 운영 환경을 만들어야 합니다
+- 리소스 관리 방법
+  - CPU, Memory(SGA, PGA), IOPS, Storage, Session 등 각 Pluggable DB레벨에서 관리할수 있는 리소스들입니다.
+  - 리소스 관리 방법은 최소와 최대 값으로 관리가 가능합니다. 리소스 여유가 있는 Container DB에서는 Pluggable DB에 더 많은 리소스를 할당할수 있고, Pluggable DB 생성이 많아지면 각 Pluggable DB별로 요구되는 리소스는 제공해줘야하기 때문입니다. 
+- 인스턴스 구성 방법
+  - Container DB레벨에서 인스턴스를 RAC로 할지 Single구성할지가 정해집니다. 따라서 위에 올라가는 Pluggable DB도 같은 속성을 따라 갈수 밖에 없습니다. 그러나 Container DB가 RAC로 구축되어 있어도 Pluggable DB에서는 single로 운영하거나 RAC로 운영할수 있도록 서비스로 제어가 가능합니다.
+  - 또한 해당 DB의 업무 수준이 높아져 Single에서 RAC로 전환해야되는경우 RAC환경의 Container DB로 이동하게 되면 자동 Pluggable DB또한 single에서 RAC로 변경됩니다.  
 
-### 모든 인프라의 연결
+### 모든 인프라위에 DB 유연성 확보
 
 Multitenant에서 가장 중요한 기능은 Pluggable DB들의 이동 기술입니다. DB 자체가 쉽게 이동한다는 개념이 생소할 수 있지만, Container DB가 구성되어 있는 환경에서 Pluggable DB들이 쉽게 이동할 수 있습니다. 
 이동에는 여러 가지 기능들이 내포되어 있습니다.
@@ -112,7 +121,7 @@ Multitenant에서 가장 중요한 기능은 Pluggable DB들의 이동 기술입
 - 모든 인프라 간에 가용성을 제공하는 환경으로 구성할 수 있습니다.
   - Pluggable DB 레벨에서 DataGuard 구성을 지원합니다. 그러므로 A 데이터 센터에 있는 Container DB와 B 데이터 센터에 있는 Container DB 사이에 상호 가용성을 지원하는 환경을 구성할 수 있습니다.
 
-제가 생각하는 Multitenant의 궁극적인 미래 모습은 모든 인프라를 연결하고 가상화하여 데이터베이스를 서비스화할 수 있는 유연성과 확장성을 제공하는 것입니다. 
+제가 생각하는 Multitenant의 궁극적인 미래 모습은 모든 인프라를 연결하고 가상화하여 데이터베이스를 서비스화할 수 있는 유연성과 확장성을 제공하는 것이라고 생각합니다.
 On-Premise 환경과 Cloud 환경 간에 데이터베이스 아키텍처 기술로 DB의 이동이 쉬워진다는 것도 하나의 예가 될것 입니다.
 
 ## 정리
