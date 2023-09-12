@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 새로운 오라클 데이터베이스 아키텍처(Multitenant)
+title: 오라클 데이터베이스 새로운(미래) 아키텍처(Multitenant)
 date: 2023-09-08 12:00
 categories: 
   - oracle
