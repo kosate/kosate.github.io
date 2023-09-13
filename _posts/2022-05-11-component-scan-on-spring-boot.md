@@ -7,9 +7,9 @@ categories:
 tags: 
     - spring-boot
     - component-scan
-summary: '@ComponentScan시 basePackageClasses을 사용하면 하위 패키지에서 상위 패키지에 있는 @Component들을 읽을수 있습니다.'
-toc: true
-comments: true
+excerpt : '@ComponentScan시 basePackageClasses을 사용하면 하위 패키지에서 상위 패키지에 있는 @Component들을 읽을수 있습니다.'
+toc : true
+toc_sticky: true
 ---
 
 @ComponentScan 어노테이션 동작방식
@@ -104,7 +104,7 @@ public class 배송서비스테스트 {
     }
     public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(배송서비스테스트.class, args);
-		Test runner = context.getBean(배송서비스테스트 .class);
+		배송서비스테스트 runner = context.getBean(배송서비스테스트 .class);
 		runner.run();
 	}
 }

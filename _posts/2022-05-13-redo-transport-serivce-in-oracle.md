@@ -1,26 +1,27 @@
 ---
 layout: single
-title: Redo 전송 서비스를 활용한 오라클 기술소개
+title: Redo Transport Service 활용방안
 date: 2022-10-18 22:01
 categories: 
-    - oracle
+    - Oracle
 tags: 
-    - oracle
+    - Oracle
     - Redo Transport Service
     - DataGuard
     - Oracle GoldenGate
     - zdlra
-summary: '오라클 DB에서 발생되는 트랜잭션로그를 이용하여 실시간 데이터 복제/추출/백업이 가능합니다.'
-toc: true
-comments: true
+excerpt : 오라클 DB에서 발생되는 트랜잭션로그를 다른곳으로 전송할수 있습니다.
+header :
+  overlay_image: /assets/images/blog/redo-transport-service.jpg
+toc : true
+toc_sticky: true
 ---
 
-오라클 데이터베이스의 Redo Transport Service에 대해서 알아보고, 
-다양한 활용방법과 고려사항들을 살펴보고자합니다.
+## 목적 
 
+오라클 데이터베이스의 Redo Transport Service에 대해서 알아보고, 다양한 활용방법과 고려사항들을 살펴보고자합니다.
 
-Redo Transport Service 소개
--
+## Redo Transport Service 소개
 
 Oracle Database에서 제공하는 Redo transport Service는 Data Guard설정이 되어 있는 구성원들간 Redo Data를 자동으로 전송하는 기능입니다. (Redo Transport Service는 Data Guard의 설정절차을 따를뿐 Data Guard를 구성한다는것만을 의미하지 않습니다. 전송받은 Redo를 어떻게 활용되는지가 더 중요합니다. )
 
@@ -112,8 +113,8 @@ Redo Transport Service 소개부분에서 DataGuard 설정작업을 한다고 �
       이러한 관리적인 이슈가 발생되어서 DataGuard에 한정하여 12.2부터는 소스DB의 sys패스워드를 변경하면 자동으로 타켓DB의 password file에 동기화하는 기능이 추가되었습니다.
 
 
-관련 기술들
-- 
+## 관련 기술들
+
 
 데이터변경정보를 담고 있는 트랜잭션 로그(Redo)를 전송하면 데이터 복제, 추출, 백업업무에 활용할수 있습니다. 소스DB는 Redo전송만 수행하게 되며, 타켓서버에서 데이터동기화 및 추출, 백업이 수행된다고 이해하시면 될것 같습니다.
 그렇기 때문에 소스DB애 부하를 발생시키지 않고도 다양한 데이터 관리 업무를 수행(offload) 할수 있습니다. 
@@ -143,8 +144,7 @@ Oracle Product중에는 데이터 보호를 위한 백업 솔루션으로 ZDLRA(
 
 > Oracle Database(Source)  -> ZDLRA(Redo Data받는 백업전용서버)
 
-기술 자료
-- 
+## 기술 자료
 
 - Redo Transport Services : https://docs.oracle.com/en/database/oracle/oracle-database/19/sbydb/oracle-data-guard-redo-transport-services.html
 

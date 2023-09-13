@@ -3,20 +3,17 @@ layout: single
 title: 오라클 데이터베이스 새로운(미래) 아키텍처(Multitenant)
 date: 2023-09-08 12:00
 categories: 
-  - oracle
+  - Oracle
 author: 
 tags: 
-   - oracle
+   - Oracle
    - multitenant
-summary: 오라클이 제공하는 새로운 데이터베이스 아키텍처인 Multitenat에 대해서 설명합니다.
+excerpt : 오라클의 데이터베이스 아키텍처인 Multitenat에 대해서 설명합니다.
+header :
+  overlay_image: /assets/images/blog/multitenant.jpg
 toc : true  
 toc_sticky: true
 ---
-
-
-![Multitenant 아키텍쳐](https://github.com/kosate/kosate.github.io/blob/766c1ed283a36eb399685c5ae5c6af2d02201f6d/assets/images/blog/multitenant.jpg?raw=true)
-*Created by Bing Image Creator*
-
 
 ## 목적
 

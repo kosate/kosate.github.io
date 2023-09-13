@@ -3,22 +3,20 @@ layout: single
 title: 오라클에 접속시 Default Service를 사용하면 안되는 이유
 date: 2023-09-04 18:00
 categories: 
-  - oracle
+  - Oracle
 author: 
 tags: 
-   - oracle
+   - Oracle
    - default service
    - user-defined service
    - sysdba
    - listener
-summary: 오라클 데이터베이스로 접속할수 있는 두가지 서비스유형에 대해서 설명합니다.
+excerpt : 오라클 데이터베이스로 접속할수 있는 두가지 서비스유형에 대해서 설명합니다.
+header :
+  overlay_image: /assets/images/blog/default-service.jpg
 toc : true
 toc_sticky: true
 ---
-
-![Default-Service](https://github.com/kosate/kosate.github.io/blob/38a63065d07fa5b51956366b0847c7eca477f109/assets/images/blog/default-service.jpg?raw=true)
-*Created by Bing Image Creator*
-
 
 ## 목적
 

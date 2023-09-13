@@ -3,19 +3,18 @@ layout: single
 title: 분산 환경에서 락(Lock)을 최소 점유하면서 로직에 집중할수 있는 방법
 date: 2023-09-07 12:00
 categories: 
-  - oracle
+  - Oracle
 author: 
 tags: 
-   - oracle
+   - Oracle
    - escrow
    - lock free reservation
-summary: ESCROW 기법으로 트랜잭션 처리 하는 방법에 대해서 설명합니다. 
+excerpt : ESCROW 기법으로 트랜잭션 처리 하는 방법에 대해서 설명합니다. 
+header :
+  overlay_image: /assets/images/blog/lock_dstributed.jpg
 toc : true  
 toc_sticky: true
 ---
-
-![분산환경에서 LOCK처리](https://github.com/kosate/kosate.github.io/blob/227acbedda8e06bae76ec449144d8580e36b8b22/assets/images/blog/lock_dstributed.jpg?raw=true)
-*Created by Bing Image Creator*
 
 ## 목적 
 

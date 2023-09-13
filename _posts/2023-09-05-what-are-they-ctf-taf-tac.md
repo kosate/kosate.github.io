@@ -3,22 +3,21 @@ layout: single
 title: 가용성 확보를 위한 오라클 접속기술 - CTF, TAF, TAC 기능 이해
 date: 2023-09-04 14:00
 categories: 
-  - oracle
+  - Oracle
 author: 
 tags: 
-   - oracle
+   - Oracle
    - jdbc driver
    - ctf
    - taf
    - tac
    - client
-summary: 오라클 데이터베이스 접속시 사용되는 여러가지 접속기술에 대해서 정리하였습니다.
+excerpt : 오라클 데이터베이스 접속시 사용되는 여러가지 접속기술에 대해서 정리하였습니다.
+header :
+  overlay_image: /assets/images/blog/default-service.jpg
 toc : true
 toc_sticky: true
 ---
-
-![Default-Service](https://github.com/kosate/kosate.github.io/blob/38a63065d07fa5b51956366b0847c7eca477f109/assets/images/blog/default-service.jpg?raw=true)
-*Created by Bing Image Creator*
 
 ## 목적
 오라클 데이터베이스 서버에는 다양한 접속 방식이 제공됩니다. 이는 모두 애플리케이션에서 고려해야 할 접속 기술들입니다. 간단히 정리해보겠습니다.

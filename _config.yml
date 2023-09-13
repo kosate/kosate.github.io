@@ -15,7 +15,7 @@
 minimal_mistakes_skin    : "air" # "default",  "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "en-US"
+locale                   : "eu-KR"
 title                    : "기억을 글로 남기기 "
 title_separator          : "|"
 subtitle                 : "우리의 삶은 틈새로 가득차 있다."
@@ -215,7 +215,7 @@ sass:
 permalink: /blog/:categories/:title/
 paginate: 10 # amount of posts to show
 paginate_path: /page:num/
-timezone: #"Asia/Seoul" # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: #Asia/Seoul # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 # google Chars
 head_scripts:
@@ -255,16 +255,16 @@ tag_archive:
   type: liquid
   path: /tags/
 # https://github.com/jekyll/jekyll-archives
-# jekyll-archives:
-#   enabled:
-#     - categories
-#     - tags
-#   layouts:
-#     category: archive-taxonomy
-#     tag: archive-taxonomy
-#   permalinks:
-#     category: /categories/:name/
-#     tag: /tags/:name/
+jekyll-archives:
+  enabled:
+    - categories
+    - tags
+  layouts:
+    category: archive-taxonomy
+    tag: archive-taxonomy
+  permalinks:
+    category: /categories/:name/
+    tag: /tags/:name/
 
 
 # HTML Compression

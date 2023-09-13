@@ -5,8 +5,6 @@
 
    
   /* 
-  padding-left: 1em;
-   padding-right: 1em;
    */
 
 #main {
@@ -15,7 +13,9 @@
   margin-right: auto;
   -webkit-animation: $intro-transition;
   animation: $intro-transition;
-  max-width: 100%;
+  max-width: 100%; 
+  padding-left: 0.5em;
+  padding-right: 0.5em;
   -webkit-animation-delay: 0.15s;
   animation-delay: 0.15s;
   @include breakpoint($x-large) {
@@ -75,8 +75,7 @@ body {
 
 .page__title {
   margin-top: 0;
-  line-height: 1;
-
+  line-height: 1; 
   a {
     color: $text-color;
     text-decoration: none;
@@ -207,18 +206,20 @@ body {
     .page__lead,
     .btn {
       color: #fff;
-      text-shadow: 1px 1px 4px rgba(#000, 0.5);
+      background-color: #000;
+      text-shadow: 1px 1px 4px rgba(#000, 0.5); 
+      width : max-content;
     }
 
     .page__lead {
       max-width: $medium;
+      
     }
 
     .page__title {
       font-size: $type-size-2;
-
       @include breakpoint($small) {
-        font-size: $type-size-1;
+        font-size: $type-size-2;
       }
     }
   }

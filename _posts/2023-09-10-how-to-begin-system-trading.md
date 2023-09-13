@@ -4,16 +4,16 @@ title: 시스템 트레이딩의 시작
 date: 2023-09-08 12:00
 categories: 
   - bitcoin
-author: 
+author: 버그대왕
 tags: 
    - bitcoin
    - system trading
-summary: 시스템 트레이딩을 위한 고려되는 사항에 대해서 정리합니다.
+excerpt : 시스템 트레이딩을 위한 고려되는 사항에 대해서 정리합니다.
+header :
+  overlay_image: /assets/images/blog/system-trading.jpg
 toc : true  
 toc_sticky: true
 ---
-![시스템 트레이딩](https://github.com/kosate/kosate.github.io/blob/229ccb00a3191684a62e042d8496a4779c280edb/assets/images/blog/system-trading.jpg?raw=true)
-*Created by Bing Image Creator*
 
 ## 목적
 

@@ -20,7 +20,7 @@
                 <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
                 {% for category in site.categories %}
                     {% if category[0] == "frontend" %}
-                        <li><a href="/categories/frontend" class="">프론트엔드 ({{category[1].size}})</a></li>
+                        <li>- <a href="/categories/frontend" class="">프론트엔드 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
@@ -29,15 +29,15 @@
                 <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
                 {% for category in site.categories %}
                     {% if category[0] == "backend" %}
-                        <li><a href="/categories/backend" class="">백엔드 ({{category[1].size}})</a></li>
+                        <li>- <a href="/categories/backend" class="">백엔드 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
         <span>데이터베이스</span>
           <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "oracle" %}
-                        <li><a href="/categories/oracle" class="">오라클 ({{category[1].size}})</a></li>
+                    {% if category[0] == "Oracle" %}
+                        <li>- <a href="/categories/Oracle" class="">오라클 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
@@ -45,7 +45,7 @@
           <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "cloud" %}
-                        <li><a href="/categories/cloud" class="">클라우드 서비스 ({{category[1].size}})</a></li>
+                        <li>- <a href="/categories/cloud" class="">클라우드 서비스 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
@@ -53,7 +53,7 @@
            <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "bitcoin" %}
-                        <li><a href="/categories/bitcoin" class="">암호화폐 ({{category[1].size}})</a></li>
+                        <li>- <a href="/categories/bitcoin" class="">암호화폐 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 

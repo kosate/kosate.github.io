@@ -3,17 +3,17 @@ layout: single
 title: SQL 튜닝할때, 어떤 방식으로 접근하고 있나요?
 date: 2023-09-05 08:00
 categories: 
-  - oracle
+  - Oracle
 author: 
 tags: 
-   - oracle
+   - Oracle
    - sql tunning
-summary: SQL 튜닝할때 접근하는 방법에 대해서 다시 생각해봅니다. 작성자에게 작성의도(목적)를 물어봤으면 좋겠어요.
+excerpt : SQL 튜닝할때 접근하는 방법에 대해서 다시 생각해봅니다.
+header :
+  overlay_image: /assets/images/blog/sql-tuning-approch.jpg
 toc : true
+toc_sticky: true
 ---
-
-![SQL튜닝접근?](https://github.com/kosate/kosate.github.io/blob/736974f01d1e3c21e1e8e1558505e87128f72856/assets/images/blog/sql-tuning-approch.jpg?raw=true)
-*Created by Bing Image Creator*
 
 ## 목적
 
