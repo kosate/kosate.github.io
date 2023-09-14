@@ -27,9 +27,9 @@ SQL TEXT에 Literal 변수를 사용하거나, White space가 있거나, 대소�
 그래서 SQL TEXT에 정규화(Normalized)과정을 거치면 동일한 SQL로 인식할수 있는 ID를 확인할수 있습니다. 그것이 SIGNATURE입니다.
 
 - SQL TEXT 정규화 방식
-  1. 빈스페이스값도 제거됩니다.
-  2. 리터널 변수는 제외한 SQL TEXT의 나머지부분을 모두 대문자로 변환시킵니다.
-  3. (옵션) 리터널 변수를 바인드변수로 변환합니다. 
+  1. 빈스페이스값(White Space) 제거됩니다.
+  2. Literal 변수는 제외한 SQL TEXT의 나머지부분을 모두 대문자로 변환시킵니다.
+  3. (옵션) Literal 변수를 Bind 수로 변환합니다. 
 
 ### SIGNATURE 생성방법
 
@@ -81,9 +81,10 @@ select 1 from dual where dummy = '2'          8674825496841288494     1315419945
 SELECT 1         from dual where dummy = '2'  8674825496841288494     13154199455204052618
 
 ```
+2번째 SQL과 3번째 SQL은 동일한 EXACT_MATCHING_SIGNATURE를 가집니다. SQL이 정규화될때 대소문자와 빈공간이 조정되므로 동일한 SIGNATURE가 생성됩니다. 
+1번째 SQL과 2번째 SQL과 3번째 SQL은 동일한 FORCE_MATCHING_SIGNATURE를 가집니다. Literal 변수에 해당되는 dummy = 'X' 까지 정규화가 되어 모두다 동일한 SIGNATURE가 생성됩니다. 
 
-Literal 변수에 해당되는 dummy = '1' 이부분이 Bind 변수로 처리된 SIGNATURE가 FORCE_MATCHING_SIGNATURE이고 변환되지 않은 SIGNATURE가 FORCE_MATCHING_SIGNATURE입니다. 
-v$SQL, V$SQLSTATS, V$SQLAREA등 SQL관련된 정보를 가지고 있는 performance view에는 거의다 두개의 SIGNATURE정보를 제공합니다.
+v$SQL, V$SQLSTATS, V$SQLAREA등 SQL관련된 정보를 가지고 있는 performance view에는 거의다 두개의 SIGNATURE정보 모두를 제공합니다.
 
 ## SIGNATURE은 언제 사용될수 있을까?
 
