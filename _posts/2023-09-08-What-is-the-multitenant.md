@@ -10,12 +10,13 @@ tags:
    - multitenant
 excerpt : 오라클의 데이터베이스 아키텍처인 Multitenat에 대해서 설명합니다.
 header :
+  teaser: /assets/images/blog/multitenant.jpg
   overlay_image: /assets/images/blog/multitenant.jpg
 toc : true  
 toc_sticky: true
 ---
 
-## 목적
+## 개요
 
 오라클 데이터베이스는 다양한 버전이 있지만 21c부터는 Multitenant 으로 불리우는 아키텍쳐가 필수 요구사항이 되었습니다.
 차세대 프로젝트를 하거나 신규 업무에 데이터베이스 구축을 하게 되면 19c이상의 버전을 고려하게 될것이며, 23c가 출시되면 Multitenant 아키텍쳐로 구성할수 밖에 없게 될것입니다.
@@ -127,7 +128,7 @@ Multitenant에서 가장 중요한 기능은 Pluggable DB들의 이동 기술입
 제가 생각하는 Multitenant의 궁극적인 미래 모습은 모든 인프라를 연결하고 가상화하여 데이터베이스를 서비스화할 수 있는 유연성과 확장성을 제공하는 것이라고 생각합니다.
 On-Premise 환경과 Cloud 환경 간에 데이터베이스 아키텍처 기술로 DB의 이동이 쉬워진다는 것도 하나의 예가 될것 입니다.
 
-## 정리
+## 마무리
 
 앞으로 오라클 데이터베이스가 제공하려는 Multitenant 아키텍쳐의 방향성에 대해서만 간단히 알아보았습니다. 
 당장 우리 환경에 즉시 도입되지 않겠지만, 23c가 나오는 순간부터 차세대프로젝트에서는 선택할수 밖에 없는 아키텍처가 될수 있습니다. 

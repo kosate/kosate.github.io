@@ -10,12 +10,13 @@ tags:
    - system trading
 excerpt : 시스템 트레이딩에서 매매 수행방식에 대해서 알아봅니다.
 header :
+  teaser: /assets/images/blog/trading-logic.jpg
   overlay_image: /assets/images/blog/trading-logic.jpg
 toc : true  
 toc_sticky: true
 ---
 
-## 목적
+## 개요
 
 시스템 트레이딩에서 매매수행 방식과 매매로직 구현방안에 대해서 같이 설명합니다.
 단순히 매매관련된 고려사항에 대해서 정리하기 떄문에, 자신에게 맞는 기법들을 만들어야합니다.
@@ -115,7 +116,7 @@ public interface ISignal {
 저는 아래 두 가지 경우만 사용하고 있습니다.
 (매수 -> 일괄 매도), (매수 -> 추가 매수 -> 일괄 매도)
 
-## 정리
+## 마무리
 
 실제 매매 로직을 구현하려면 알아야 할 것들이 많습니다. 현재는 매매 수행을 위한 기본적인 내용을 설명하고 있습니다. 시스템 트레이딩을 처음 준비할 때는 매우 추상적으로 느껴질 수 있지만, 시간이 해결해 주는 부분도 있습니다.
 

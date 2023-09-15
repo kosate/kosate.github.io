@@ -13,12 +13,13 @@ tags:
    - listener
 excerpt : 오라클 데이터베이스로 접속할수 있는 두가지 서비스유형에 대해서 설명합니다.
 header :
+  teaser: /assets/images/blog/default-service.jpg
   overlay_image: /assets/images/blog/default-service.jpg
 toc : true
 toc_sticky: true
 ---
 
-## 목적
+## 개요
 
 오라클 데이터베이스에 접속하는 방법과 서비스명(Service Name) 사용방법에 대해 간단히 정리해보겠습니다. 일반적으로 DB_NAME을 서비스명으로 활용하지만, 관리나 업무 관점에서는 DB_NAME보다는 별도의 서비스명(User-Defined Service)을 만들어 사용하는 것이 더 많은 운영의 이점을 얻을수 있습니다.
 
@@ -75,7 +76,7 @@ Default Service는 Mount 상태에서도 접속이 가능한 서비스입니다.
 이로 인해 RMAN을 활용한 백업/복구 작업이나 Standby DB 구성 및 복구 시 사용됩니다. 이러한 작업 대부분은 주로 데이터 조작이 아닌 관리적인 작업임을 알 수 있습니다. 데이터베이스 관리자가 특별한 상황에서 사용하는 용도로 이해하시면 좋을 것 같습니다.
 
 
-## 정리
+## 마무리
 
 사실 애플리케이션 담당자들에게는 크게 중요하지 않을 수 있는 내용이겠지만,
 데이터베이스 관리자가 애플리케이션 담당자에게 접속 정보를 제공할 때 고려해야 할 중요한 사항입니다.

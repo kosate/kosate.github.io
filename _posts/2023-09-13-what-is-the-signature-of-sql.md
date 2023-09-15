@@ -11,12 +11,13 @@ tags:
    - sql plan
 excerpt : SQL의 SIGNATURE정보를 이용하여 Literal SQL을 찾아내는 방법을 설명합니다.
 header :
+  teaser: /assets/images/blog/signature-sql.jpg
   overlay_image: /assets/images/blog/signature-sql.jpg
 toc : true  
 toc_sticky: true
 ---
 
-## 목적
+## 개요
 
 오라클 데이터베이스에서는 SQL 문장을 정규화하여 서명(SIGNATURE) 값을 계산하고 SQL 튜닝에 활용합니다. 
 이 개념을 이해하면 Literal  SQL을 쉽게 찾아낼 수 있습니다. 
@@ -140,7 +141,7 @@ group by FORCE_MATCHING_SIGNATURE
 having count(*) > 10;
 ```
 
-## 정리 
+## 마무리 
 
 우리가 SQL 튜닝한후에 SQL TEXT에 공백이 추가되어 SQL 튜닝을 다시 되어야한다면 너무 불합리적이지 않나요? 오라클 내부적으로 SIGNATURE를 이용하여 동일한 SQL로 인식하기 때문에 튜닝이 유지됩니다. 
 

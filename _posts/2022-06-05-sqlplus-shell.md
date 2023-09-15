@@ -10,12 +10,13 @@ tags:
    - sqlplus
 excerpt : sqlplus을 호출하는 여러가지 방법에 대해서 알아봅니다.
 header :
+  teaser: /assets/images/blog/sqlplus.jpg
   overlay_image: /assets/images/blog/sqlplus.jpg
 toc : true
 toc_sticky: true
 ---
 
-## 목적
+## 개요
 
 Shell스크립트에서 sqlplus을 호출하는 여러가지 방법에 대해서 정리했습니다. 
 예를 들어 부하테스트를 할경우 여러개의 세션에서 동시에 SQL을 실행하거나, 루프를 돌면서 반복으로 실행될수 있습니다.

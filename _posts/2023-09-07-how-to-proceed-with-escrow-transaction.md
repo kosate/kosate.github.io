@@ -11,12 +11,13 @@ tags:
    - lock free reservation
 excerpt : ESCROW 기법으로 트랜잭션 처리 하는 방법에 대해서 설명합니다. 
 header :
+  teaser: /assets/images/blog/lock_dstributed.jpg
   overlay_image: /assets/images/blog/lock_dstributed.jpg
 toc : true  
 toc_sticky: true
 ---
 
-## 목적 
+## 개요 
 
 분산 환경에서 혹은 트랜잭션 경합이 심한 업무 환경에서 사용할수 있는 논리적인 트랜잭션 기법을 소개합니다. 
 
@@ -126,7 +127,7 @@ ESCROW 트랜잭션 처리의 동작 방식을 간락히 설명합니다.
 ALTER TABLE ticketsales MODIFY qty number RESERVABLE CONSTRAINT MINIMUM_CAPACITY CHECK (qty >= 10)
 ```
 
-## 정리
+## 마무리
 
 트랜잭션 중에 발생해서는 안 되는 상황 중 하나는 Deadlock입니다.(실패 하는 업무가 발생하기 때문입니다. ) 트랜잭션 처리 시에 가장 중요한 고려사항은 Lock을 점유하는 시간입니다. (다른 업무에 영향을 주기 때문입니다. )
 

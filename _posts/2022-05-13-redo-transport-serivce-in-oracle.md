@@ -12,12 +12,13 @@ tags:
     - zdlra
 excerpt : 오라클 DB에서 발생되는 트랜잭션로그를 다른곳으로 전송할수 있습니다.
 header :
+  teaser: /assets/images/blog/redo-transport-service.jpg
   overlay_image: /assets/images/blog/redo-transport-service.jpg
 toc : true
 toc_sticky: true
 ---
 
-## 목적 
+## 개요 
 
 오라클 데이터베이스의 Redo Transport Service에 대해서 알아보고, 다양한 활용방법과 고려사항들을 살펴보고자합니다.
 
