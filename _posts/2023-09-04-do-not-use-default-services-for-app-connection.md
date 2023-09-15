@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 오라클에 접속시 Default Service를 사용하면 안되는 이유
+title: 오라클의 기본 서비스(Default Service)를 사용하면 안되는 이유
 date: 2023-09-04 18:00
 categories: 
   - Oracle

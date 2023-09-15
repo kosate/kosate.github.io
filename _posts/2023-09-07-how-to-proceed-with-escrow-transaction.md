@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 분산 환경에서 락(Lock)을 최소 점유하면서 로직에 집중할수 있는 방법
+title: 분산 환경에서 락(Lock)처리 방안
 date: 2023-09-07 12:00
 categories: 
   - Oracle

@@ -1,6 +1,6 @@
 ---
 layout: single
-title: shell script에서 sqlplus 호출하기
+title: 다양한 sqlplus 실행 방안
 date: 2022-06-05 21:58
 categories: 
   - Oracle

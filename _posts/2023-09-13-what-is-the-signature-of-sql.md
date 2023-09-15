@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 비슷한 SQL문장들을 찾아내는 방법
+title: 비슷한 SQL문장을 찾아내는 방법
 date: 2023-09-12 03:00
 categories: 
   - Oracle

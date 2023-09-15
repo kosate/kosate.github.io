@@ -390,7 +390,7 @@ body {
   grid-template-columns: repeat(2, 1fr);
   margin: 1.414em 0;
   padding: 0;
-  font-size: 0.75em;
+  font-size: $type-size-4;
   list-style: none;
 
   @include breakpoint($large) {
@@ -547,7 +547,7 @@ body {
 
 .page__related-title {
   margin-bottom: 10px;
-  font-size: $type-size-6;
+  font-size: $type-size-5;
   text-transform: uppercase;
 }
 

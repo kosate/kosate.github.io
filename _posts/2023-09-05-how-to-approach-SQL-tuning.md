@@ -1,6 +1,6 @@
 ---
 layout: single
-title: SQL 튜닝할때, 어떤 방식으로 접근하고 있나요?
+title: SQL 튜닝 대한 접근 방법
 date: 2023-09-05 08:00
 categories: 
   - Oracle

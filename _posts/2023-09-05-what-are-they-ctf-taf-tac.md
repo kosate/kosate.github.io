@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 가용성 확보를 위한 오라클 접속기술 - CTF, TAF, TAC 기능 이해
+title: 오라클 접속 기술(CTF, TAF, TAC) 소개
 date: 2023-09-04 14:00
 categories: 
   - Oracle

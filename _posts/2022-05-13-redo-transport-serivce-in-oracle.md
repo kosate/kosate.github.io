@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Redo Transport Service 활용방안
+title: Redo Transport Service 기능 이해
 date: 2022-10-18 22:01
 categories: 
     - Oracle
