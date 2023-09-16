@@ -31,7 +31,7 @@ SQL TEXT에 Literal 변수를 사용하거나, White space가 있거나, 대소�
 - SQL TEXT 정규화 방식
   1. 빈공백(White Space)을 제거됩니다.
   2. Literal 변수는 제외한 SQL TEXT의 나머지부분을 모두 대문자로 변환시킵니다.
-  3. (옵션) Literal 변수를 Bind 수로 변환합니다. 
+  3. (옵션) Literal 변수를 Bind 변수로 변환합니다. 
 
 ### SIGNATURE 생성방법
 

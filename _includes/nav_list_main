@@ -49,11 +49,18 @@
                     {% endif %}
                 {% endfor %}
             </ul> 
-        <span>가상자산</span>
+        <span>투자</span>
            <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "bitcoin" %}
-                        <li>- <a href="/categories/bitcoin" class="">암호화폐 ({{category[1].size}})</a></li>
+                        <li>- <a href="/categories/bitcoin" class="">가상자산투자 ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul> 
+            <ul>
+                {% for category in site.categories %}
+                    {% if category[0] == "stock" %}
+                        <li>- <a href="/categories/stock" class="">주식투자 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 

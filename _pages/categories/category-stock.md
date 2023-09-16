@@ -1,13 +1,13 @@
 ---
-title: "가산자산투자"
+title: "주식투자"
 layout: archive
-permalink: categories/bitcoin
+permalink: categories/stock
 author_profile: true
 sidebar_main: true
 ---
 
 
-{% assign posts = site.categories.bitcoin %}
+{% assign posts = site.categories.stock %}
 {% for post in posts %} 
     {% include archive-single2.html type=page.entries_layout %} 
 {% endfor %}
