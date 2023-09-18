@@ -8,6 +8,10 @@ author:
 tags: 
    - Oracle
    - multitenant
+   - container db
+   - 19c
+   - 21c
+   - 23c
 excerpt : 오라클의 데이터베이스 아키텍처인 Multitenat에 대해서 설명합니다.
 header :
   teaser: /assets/images/blog/multitenant.jpg

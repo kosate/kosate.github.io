@@ -1,5 +1,5 @@
 ---
-title: "주식투자"
+title: "주식"
 layout: archive
 permalink: categories/stock
 author_profile: true

@@ -9,6 +9,8 @@ tags:
    - Oracle
    - signature
    - sql plan
+   - firewall
+   - 23c
 excerpt : SQL의 SIGNATURE정보를 이용하여 Literal SQL을 찾아내는 방법을 설명합니다.
 header :
   teaser: /assets/images/blog/signature-sql.jpg
@@ -84,11 +86,11 @@ SQL> col sql_text format format a30
 SQL> col EXACT_MATCHING_SIGNATURE format  99999999999999999999
 SQL> col FORCE_MATCHING_SIGNATURE format  99999999999999999999
 SQL> select sql_text, EXACT_MATCHING_SIGNATURE, FORCE_MATCHING_SIGNATURE from V$sqlstats where sql_text like '%dummy%';
-SQL_TEXT                                            EXACT_MATCHING_SIGNATURE FORCE_MATCHING_SIGNATURE
+SQL_TEXT                                     EXACT_MATCHING_SIGNATURE FORCE_MATCHING_SIGNATURE
 -------------------------------------------- ------------------------ ------------------------
-select 1 from dual where dummy = '1'          1821967281786142678     13154199455204052618
-select 1 from dual where dummy = '2'          8674825496841288494     13154199455204052618
-SELECT 1         from dual where dummy = '2'  8674825496841288494     13154199455204052618
+select 1 from dual where dummy = '1'         1821967281786142678      13154199455204052618
+select 1 from dual where dummy = '2'         8674825496841288494      13154199455204052618
+SELECT 1         from dual where dummy = '2' 8674825496841288494      13154199455204052618
 
 ```
 
@@ -148,5 +150,5 @@ having count(*) > 10;
 SIGNATURE는 10g Release 2에서 나온것으로 알고 있습니다. SIGNATURE계산하는 로직이나 방법도 계속 변화하는것 같습니다. 굳이 어떻게 동작하는지는 큰 의미는 없지만 개념정도는 이해하면 내부적으로 동작하는 방법을 이해할수 있을것 같습니다. 
 
 부가적으로 SIGNATURE를 사용하는 23c New Feature에 대해서 소개하고자합니다. <br>
-SQL Firewall이란 기능인데요?
-SQL Firewall기능에서 동일한 SQL인지 판단하기 위하여 SQL의 SIGNATURE가 사용됩니다. SQL Firewall은 DB안에서 세션정보, SQL정보를 이용하여 firewall을 설정할수 있는 기능입니다. 정상적인 접속으로 생각되는 세션정보들을 수집하여 allow list를 만들면, 허용되지 않는 세션 혹은 SQL들은 차단이 되도록 관리할수 있습니다.
+SQL Firewall이란 기능인데요? SQL Firewall기능에서 동일한 SQL인지 판단하기 위하여 SQL의 SIGNATURE가 사용됩니다.
+SQL Firewall은 DB안에서 세션정보, SQL정보를 이용하여 firewall을 설정할수 있는 기능입니다. 정상적인 접속으로 생각되는 세션정보들을 수집하여 allow list를 만들면, 허용되지 않는 세션 혹은 SQL들은 차단이 되도록 관리할수 있습니다.

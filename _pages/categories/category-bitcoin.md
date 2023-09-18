@@ -1,5 +1,5 @@
 ---
-title: "가산자산투자"
+title: "가산자산"
 layout: archive
 permalink: categories/bitcoin
 author_profile: true

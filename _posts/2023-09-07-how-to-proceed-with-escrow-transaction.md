@@ -9,6 +9,7 @@ tags:
    - Oracle
    - escrow
    - lock free reservation
+   - 23c
 excerpt : ESCROW 기법으로 트랜잭션 처리 하는 방법에 대해서 설명합니다. 
 header :
   teaser: /assets/images/blog/lock_dstributed.jpg

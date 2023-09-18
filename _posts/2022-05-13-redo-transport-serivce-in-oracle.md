@@ -8,7 +8,7 @@ tags:
     - Oracle
     - Redo Transport Service
     - DataGuard
-    - Oracle GoldenGate
+    - GoldenGate
     - zdlra
 excerpt : 오라클 DB에서 발생되는 트랜잭션로그를 다른곳으로 전송할수 있습니다.
 header :
