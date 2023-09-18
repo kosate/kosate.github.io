@@ -11,6 +11,7 @@ tags:
    - sql plan
 excerpt : 오라클에서 SPM기능에 대해서 알아봅니다.
 header :
+  teaser: /assets/images/blog/sql_plan.jpg
   overlay_image: /assets/images/blog/sql_plan.jpg
 toc : true  
 toc_sticky: true
