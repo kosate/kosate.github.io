@@ -26,6 +26,7 @@ header :
 
 - [오라클의 새로운 아키텍처 - Multitenant소개](/blog/oracle/What-is-the-multitenant)
   - [Container DB 생성 및 기동](/blog/oracle/how-to-create-containerdb)
+  - [Container DB 구성시 고려사항](/blog/oracle/consideration-for-containerdb)
 
 ## 마무리 
 계속 업데이트 됩니다.
