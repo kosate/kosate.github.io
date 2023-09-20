@@ -21,7 +21,7 @@ toc_sticky: true
 
 Container DB는 애플리케이션이 데이터에 접근할 수 있는 Pluggable DB를 관리합니다. Container DB를 구성할 때 고려해야 할 사항에 대해 알아보겠습니다.
 
-## Container DB 운영방안
+## Container DB의 역할
 
 Container DB가 기동되면 오라클 인스턴스도 함께 기동됩니다. 이로 인해 오라클 백그라운드 프로세스가 시작되고 메모리가 할당됩니다. 여기까지는 Non-CDB 환경에서의 데이터베이스 기동 절차와 완전히 동일합니다. 그러나 큰 차이점이 한 가지 있습니다. Container DB에는 일반 사용자의 데이터를 저장할 수 없다는 점입니다.
 
