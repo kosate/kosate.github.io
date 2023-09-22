@@ -23,12 +23,12 @@ toc_sticky: true
 Oracle Database 23c은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 소규모 시스템에서 Oracle Database 23c Free버전을 사용해볼수 있을것 같습니다. 
 
 Oracle Database 23c Free 설치 방법에 대해서 알아보겠습니다. 
-※이전에 무료로 제공했던 Oracle Express Edition의 버전과 동일합니다.
 
 ## 리소스 제약
 
 Oracle Database Free버전은 웹에서 직접 다운로드 받아서 설치할수 있습니다. 
 아무래도 Free로 제공되는 버전이어서 리소스 제약과 오라클 지원(Support) 제약을 가지고 있습니다. 
+(이전에 무료로 제공했던 Oracle Express Edition버전의 제약과 거의 비슷합니다.)
 
 - 리소스 제약
   - CPU 제약 : 2 CPUs(2 Threads), Forground Proccess의 갯수 제약
@@ -54,7 +54,7 @@ Oracle Database Free버전을 설치하기 위한 RPM패키지나 VM이미지를
   - Virtual Box 이미지 제공
   - Linux RPM 제공 (Oracle Linux 8, Redhat 호환Linux환경)
 
-참조문서<https://www.oracle.com/database/free/get-started/#installing>
+- 참조문서<https://www.oracle.com/database/free/get-started/#installing>
 
 ※ 윈도우에서는 Docker이미지 혹은 Virutal box이미지를 사용해야합니다. (아직 윈도우에서 설치버전은 출시되지 않았습니다. )
 
@@ -213,7 +213,8 @@ Oracle DB유저가 생성된것을 확인할수 있습니다.
 
 Oracle Database 23c Free설치를 위한 RPM을 다운로드합니다.
 아래 참조문서에서 Free RPM의 경로를 확인할수 있습니다. 
-참조문서<https://www.oracle.com/database/free/get-started/#installing>
+
+- 참조문서 <https://www.oracle.com/database/free/get-started/#installing>
 
 RPM이 다운로드되면 설치 작업을 수행합니다. (RPM 크기는 약 1.6G입니다.)
 
