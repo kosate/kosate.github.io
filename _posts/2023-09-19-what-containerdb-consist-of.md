@@ -169,6 +169,5 @@ SQL>  select con_id, name from v$tempfile order by con_id;
 ## 마무리
 
 Container DB의 데이터 파일 구조에 대해 알아보았습니다. Control file과 Online Redolog은 공통으로 사용되지만, 각 Container마다 system, sysaux, temp 등은 독립적으로 존재합니다. 그래서 하나의 데이터베이스로 통합된것이 아니라 분리된 데이터베이스들을 통합적으로 관리하는 관점으로 접근하면 좀더 쉽게 이해할수 있습니다.
-(Container DB내부적으로 dictionary link이라는 기능을 통해 구현되어 있습니다.)
 
-Container DB에서는 여러개의 Pluggable DB를 편리하게 관리하고, Pluggable DB의 이동 기술들을 구현할 수 있습니다.
+Container DB내부적으로 dictionary link기능이 구현되어 있기 때문에 Container DB에서는 여러개의 Pluggable DB를 편리하게 관리하고, Pluggable DB의 이동 기술들을 구현할 수 있습니다.
