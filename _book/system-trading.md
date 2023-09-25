@@ -20,11 +20,13 @@ header :
 ## 개요 
 시스템트레이딩에 대해서 이해하기 쉽도록 시스템트레이딩 관련 블로그 글들만 순서에 맞게 정리하였습니다. 
 
-## 블로그 목록
+## 목차
 
 - [시스템 트레이딩 구축시 고려사항](/blog/bitcoin/how-to-begin-system-trading/)
-  - [매매처리 방안](/blog/bitcoin/how-to-make-trading-logic/)
   - [데이터 수집방안](/blog/bitcoin/how-to-collect-candle-data/)
+  - [백테스트 방안](/blog/bitcoin/first-backtest-for-systemtrading/)
+  - [매매처리 방안](/blog/bitcoin/how-to-make-trading-logic/)
+  
 
 ## 마무리 
 계속 업데이트 됩니다.

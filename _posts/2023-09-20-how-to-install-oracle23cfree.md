@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Oracle 23c Free 설치 방법(Linux RPM)
+title: Oracle Database 23c Free 설치 방법(Linux RPM)
 date: 2023-09-19 02:00
 categories: 
   - Oracle

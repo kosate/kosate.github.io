@@ -22,7 +22,7 @@ header :
 ## 개요 
 오라클의 Multitenant 아키텍쳐에 대해서 이해하기 쉽도록 Multitenant 관련 블로그 글들만 순서에 맞게 정리하였습니다. 
 
-## 블로그 목록
+## 목차
 
 - [오라클의 새로운 아키텍처 - Multitenant소개](/blog/oracle/What-is-the-multitenant)
   - [Container DB 생성 및 기동](/blog/oracle/how-to-create-containerdb)

@@ -16,9 +16,9 @@ header :
 
 ## 개요 
 
-## 블로그 목록
+## 목차
 
-- [Oracle Database Free 설치](/blog/oracle/how-to-install-oracle23cfree/)
+- [Oracle Database 23c Free 설치](/blog/oracle/how-to-install-oracle23cfree/)
   - (작성예정) JSON Relational Duality
   - (작성예정) JavaScript stored procedures
   - (작성예정) JSON Schemas
