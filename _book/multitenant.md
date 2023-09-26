@@ -20,7 +20,7 @@ header :
 ---
 
 ## 개요 
-오라클의 Multitenant 아키텍쳐에 대해서 이해하기 쉽도록 Multitenant 관련 블로그 글들만 순서에 맞게 정리하였습니다. 
+오라클 데이터베이스의 Multitenant 아키텍쳐에 대해서 정리하였습니다.
 
 ## 목차
 
@@ -28,6 +28,9 @@ header :
   - [Container DB 생성 및 기동](/blog/oracle/how-to-create-containerdb)
   - [Container DB 구성시 고려사항](/blog/oracle/consideration-for-containerdb)
   - [Container DB 파일 구조 ](/blog/oracle/what-containerdb-consist-of/)
+  - [Pluggable DB 생성 및 기동](/blog/oracle/how-to-create-pluggabledb/)
+  - (작성예정)Pluggable DB 활용 예제
+  - (작성예정)Pluggable DB 서비스 관리
 
 ## 마무리 
 계속 업데이트 됩니다.
