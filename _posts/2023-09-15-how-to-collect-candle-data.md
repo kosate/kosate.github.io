@@ -64,7 +64,7 @@ API 참고 문서 : <https://docs.upbit.com/reference/분minute-캔들-1>
   - 종목별 캔들데이터 (예시 https://api.upbit.com/v1/candles/minutes/240?market=KRW-BTC)
 
 다음은 Pseudo 코드입니다.
-```javascript
+```java
 var 종목리스트 =  종목리스트조회(https://api.upbit.com/v1/market/all)
 for 종목 in 종목리스트 loop
   var 캔들데이터 = 캔들데이터조회(https://api.upbit.com/v1/candles/minutes/240?market=종목.종목코드&count=200)
@@ -97,7 +97,7 @@ Rest API로부터 받은 데이터는 JSON 형식입니다. JSON을 Parsing해�
   - 캔들 데이터는 현재 종목을 기준으로 과거 데이터를 제공합니다. 과거 데이터를 조회하는 방법은 현재 기준에서 200개를 수집하고, 수집된 데이터 중 가장 오래된 캔들의 캔들 기준 시각을 가져와서 다시 캔들 데이터를 조회할 때 변수로 사용하면 과거 데이터를 계속 수집할 수 있습니다.
 
 다음은 캔들 데이터를 수집하는 Pseudo 코드입니다.
-```javascript
+```java
 var 종목코드 =  KRW-BTC
 var 마지막캔들기준시각 = 현재시각
 loop
