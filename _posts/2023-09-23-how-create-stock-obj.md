@@ -8,7 +8,7 @@ author:
 tags: 
    - bitcoin
    - system trading
-excerpt : 시스템 트레이딩의 구성요소 중 종목객체과 종목그룹객체에 대한 기능에 대해서 알아봅니다.
+excerpt : 트레이딩의 구성요소 중 종목객체과 종목그룹객체에 대한 기능에 대해서 알아봅니다.
 header :
   teaser: /assets/images/blog/trading-logic.jpg
   overlay_image: /assets/images/blog/trading-logic.jpg
@@ -26,7 +26,7 @@ toc_sticky: true
 
 - 종목 객체는 각 종목을 의미하며 캔들 데이터를 가지고 매매를 수행하는 역할을 담당합니다.
 - 종목 그룹 객체는 여러 개의 종목을 동시에 매매하거나 데이터를 통합하는데 목적이 있습니다.
-- 
+
 이 두 객체는 매매 계획을 작성하는데까지만 담당합니다. 즉, 캔들 데이터가 들어가면 지표를 이용하여 매매 매개변수를 생성하고 매매 로직을 수행하여 매매 기회를 탐색하여 매매 계획을 작성합니다.
 
 ## 종목객체의 스펙정보
