@@ -12,13 +12,13 @@
 
 # theme                  : "minimal-mistakes-jekyll"
 # remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    : "air" # "default",  "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin    : "dirt" # "default",  "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
 locale                   : "eu-KR"
 title                    : "기억을 글로 남기기 "
-title_separator          : "|"
-subtitle                 : "우리의 삶은 틈새로 가득차 있다."
+title_separator          : " - "
+subtitle                 : "우리의 삶은 틈새로 가득차 있다. (The more we share the more we have)"
 name                     : "kosate"
 description              : "새로운 IT기술이나 기억들을 정리했습니다."
 url                      : "https://kosate.github.io"
