@@ -12,9 +12,9 @@ $doc-font-size: 14 !default;
 $paragraph-indent: false !default; // true, false (default)
 $indent-var: 1.3em !default;
 
-/* NanumBarunGothic, JeonjuCraftGoR */
-$customFont: "JeonjuCraftGoR";
-$codingFont : "intelone-mono-font-family-regular";
+/* font-face */
+$customFont: "JeonjuCraftMjB";
+$codingFont : "D2Coding";
 
 /* system typefaces */
 $serif: $customFont, Georgia, Times, serif !default;
