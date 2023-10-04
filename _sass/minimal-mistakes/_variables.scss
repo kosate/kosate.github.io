@@ -12,12 +12,15 @@ $doc-font-size: 14 !default;
 $paragraph-indent: false !default; // true, false (default)
 $indent-var: 1.3em !default;
 
-$customFont: "NanumBarunGothic";
+/* NanumBarunGothic, JeonjuCraftGoR */
+$customFont: "JeonjuCraftGoR";
+$codingFont : "intelone-mono-font-family-regular";
+
 /* system typefaces */
 $serif: $customFont, Georgia, Times, serif !default;
 $sans-serif: $customFont, -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI",
   "Helvetica Neue", "Lucida Grande", Arial, sans-serif !default;
-$monospace: Monaco, Consolas, "Lucida Console", monospace !default;
+$monospace: $codingFont, Monaco, Consolas, "Lucida Console", monospace !default;
 
 /* sans serif typefaces */
 $sans-serif-narrow: $sans-serif !default;
