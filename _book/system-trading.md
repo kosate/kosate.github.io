@@ -28,7 +28,7 @@ header :
     - (작성예정)데이터 저장 형식(json) 
   - [백테스트 방안](/blog/bitcoin/first-backtest-for-systemtrading/){: target="_blank"}
     - [구성요소(종목객체과 종목그룹객체)](/blog/bitcoin/how-create-stock-obj/){: target="_blank"} 
-      - (작성예정) 지표관리방안
+      - [지표관리방안](/blog/bitcoin/how-to-deal-with-indicator/){: target="_blank"} 
       - [매매관리방안](/blog/bitcoin/how-to-manage-trade/){: target="_blank"} 
     - (작성예정)구성요소(자금관리자객체)
   - [매매처리 방안](/blog/bitcoin/how-to-make-trading-logic/){: target="_blank"}
