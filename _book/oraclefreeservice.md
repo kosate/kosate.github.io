@@ -8,7 +8,7 @@ author:
 tags: 
    - oracle
    - 
-excerpt : 오라클에서는 여러 무료서비스와 제품들에 대해서 설명합니다.
+excerpt : Oracle에서는 제공하는 무료서비스와 제품들에 대해서 설명합니다.
 header :
   teaser: /assets/images/blog/free-service.jpg
   overlay_image: /assets/images/blog/free-service.jpg
@@ -16,7 +16,7 @@ header :
 
 ## 개요
 
-오라클에서는 무료로 사용할수 있는 서비스와 제품들을 제공합니다.
+Oracle에서는 무료로 사용할수 있는 서비스와 제품들을 제공합니다.
 상용버전이 아니고 무료로 제공되므로 리소스 제한이 존재하고 이슈발생시 공식적인 지원을 받기 어렵습니다.(Community Channel을 통해서 해결해야합니다.)
 사이드 프로젝트 할때 사용하시면 좋을것 같습니다. 
 
