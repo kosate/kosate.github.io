@@ -29,7 +29,7 @@ Swingbench 도구의 기본 소개 및 설치 방법에 대해서 정리하였�
 SwingBench는 오라클 직원이 직접 개발한 **오라클 데이터베이스 부하 테스트 도구**입니다. 
 다양한 benchmark데이터를 제공하며 간단한 커맨드로 데이터를 적재, 테스트 작업을 수행할수 있습니다. 
 
-Swingbench 홈페이지 : <https://www.dominicgiles.com/swingbench.html>
+Swingbench 홈페이지 : <https://www.dominicgiles.com/swingbench.html>{: target="_blank"}
 
 - SwingBench도구의 특징 
   - 다양한 Benchmark 데이터를 제공합니다(OLTP, OLAP, TPC-DS like, TPC-H like)
@@ -110,7 +110,7 @@ Swingbench를 실행하기 위해서는 Java가 필요합니다. Oracle JDK를 �
 #### Java 설치(Linux RPM)
 
 오라클 사이트에서 Oracle JDK(약 173MB)를 다운로드 받습니다.<br>
-Oracle JDK 다운로드 사이트 : <https://www.oracle.com/java/technologies/downloads/>
+Oracle JDK 다운로드 사이트 : <https://www.oracle.com/java/technologies/downloads/>{: target="_blank"}
 
 root유저로 Java RPM을 설치합니다. 
 저는 Oracle JDK 17를 다운로드 받고 설치했습니다. 
@@ -143,7 +143,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 17.0.8+9-LTS-211, mixed mode, sharing)
 Swingbench 도구를 다운로드 받습니다. 
 2023년 10월기준, Swingbnech 도구의 최신버전은 June 2023 Release(약 39MB)입니다. 
 
-Swingbench 최신버전 다운로드 사이트 : <https://github.com/domgiles/swingbench-public/releases/tag/production>
+Swingbench 최신버전 다운로드 사이트 : <https://github.com/domgiles/swingbench-public/releases/tag/production>{: target="_blank"}
 
 root유저 혹은 oracle유저로 다운로드합니다. 별도의 설치과정은 없고, 다운로드 받고 압축을 해제합니다.
 
@@ -515,7 +515,7 @@ Enabled 태그에 true 로 설정된 작업이 수행됩니다.
 
 아래 트랜잭션 명을 보면 DML유형이 추측이 되지만 좀더 명확하게 파악하려면 소스코드를 직적 확인해야합니다. 트랜재션별로 ClassName로 구분되어 있고, Class내에 call되는 function을 확인할수 있습니다.
 
-- 소스링크 : <https://github.com/domgiles/swingbench-public/tree/master/src/com/dom/benchmarking/swingbench/benchmarks/orderentryplsql>
+- 소스링크 : <https://github.com/domgiles/swingbench-public/tree/master/src/com/dom/benchmarking/swingbench/benchmarks/orderentryplsql>{: target="_blank"}
  
 swingbench 설치된 폴더내 sql/orderentry/soedgpackage.sql 파일에 orderentry 패키지 생성문이 있으니 Call되는 function명으로 찾으면 DML유형을 파악할수 있습니다. 
 
@@ -813,5 +813,5 @@ Swingbench 도구에 대해서 알아보았습니다. 테스트 환경이 구성
 
 ## 참고문서
 
-- Swingbench 홈페이지 : <https://www.dominicgiles.com/swingbench.html>
-- Swingbnech github : <https://github.com/domgiles/swingbench-public>
+- Swingbench 홈페이지 : <https://www.dominicgiles.com/swingbench.html>{: target="_blank"}
+- Swingbnech github : <https://github.com/domgiles/swingbench-public>{: target="_blank"}
