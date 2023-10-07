@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Swingbench 소개 및 설치 방법
+title: Swingbench 소개(2.7) 및 설치 방법
 date: 2023-10-05 07:00
 categories: 
   - Oracle
