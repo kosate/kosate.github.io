@@ -25,7 +25,7 @@ Oracle Database 23c 신기능관련 블로그목록입니다.
   - (작성예정) JavaScript stored procedures
   - (작성예정) JSON Schemas
   - (작성예정) Property Graphs
-  - (작성예정) SQL Domains
+  - [SQL Domains](/blog/oracle/23c_newfeature_sql_domain/){: target="_blank"}
   - (작성예정) Annotations
   - (작성예정) Oracle Kafka APIs
 
