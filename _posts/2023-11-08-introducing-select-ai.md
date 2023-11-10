@@ -10,9 +10,6 @@ tags:
    - Autonomous Database
    - SELECT AI
 excerpt : 자연어로 SQL질의할수 있는 SELECT AI기능이 Autonomous Database에 추가되었습니다.
-header :
-  teaser: /assets/images/blog/oracle23c.jpg
-  overlay_image: /assets/images/blog/oracle23c.jpg
 toc : true  
 toc_sticky: true
 ---
