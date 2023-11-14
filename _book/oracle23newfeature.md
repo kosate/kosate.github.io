@@ -25,9 +25,9 @@ Oracle Database 23c 신기능관련 블로그목록입니다.
   - (작성예정) JavaScript stored procedures
   - (작성예정) JSON Schemas
   - (작성예정) Property Graphs
-  - [SQL Domains](/blog/oracle/23c_newfeature_sql_domain/){: target="_blank"}
+  - [SQL Domains](/blog/oracle/23c-sql-domain/){: target="_blank"}
   - (작성예정) Annotations
   - (작성예정) Oracle Kafka APIs
-
+  - [Automatic Transaction Rollback](/blog/oracle/23c-automatic-transaction-rollback/){: target="_blank"}
 ## 마무리 
 계속 업데이트 됩니다.
