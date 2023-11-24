@@ -49,11 +49,11 @@
                     {% endif %}
                 {% endfor %}
             </ul> 
-        <span>투자</span>
+        <span>재테크(투자)</span>
            <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "bitcoin" %}
-                        <li>- <a href="/categories/bitcoin" class="">가상자산 ({{category[1].size}})</a></li>
+                    {% if category[0] == "system-trading" %}
+                        <li>- <a href="/categories/system-trading" class="">시스템트레이딩 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 

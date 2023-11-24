@@ -3,7 +3,7 @@ layout: single
 title: 시스템 트레이딩을 위한 데이터 수집방안
 date: 2023-09-15 08:00
 categories: 
-  - bitcoin
+  - system-trading
 author: 
 tags: 
    - bitcoin

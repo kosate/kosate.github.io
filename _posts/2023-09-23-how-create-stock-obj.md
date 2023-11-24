@@ -3,7 +3,7 @@ layout: single
 title: 시스템 트레이딩의 구성요소 - 공통(종목객체, 종목그룹객체)
 date: 2023-09-23 03:00
 categories: 
-  - bitcoin
+  - system-trading
 author: 
 tags: 
    - bitcoin

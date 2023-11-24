@@ -3,7 +3,7 @@ layout: single
 title: 시스템 트레이딩 구축시 고려사항
 date: 2023-09-10 12:00
 categories: 
-  - bitcoin
+  - system-trading
 author: 
 tags: 
    - bitcoin
