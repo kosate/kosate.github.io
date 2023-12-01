@@ -454,7 +454,7 @@ STS를 다른 Advisor기능과 연동해서 튜닝을 하거나, SPM(SQL Plan Ma
 ## 참고자료 
 
 - Documents
-  - [Managing SQL Tuning Sets](https://docs.oracle.com/en/database/oracle/oracle-database/19/tgsql/managing-sql-tuning-sets.html)
-  - [DBMS_SQLTUNE Package](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_SQLTUNE.html)
+  - [Managing SQL Tuning Sets](https://docs.oracle.com/en/database/oracle/oracle-database/19/tgsql/managing-sql-tuning-sets.html){: target="_blank"}
+  - [DBMS_SQLSET Package](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_SQLSET.html){: target="_blank"}
 - Blogs
-  - [STS 관련 스크립트(capture_awr.sql, capture_cc.sql, export_sts_stagingtable.sql, import_sts_stagingtable.sql)](https://mikedietrichde.com/scripts/)
+  - [STS 관련 스크립트(capture_awr.sql, capture_cc.sql, export_sts_stagingtable.sql, import_sts_stagingtable.sql)](https://mikedietrichde.com/scripts/){: target="_blank"}
