@@ -8,9 +8,8 @@ author:
 tags: 
    - Oracle
    - sql tuning set
-   - sts
    - sql performance analyzer
-   - spa
+   - real application testing
 excerpt : SQL Performance Analyzer 수행방법에 대해서 정리하였습니다.
 toc : true  
 toc_sticky: true
@@ -26,18 +25,20 @@ SQL Performance Analyzer(SPA) 기능은 SQL 쿼리의 성능을 분석하고 최
 
 SPA를 사용하려면 Oracle Enterprise Manager 또는 SQL*Plus(DBMS_SQLPA 패키지사용)와 같은 도구를 통해 데이터베이스에서 성능 분석을 실행하고 결과를 확인할 수 있습니다. SQL Performance Analyzer는 SQL 튜닝을 통해 데이터베이스 성능을 향상시키는 데 중요한 역할을 합니다.
 
+※ SPA기능을 사용하기 위해서는 Real Application Testing 기능이 활성화되어 있어야하며, 라이센스가 필요합니다.
+
 ## 사전준비 작업
 
 1. SPA수행을 위한 SQL 정보 캡쳐
    - SPA를 수행기전에 SQL정보를 캡쳐해야합니다. STS 생성하는 방법은 아래 문서를 참고하세요.
      - AWR혹은 Cursor정보로 부터 SQL정보를 캡쳐하여 STS(SQL Tuning Set)으로 생성할수 있습니다.
      - 참고 문서 : [STS 생성하는 방법](/blog/oracle/how-to-create-sqlset/){: target="_blank"}
-2. 테스트 환경 구성
+2. RAT 옵션 필요
+   - SPA수행을 위해서는 RAT기능이 binary에서 활성화되어 있어야합니다. (Real Application Testing 라이센스가 필요합니다.)
+3. 테스트 환경 구성(업그레이드 업그레이드 및 서버가 변경될경우)
    - 캡쳐된 SQL정보를 수행하기 위한 테스트 DB환경이 필요합니다.
    - DB 백업본으로 테스트환경을 구성합니다. (RMAN을 사용하여, DataPump로 데이터 이관을 합니다)
    - 최대한 운영환경과 일치하도록 구성해야하고, 켭쳐한 SQL정보를 가져옵니다.
-3. RAT 옵션 필요
-   - SPA수행을 위해서는 RAT기능이 binary에서 활성화되어 있어야합니다. (Real Application Testing 라이센스가 필요합니다.)
 
 ```sql
 --RAT 옵션 활성화 여부 확인
@@ -46,18 +47,23 @@ VALUE
 ----------------------------------------------------------------
 FALSE
 SQL> shutdown immediate
-
 -- RAT 옵션 활성화
 $> chopt enable rat
+SQL> startup
 ```
 
 ## SPA 수행 방법
+
+SPA는 크게 3단계로 구분할수있습니다. 
+1. Pre-Change SQL Trial 작업
+2. Post-Change SQL Trial 작업
+3. Compare Performance 작업
 
 SPA는 2개의 SQL Trial간에 비교하여 성능변화를 확인할수 있습니다.
 - Pre-Change SQL Trial #1 : 환경변경전의 SQL 수행결과
 - Post-Change SQL Trial #2 : 환경변경후의 SQL 수행결과
 
-SQL Trail을 생성하는 방법(SQL 성능 측정 방법)
+SQL Trial을 생성하는 방법(SQL 성능 측정 방법)
 - Test Execute : SPA를 이용하여 SQL 구문을 실행합니다. 테스트환경에서 수행하거나, Remote DB에서 수행가능합니다. (execution_type => 'TEST EXECUTE')
 - Explain Plan : SPA를 이용하여 SQL Plan정보만 생성합니다. 테스트환경에서 수행하거나, Remote DB에서 수행가능합니다. SQL Plan정보는 explain plan구문을 이용한 실행계획이 아니라 바인드변수를 참조한 실제 실행계획을 의미합니다. (execution_type => 'EXPLAIN PLAN')
 - Convert SQL Tuning Set : SQL Tuning Set에 저장된 Plan정보와 실행정보를 변환합니다. API를 통해서만 지원합니다.(execution_type => 'CONVERT SQLSET')
@@ -71,7 +77,8 @@ SPA는 SQL을 실행할때 최소 2번을 실행합니다. 첫번째 실행은 b
   - 기본적으로 DML중 Query부분이 실행됩니다. EXECUTE_FULLDML매개변수를 사용할 경우 모든 DML수행이 가능합니다.
   - Parallel DML을 지원하지 않습니다. 그러므로 Parallel힌트를 제거하지 않으면 실행되지 않습니다.
 
-두개의 SQL Trial을 비교하는 작업을 수행합니다. 이때 비교의 기준이 필요합니다. 
+Compare performance 단계(execution_type => ‘COMPARE PERFORMANCE’)에서는 두개의 SQL Trial을 비교하는 작업을 수행합니다. 이때 비교의 기준이 필요합니다. 
+실행시간, IO량, CPU 시간등을 기준으로 비교할수 있으며, 추가적인 상세 비교기준은 아래 SQL을 통해서 확인할수 있습니다.
 ```sql
 SQL> SELECT metric_name FROM v$sqlpa_metric;
 METRIC_NAME
@@ -155,7 +162,7 @@ SET TRIM ON
 set echo off
 set feedback off
 
-SELECT DBMS_SQLPA.report_analysis_task('my_spa_task','TEXT','ALL','ALL') FROM   dual;
+SQL> SELECT DBMS_SQLPA.report_analysis_task('my_spa_task','TEXT','ALL','ALL') FROM   dual;
 General Information
 ---------------------------------------------------------------------------------------------
 
@@ -219,7 +226,7 @@ Top 17 SQL Sorted by Absolute Value of Change Impact on the Workload
 |           |               | Impact on | Execution | Metric              | Metric | Impact  | Plan   |
 | object_id | sql_id        | Workload  | Frequency | Before              | After  | on SQL  | Change |
 -------------------------------------------------------------------------------------------------------
-|        53 | c13sma6rkr27c |    27.42% |   3554546 |    34.7612522105495 |      2 |  94.25% | y      |
+|        53 | c13sma6rkr27c |    27.42% |   3554546 |    34.7612522105495 |      2 |  94.25% | y      |  <-- Plan이 변경됨
 |        44 | 7r7636982atn9 |      .66% |    282416 |    12.8517222820237 |      3 |  76.66% | n      |
 |        43 | 5mddt5kt45rg3 |      .46% |    296659 |    9.59189170057204 |      3 |  68.72% | n      |
 |        45 | 7ws837zynp1zv |      -.1% |    296459 |    4.51186167395829 |      6 | -32.98% | n      |
@@ -370,7 +377,24 @@ Predicate Information (identified by operation id):
 
 환경변경사항으로 Adaptive plan기능을 비활성화(optimizer_adaptive_plans=false)하는 작업을 수행했습니다. 결과 SQL_ID(c13sma6rkr27c)만 SQL Plan이 변경이 되었습니다. 
 
-## 후속작업
+
+SPA 작업에 대한 결과를 확인할수 있습니다. 
+```sql
+SQL> SELECT owner, task_name, status FROM dba_advisor_tasks WHERE upper(advisor_name)='SQL PERFORMANCE ANALYZER'; 
+OWNER      TASK_NAME            STATUS
+---------- -------------------- -----------
+ADMIN      my_spa_task          COMPLETED
+
+SQL> select task_name, execution_name,EXECUTION_TYPE,EXECUTION_START START_DT, EXECUTION_END END_DT, status 
+from dba_advisor_executions where TASK_NAME = 'my_spa_task';
+TASK_NAME            EXECUTION_NAME       EXECUTION_TYPE       START_DT            END_DT              STATUS
+-------------------- -------------------- -------------------- ------------------- ------------------- -----------
+my_spa_task          Compare BUFFER_GETS  COMPARE PERFORMANCE  2023-12-01 08:05:34 2023-12-01 08:05:34 COMPLETED
+my_spa_task          EXEC_SPA_SQL#1       CONVERT SQLSET       2023-12-01 08:05:22 2023-12-01 08:05:22 COMPLETED
+my_spa_task          EXEC_SPA_SQL#2       TEST EXECUTE         2023-12-01 08:05:22 2023-12-01 08:05:34 COMPLETED
+```
+
+## 후속작업(튜닝 및 실행계획 고정)
 
 성능이 저하된 SQL이 발견이 되면 튜닝작업을 수행해서 성능을 개선시키거나, 이전의 실행계획으로 고정하면 성능을 유지할수 있습니다. 
 
@@ -379,19 +403,22 @@ SQL 검증이후 방법
    ```sql
    -- STS 생성
    SQL> exec SYS.dbms_sqlset.CREATE_SQLSET(sqlset_name=>'STS_regressed_sql');
-   SQL> -- select from a sql tuning set
-   DECLARE
+   -- Compare Performance를 수행한 Task를 이용하여 Regressed SQL정보를 가져옴.
+   -- level_filter조건이 다양하게 있음. (IMPROVED, REGRESSED(default), CHANGED, UNCHANGED, CHANGED_PLANS, UNCHANGED_PLANS, ERRORS, MISSING_SQL, NEW_SQL)
+   SQL> DECLARE
      cur sys_refcursor;
    BEGIN
      OPEN cur FOR
      SELECT VALUE (P) 
-     FROM table(DBMS_SQLSET.SELECT_SQLSET('STS_CaptureAWR')) P where sql_id = 'c13sma6rkr27c';
+     FROM table(DBMS_SQLTUNE.SELECT_SQLPA_TASK(TASK_NAME=>'my_spa_task', EXECUTION_NAME=>'Compare BUFFER_GETS',LEVEL_FILTER=> 'REGRESSED')) p;
       dbms_sqlset.load_sqlset('STS_regressed_sql', cur);
       CLOSE cur;
     END;
     /
+    -- SQL 개수확인
+    SQL> SELECT statement_count FROM dba_sqlset WHERE name = 'STS_regressed_sql';
    ```
-2. Regression SQL들을 SQL Plan baselines으로 실행계획으로 고정
+2. Regression SQL들을 SQL Plan baselines으로 실행계획으로 고정(SPM을 사용하고 있다면)
    ```sql
     DECLARE
     my_plans PLS_INTEGER;
@@ -404,6 +431,31 @@ SQL 검증이후 방법
     /
     ```
 3. SQL Tuning Advisor를 통해서 성능 개선수행
+   ```sql
+   -- STS로부터 STA를 수행 (혹은 SPA결과를 직접 STA와 연동시킬수 있습니다.)
+   DECLARE
+     sts_name varchar2(100) := 'STS_regressed_sql';
+     sts_owner varchar2(100):= 'ADMIN';
+     tune_task_name varchar2(100):= 'TUNE_TASK1';
+     tname varchar2(100);
+     exec_name varchar2(100);
+   BEGIN
+     tname := DBMS_SQLTUNE.CREATE_TUNING_TASK(sqlset_name  => sts_name, 
+                                           sqlset_owner => sts_owner, 
+                                           task_name    => tune_task_name);
+     DBMS_SQLTUNE.SET_TUNING_TASK_PARAMETER(tname, 
+                                              'APPLY_CAPTURED_COMPILENV', 
+                                              'FALSE');
+     exec_name := DBMS_SQLTUNE.EXECUTE_TUNING_TASK(tname);
+   END;
+   /
+
+   SQL> set lines 1000
+   SQL> set long 999999
+   -- STA 리포트를 확인(SQL Profile이 만들어지면 적용합니다.)
+   SQL> select dbms_sqltune.report_tuning_task ('TUNE_TASK1') from dual;
+   ```
+ 
 
 ## 마무리
 
@@ -417,6 +469,7 @@ SPA수행할때는 수행되는 DB서버에서 시간이 소요되고 부하가 
 - Documents
   - [SQL Performance Analyzer](https://docs.oracle.com/en/database/oracle/oracle-database/19/ratug/introduction-to-sql-performance-analyzer.html){: target="_blank"}
   - [DBMS_SQLPA Packages](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_SQLPA.html){: target="_blank"}
+  - [DBMS_SQLTUNE.SELECT_SQLPA_TASK Function](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_SQLTUNE.html#GUID-510255F3-7850-4FDB-A3EB-4B3E65323274){: target="_blank"}
 
 - Blogs
   - [SPA관련 스크립트(spa_*.sql,spa_report_*.sql)](https://mikedietrichde.com/scripts/){: target="_blank"}
