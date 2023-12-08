@@ -244,11 +244,11 @@ STS를 위하여 Stage 테이블을 생성후에 STS를 저장후 expdp & impdp�
 Stage 테이블을 생성후, STS를 packing 후 Export합니다.
 ```sql
 -- Stage 테이블을 생성합니다(dba_sqlset관련 테이블의 join된 형태로 반정규화된 테이블로 생성됩니다.)
-SQL> exec dbms_sqlset.CREATE_STGTAB_SQLSET (table_name  => 'TAB_STAGE1',schema_name => 'ADMIN');
+SQL> exec dbms_sqlset.CREATE_STGTAB (table_name  => 'TAB_STAGE1',schema_name => 'ADMIN');
 
 -- STS_CaptureAWR STS를 Stage 테이블에 저장합니다.
 SQL> begin 
-dbms_sqlset.PACK_STGTAB_SQLSET(
+dbms_sqlset.PACK_STGTAB(
     sqlset_name =>'STS_CaptureAWR',
     sqlset_owner=>'ADMIN',
 	staging_schema_owner  =>'ADMIN',
@@ -259,7 +259,7 @@ end;
 
 -- STS_CaptureCursorCache STS를 Stage 테이블에 저장합니다.
 SQL> begin 
-dbms_sqlset.PACK_STGTAB_SQLSET(
+dbms_sqlset.PACK_STGTAB(
     sqlset_name =>'STS_CaptureCursorCache',
     sqlset_owner=>'ADMIN',
 	staging_schema_owner  =>'ADMIN',
@@ -417,7 +417,7 @@ Job "ADMIN"."STS_STAGING_IMPORT" successfully completed at Thu Nov 30 03:03:59 2
 
 -- STS_CaptureCursorCache STS를 unpack합니다.
 SQL> begin
- dbms_sqlset.UNPACK_STGTAB_SQLSET (
+ dbms_sqlset.UNPACK_STGTAB (
       sqlset_name        => 'STS_CaptureCursorCache',
       sqlset_owner       => 'ADMIN',
       replace            => TRUE,
@@ -428,7 +428,7 @@ end;
 
 -- STS_CaptureAWR STS를 unpack합니다.
 begin
- dbms_sqlset.UNPACK_STGTAB_SQLSET (
+ dbms_sqlset.UNPACK_STGTAB (
       sqlset_name        => 'STS_CaptureAWR',
       sqlset_owner       => 'ADMIN',
       replace            => TRUE,
