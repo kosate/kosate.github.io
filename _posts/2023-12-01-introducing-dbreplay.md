@@ -130,14 +130,19 @@ $> ./charbench -c ../configs/SOE_Client_Side_test1.xml -v tpm,tps,users,resp,vre
 
 ```sql
 -- INSTANCE_NUMBER, USER, MODULE, ACTION, PROGRAM, SERVICE, PDB_NAME를 조건으로 필터적용가능
-  -- SOE유저로 수행되는 워크로드를 캡쳐하기 위하여 필터를 적용
-  SQL> execute dbms_workload_capture.add_filter (fname=>'SOE_USER', fattribute=>'USER', fvalue=>'SOE');
+-- SOE유저로 수행되는 워크로드를 캡쳐하기 위하여 필터를 적용
+-- 해당필터는 start_capture할때 결정됩니다. 
+-- start_capture(default_action=>'INCLUDE') 일경우 정의한 필터를 제외한 워크로드를 캡쳐하고, 
+-- start_capture(default_action=>'EXCLUDE') 일경우 정의한 조건에 맞는 워크로드만 캡쳐합니다.
+SQL> execute dbms_workload_capture.add_filter (fname=>'SOE_USER', fattribute=>'USER', fvalue=>'SOE');
 
-  -- 설정된 필터 확인
-  SQL> select name, status, type, set_name, attribute, value from dba_workload_filters;
-  NAME       STATUS TYPE       SET_NAME   ATTRIBUTE  VALUE
-  ---------- ------ ---------- ---------- ---------- ----------
-  SOE_USER   NEW    CAPTURE               USER       SOE
+-- 설정된 필터 확인
+-- start_capture작업으로 필터가 사용되면 STATUS가 NEW 에서 USED로 변경됩니다.
+-- 그래서 사용된 필터는 재사용이 되지 않습니다. capture 작업전에 매번 설정해야합니다.
+SQL> select name, status, type, set_name, attribute, value from dba_workload_filters;
+NAME       STATUS TYPE       SET_NAME   ATTRIBUTE  VALUE
+---------- ------ ---------- ---------- ---------- ----------
+SOE_USER   NEW    CAPTURE               USER       SOE
 ```
 
 ### 2. OS 디스크 공간 할당(확인)
@@ -206,14 +211,14 @@ drwxr-xr-x. 2 oracle oinstall 4096 Dec  7 04:55 .
 drwxr-xr-x. 9 oracle oinstall 4096 Dec  7 04:55 ..
 
 -- 워크로드 Capture작업을 수행
--- 필터는 INCLUDE속성(업무를 지정)으로 사용함. duration을 주지 않으면 finish_capture할때까지 워크로드를 계속 Capture함.
+-- 필터는 EXCLUDE속성(업무를 지정)으로 사용함. duration을 주지 않으면 finish_capture할때까지 워크로드를 계속 Capture함.
 -- Capture작업과 병행하여 cursor로부터 sql tuning set를 생성함
 -- . sts_cap_interval 초에 한번씩 수집(기본 300초)
 -- . RAC환경은 STS수집을 지원하지 않으며 에러 발생됨
 -- . SQL Tuning Set에는 Capture에 적용된 Filter가 적용되지 않음
 -- . export_awr작업을 하면 sts도 같이 export됨.
 -- plsql_mode를 extended설정하면 top-level뿐만 아니라 호출된 SQL까지 같이 capture됨
-SQL> execute dbms_workload_capture.start_capture (name=>'CAP_SOE', dir=>'CAP_DIR', duration=> null, default_action=> 'INCLUDE', capture_sts=> TRUE, sts_cap_interval=> 60, plsql_mode => 'extended');
+SQL> execute dbms_workload_capture.start_capture (name=>'CAP_SOE', dir=>'CAP_DIR', duration=> null, default_action=> 'EXCLUDE', capture_sts=> TRUE, sts_cap_interval=> 60, plsql_mode => 'extended');
 
 -- alert.log에 아래와 같은 메시지가 발생됩니다.
 2023-12-08 00:23:57.235000 +00:00
@@ -228,31 +233,8 @@ SQL> SELECT min(snap_id) begin_id, max(snap_id) end_id FROM awr_pdb_snapshot;
 
 ```
 
-> RAC환경에서 STS 생성방법
-- Single Instance에서만 start_capture시에 STS를 같이 생성할수 있습니다. 
-- RAC에서는 "노드별"로 Cursor Cache를 수집하는 작업을 Capture작업과 병행합니다.
-  - 관련문서 RAT: How To Create 'SQL Tuning Set (STS)' Along With Capture/Replay On RAC Database - Using 'CAPTURE_STS=>TRUE' In RAC Results In Error. (Doc ID 2792609.1)
-```sql
--- 노드별로 STS 생성하여 수집합니다.
-SQL> exec SYS.dbms_sqlset.CREATE_SQLSET(sqlset_name=>'STS_CAP_SOE_NODE1', description=>'Statements from Before-Change' );
--- 1500초동안 60초에 한번씩 수집함.
-SQL> begin
-  DBMS_SQLTUNE.CAPTURE_CURSOR_CACHE_SQLSET(
-    sqlset_name => 'STS_CAP_SOE_NODE1',
-    time_limit => 1500,
-    repeat_interval => 60,
-    capture_option => 'MERGE',
-    capture_mode => DBMS_SQLTUNE.MODE_ACCUMULATE_STATS,
-    basic_filter  => 'parsing_schema_name in (''SOE'')',
-    sqlset_owner => NULL,
-    recursive_sql => 'HAS_RECURSIVE_SQL');
-end;
-/
-SQL> SELECT statement_count FROM dba_sqlset WHERE name = 'STS_CAP_SOE_NODE1';
-STATEMENT_COUNT
----------------
-              39
-```
+> RAC환경에서 Database Repaly 고려사항에 대해서 정리했으니 참고하시기 바랍니다.
+> - 참고블로그 : [RAC환경에서 Database Repaly 고려사항](/blog/oracle/how-to-capture-workload-on-rac/){: target="_blank"}
 
 **Capture 작업 중지**
 
@@ -356,7 +338,7 @@ CDB1           909607496 19.3.0.0.0  NO  CAP_SOE                    COMPLETED
              Directory object: CAP_DIR
                Directory path: /oradata/capdir
       Directory shared in RAC: TRUE
-                 Filters used: 0 EXCLUSION filters
+                 Filters used: 1 INCLUSION filter
                   PL/SQL mode: EXTENDED
          Encryption algorithm:
 
@@ -690,23 +672,15 @@ SQL> select id, name, dbid, capture_id, status  from DBA_WORKLOAD_REPLAYS;
 -- connect 정보를 매핑하는 작업을 수행합니다.
 -- 기본 null로 설정되어 있는 wrc클라이언트가 접속된 세션으로 replay작업을 수행합니다. 
 -- 때에따라 특정 노드나 특정 서비스로, 부하분산을 해서 연결해야될경우 변경할수 있습니다. 
--- 변경방법 : exec DBMS_WORKLOAD_REPLAY.REMAP_CONNECTION (connection_id => 1,replay_connection =>'PDB1_CLONE');
 SQL> select conn_id,replay_id, replay_conn  from dba_workload_connection_map;
    CONN_ID  REPLAY_ID REPLAY_CONN
 ---------- ---------- --------------------
-         1          1
-         2          1
-         3          1
-         4          1
-         5          1
-         6          1
-         7          1
-         8          1
-         9          1
-        10          1
+         1          1 
+... 
         11          1
         12          1
-
+-- 접속정보 오류가 있을수 있으므로 명확하게 선언해주는것이 좋습니다.
+--SQL> exec DBMS_WORKLOAD_REPLAY.REMAP_CONNECTION (connection_id => 1,replay_connection =>'TEST서버');
 ```
 
 Replay 작업시 옵션
