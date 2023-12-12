@@ -501,6 +501,19 @@ Capture 작업이 수행되면 Capture file를 생성하기 위하여 "WCR: capt
 
 ## 테스트서버(preprocess, replay, report)
 
+테스트 서버에서 DB구성시에는 운영DB와 동일한 데이터셋으로 구성해야합니다.
+Capture시점의 데이터로 구성하여 replay의 반복적인 테스트를 위하여 flashback설정하는 방법이 필요합니다. 
+
+Capture시점의 데이터 구성방법
+- PDB의 Clone기능을 사용
+- RMAN을 통한 백업/복구방법
+- Datapump을 이용한 데이터 이관
+
+replay의 반복적인 테스트 
+- replay시작전에 restore point를 생성후에 replay작업완료후 데이터베이스를 flashback하여 이전 시점으로 변경합니다.
+- 혹은 다시 rman을 통한 백업/복구, datapump를이용한 데이터 이관방법이 있습니다.
+
+
 테스트서버에서는 3단계작업을 수행합니다. 
 
 - 테스트서버에서 작업 단계
