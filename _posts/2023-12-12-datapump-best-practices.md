@@ -33,6 +33,21 @@ DB 버전 및 OS 영향으로부터 영향받지 않는 논리적인 마이그�
 SYSDBA는 내부적으로 사용되며 특별한 기능들을 제공하고 있습니다. 일반적으로 생성된 유저와 동일하게 동작하지 않습니다. 그러므로 Export할때 SYSDBA로 수행할 필요가 없습니다. 
 (대신 오라클 기술지원의 요청이나 Transportable Tablespace를 수행할때는 사용될수 있습니다.)
 
+SYS유저는 data pump로 받을수없습니다. (SYSTEM은 가능합니다)
+```bash
+$> expdp admin@pdb1 SCHEMAS=SYS DIRECTORY=my_data_pump_dir DUMPFILE=sys.dmp
+Export: Release 19.0.0.0.0 - Production on Mon Dec 18 03:48:31 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+Password:
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "ADMIN"."SYS_EXPORT_SCHEMA_01":  admin/********@pdb1 SCHEMAS=SYS DIRECTORY=my_data_pump_dir DUMPFILE=sys.dmp
+ORA-39165: Schema SYS was not found.
+ORA-31655: no data or metadata objects selected for job
+Job "ADMIN"."SYS_EXPORT_SCHEMA_01" completed with 2 error(s) at Mon Dec 18 03:48:49 2023 elapsed 0 00:00:15
+```
 ## PARAMETER FILE을 사용해라
 
 Parameter File은 parfile 매개변수를 사용할수 있습니다. parameter file을 만들면 오타를 줄이고 CLI에서 아주 긴 data pump 명령어를 실행시 화면에 잘못표기 되는 오류를 방지하는데 도움이 됩니다. 
