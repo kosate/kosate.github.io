@@ -26,12 +26,16 @@ header :
 ## 목차
 
 - [오라클의 새로운 아키텍처 - Multitenant소개](/blog/oracle/What-is-the-multitenant){: target="_blank"}
+- 구성 관리
   - [Container DB 생성 및 기동](/blog/oracle/how-to-create-containerdb){: target="_blank"}
   - [Container DB 구성시 고려사항](/blog/oracle/consideration-for-containerdb){: target="_blank"}
   - [Container DB 파일 구조 ](/blog/oracle/what-containerdb-consist-of/){: target="_blank"}
   - [Pluggable DB 생성 및 기동](/blog/oracle/how-to-create-pluggabledb/){: target="_blank"}
   - (작성예정)Pluggable DB 활용 예제
   - (작성예정)Pluggable DB 서비스 관리
+- 성능 관리
+  - [CDB환경에서 AWR관리 방법](/blog/oracle/how-to-manage-awr-on-cdb/){: target="_blank"}
+
 
 ## 마무리 
 계속 업데이트 됩니다.
