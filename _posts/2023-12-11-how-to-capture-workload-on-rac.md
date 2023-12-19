@@ -1,6 +1,6 @@
 ---
 layout: single
-title: RAC환경에서 Database Repaly 고려사항
+title: RAC환경에서의 Database Replay 고려사항
 date: 2023-12-11 15:00
 categories: 
   - Oracle
@@ -17,11 +17,11 @@ toc_sticky: true
 
 ## 개요
 
-RAC환경에서 Database Replay할때 고려사항에 대해서 정리하였습니다.
+Database Replay수행할때 RAC환경에서 추가적으로 고려되는 사항에 대해서 정리해보았습니다.
 
 ## RAC 환경에서 고려사항
 
-Single Instance에서는 DB Replay방법은 아래 블로그을 참고하시면 됩니다. 
+우선 Single Instance에서 DB Replay방법은 아래 블로그을 참고하시면 됩니다. 
 
 - 블로그 : [Database Replay 수행방법](/blog/oracle/introducing-dbreplay//){: target="_blank"}
 
