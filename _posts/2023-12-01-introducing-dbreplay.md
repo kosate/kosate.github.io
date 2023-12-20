@@ -24,29 +24,31 @@ swingbench에서 발생되는 워크로드를 이용하여 작업 절차를 정�
 
 ## Database Replay기능이란?
 
-Database Replay는 오라클 데이터베이스에서 제공하는 튜닝 도구 중 하나로, 실제 운영 환경에서 발생한 워크로드를 기록하고, 이를 이용하여 테스트 환경에서 동일한 작업을 재현하는 기능을 제공합니다. 이를 통해 데이터베이스 성능을 향상시키는 데 도움이 됩니다.
+Database Replay는 오라클 데이터베이스의 중요한 튜닝 도구 중 하나입니다. 이 도구는 실제 운영 환경에서 발생한 워크로드를 기록하고, 이를 활용하여 동일한 작업을 테스트 환경에서 재현하는 기능을 제공합니다. 이를 통해 데이터베이스의 성능을 향상시키는 데 큰 도움이 됩니다.
 
-- 주요기능
-  - 워크로드 캡쳐(Capture) 작업 : 운영DB에서 발생되는 SQL 쿼리들을 기록합니다.
-  - 워크로드 재생(Replay) 작업 : 기록된 워크로드를 사용하여 테스트환경에서 동일한 워크로드를 수행합니다. 이를 통해 성능변화를 분석하여 튜닝대상을 식별하고 개선할수 있습니다.
-  - 워크로드 부하 발생 : 운영DB에서 발생된 워크로드기반으로 테스트 DB에서 발생시키지만 더 많은 사용자를 처리한다는 가정으로 더 많은 부하를 발생시킬수 있습니다. 
-  - 성능 분석 및 최적화 : 캡쳐 작업과 재생작업을 비교하면 튜닝대상을 선별할수 있습니다. 반복적으로 수행하여 성능 최적화 작업을 할수 있습니다. 
+주요기능
+- 워크로드 캡쳐(Capture) 작업 : 운영DB에서 발생되는 SQL 쿼리들을 기록합니다.
+- 워크로드 재생(Replay) 작업 : 기록된 워크로드를 사용하여 테스트환경에서 동일한 워크로드를 수행합니다. 이를 통해 성능변화를 분석하여 튜닝대상을 식별하고 개선할수 있습니다.
+- 워크로드 부하 발생 : 운영DB에서 발생된 워크로드기반으로 테스트 DB에서 발생시키지만 더 많은 사용자를 처리한다는 가정으로 더 많은 부하를 발생시킬수 있습니다. 
+- 성능 분석 및 최적화 : 캡쳐 작업과 재생작업을 비교하면 튜닝대상을 선별할수 있습니다. 반복적으로 수행하여 성능 최적화 작업을 할수 있습니다. 
 
-※  Database Replay는 여러사용자가 접속하는 실 업무워크로드를 기반으로 DB전체의 성능을 보는데 사용됩니다. 인스턴스 튜닝관점으로 접근하는것이 더 낫습니다.
+※ Database Replay는 여러 사용자가 접속하는 실제 업무 워크로드를 기반으로 DB 전체의 성능을 평가하는 데 사용됩니다. 인스턴스 튜닝 관점에서 접근하는 것이 더 효과적입니다.
 
-- Database Replay와 연관된 DBMS 패키지 
-  - [dbms_workload_capture](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_WORKLOAD_CAPTURE.html){: target="_blank"} : 운영서버에서 워크로드를 Capture할때 사용합니다. 
-  - [dbms_workload_replay](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_WORKLOAD_REPLAY.html){: target="_blank"} : Capture된 워크도르를 재 실행할때 사용합니다.
+Database Replay와 연관된 DBMS 패키지 
 
-- Database Replay가 지원하지 않는 세션이나 트랜잭션 유형 
-  - 주로 XA, Flashback query, SQL*Loader작업, DBRP같은 작업은 Capture되지 않습니다. 
-  - 자세한 내용은 아래 메뉴얼문서를 참고하세요.
-    - [Workload Capture Restrictions](https://docs.oracle.com/en/database/oracle/oracle-database/19/ratug/capturing-a-database-workload.html#GUID-4A1995F1-78F9-4080-8DFC-1E3EBCB3F4B8){: target="_blank"}
+- [dbms_workload_capture](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_WORKLOAD_CAPTURE.html){: target="_blank"} : 운영서버에서 워크로드를 Capture할때 사용합니다. 
+- [dbms_workload_replay](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_WORKLOAD_REPLAY.html){: target="_blank"} : Capture된 워크도르를 재 실행할때 사용합니다.
+
+Database Replay가 지원하지 않는 세션이나 트랜잭션 유형 
+
+- 주로 XA, Flashback query, SQL*Loader작업, DBRP같은 작업은 Capture되지 않습니다. 
+- 자세한 내용은 아래 메뉴얼문서를 참고하세요.
+  - [Workload Capture Restrictions](https://docs.oracle.com/en/database/oracle/oracle-database/19/ratug/capturing-a-database-workload.html#GUID-4A1995F1-78F9-4080-8DFC-1E3EBCB3F4B8){: target="_blank"}
 
 
 ## RAT 활성화 확인
 
-database repaly는 Real Application Testing(RAT)옵션중 하나의 기능입니다. 따라서 RAT옵션이 DBMS 엔진내 활성화되어 있어야 사용가능합니다. (RAC인경우 모든 노드에서 활성화해야합니다.)
+Database replay는 Real Application Testing(RAT)옵션중 하나의 기능입니다. 따라서 RAT옵션이 DBMS 엔진내 활성화되어 있어야 사용가능합니다. (RAC인경우 모든 노드에서 활성화해야합니다.)
 
 관련문서 : [Enabling and Disabling Database Options After Installation](https://docs.oracle.com/en/database/oracle/oracle-database/19/ntdbi/enabling-and-disabling-database-options-after-installation.html){: target="_blank"}
 
@@ -72,29 +74,31 @@ SQL>
 ## 운영서버(Capture작업)
 
 운영 DB서버에서 워크로드를 Capture하면 세션별 SQL수행이력을 파일로 저장합니다.
-우선 Capture대상 업무를 선정하고, 모든 SQL 수행이력을 저장하므로 OS에 여유공간이 필요합니다. 
+우선 Capture대상 업무를 선정해야하며, 모든 SQL 수행이력을 저장하므로 OS에 여유공간이 필요합니다. 
 
-- 운영서버에서 고려사항
-  - Capture 대상 업무 선정 
-    - Database Replay도구의 특성상 부하 발생기 이므로 부하가 많은 업무를 선정하는것이 유의미한 결과를 도출할수 있습니다
-  - OS 여유공간 확인
-  - Capture 작업에 대한 부하
+**운영서버에서 고려사항**
+
+- Capture 대상 업무 선정 
+  - Database Replay도구의 특성상 부하 발생기 이므로 부하가 많은 업무를 선정하는것이 유의미한 결과를 도출할수 있습니다
+- OS 여유공간 확인
+- Capture 작업에 대한 부하
 
 ### 1. Capture 대상 업무 선정
 
 Capture 대상 업무 선정을 합니다. Database Replay는 특정 시간에 특정 업무를 Filtering해서 Capture가 가능합니다. Capture 대상 업무는 Replay 방법와 같이 연관지어 생각해볼수 있습니다. 
 낮에는 OLTP, 밤에는 Batch Job이 동작한다면 낮에 특정시간에 OLTP업무를 Capture하고 밤에 Batch 작업이 수행되는 시간에 Capture하여 Replay시에는 두개의 업무를 Merge해서 수행할수도 있습니다.(테스트환경도 동일한 데이터셋이 있어야 동일한 워크로드가 발생됩니다.). 
 
-- Capture 업무 대상 선정시 고려사항
-  - 업무 유형을 고려한 업무선정예시
-    - Peak시점에 모든 워크로드 수집 
-    - 하나의 복잡한 비즈니스 업무을 선정하여 수집
-    - 그외 관심이 있는 업무를 선정하여 수집
-  - Capture 시간 확인
-    - 선택한 업무에 실행시간을 확인합니다. 이전에 동일한 업무가 수행되었던 시간에 대한 워크로드 분석을 합니다. AWR Report생성하여 Capture 파일 생성량을 미리계산합니다.
-    - 배치작업이 있을경우 배치 작업시작부터 완료시간을 Capture할수 있습니다.
-  - 테스트DB서버 구성
-    - Capture시점의 데이터로 데이터 DB가 구성되어야합니다. 테스트 DB에서는 운영DB에서 수집한 동일한 SQL구문과 바인드변수가 사용되므로 동일한 데이터로 준비되어 있어야 운영과 동일한 워크로드로 재현이 가능합니다.
+**Capture 업무 대상 선정시 고려사항**
+
+- 업무 유형을 고려한 업무선정 예시
+  - Peak시점에 모든 워크로드 수집 
+  - 하나의 복잡한 비즈니스 업무을 선정하여 수집
+  - 그외 관심이 있는 업무를 선정하여 수집
+- Capture 시간 확인
+  - 선택한 업무에 실행시간을 확인합니다. 이전에 동일한 업무가 수행되었던 시간에 대한 워크로드 분석을 합니다. AWR Report생성하여 Capture 파일 생성량을 미리계산합니다.
+  - 배치작업이 있을경우 배치 작업시작부터 완료시간을 Capture할수 있습니다.
+- 테스트DB서버 구성
+  - Capture시점의 데이터로 데이터 DB가 구성되어야합니다. 테스트 DB에서는 운영DB에서 수집한 동일한 SQL구문과 바인드변수가 사용되므로 동일한 데이터로 준비되어 있어야 운영과 동일한 워크로드로 재현이 가능합니다.
 
 **테스트 환경구성**
 
@@ -118,9 +122,9 @@ SQL> show pdbs
 
 - Capture 대상업무를 Swingbench업무로 SOE유저로 수행되는 워크로드를 Capture합니다.
   - 업무 발생 방법 : [Swingbench 소개(2.7) 및 설치 방법 ](/blog/oracle/introduce-swingbench/){: target="_blank"}
-  - Swingbench는 두가지 부하 처리 방식을 제공
-    - DB서버에서 PL/SQL수행 방식 : SOE_Server_Side_V2.xml
-    - Client에서 SQL Call수행 방식 : SOE_Client_Side.xml(본문에서 사용한 템플릿입니다.)
+- Swingbench는 두가지 부하 처리 방식을 제공
+  - DB서버에서 PL/SQL수행 방식 : SOE_Server_Side_V2.xml
+  - Client에서 SQL Call수행 방식 : SOE_Client_Side.xml(본문에서 사용한 템플릿입니다.)
 
 ```bash
 -- 일반적인 애플리케이션을 고려하여 JDBC로 SQL Call하는 방식으로 부하를 발생
@@ -149,9 +153,10 @@ SOE_USER   NEW    CAPTURE               USER       SOE
 
 클라이언트로 부터 발생된 모든 요청내용은 Capture파일로 저장됩니다(바이너리 형식). 클라이언트 요청량을 계산하면 어느정도 필요한 용량산정이 가능합니다. Capture하려는 대상업무가 수행되는 시점의 AWR Report에서 client 네트워크 전송량을 가지고 계산할수 있습니다. 
 
-- Capture를 위해 필요한 디스크 공간 계산식
-  - Capture시 생성될 파일 사이즈는 AWR Report로 부터 계산해볼수 있습니다..
-  - 디스크 용량 계산식 : Instance Activity Stats의 "bytes received via SQL*Net from client"값 * 2배
+**Capture를 위해 필요한 디스크 공간 계산식**
+
+- Capture시 생성될 파일 사이즈는 AWR Report로 부터 계산해볼수 있습니다..
+- 디스크 용량 계산식 : Instance Activity Stats의 "bytes received via SQL*Net from client"값 * 2배
 
 ```sql 
 -- Capture대상 업무의 네트워크 요청 사이즈를 계산  
@@ -172,11 +177,12 @@ SNAP       STAT_NAME                                   DELTA
 
 세션별로 Capture 파일(.rec)이 생성됩니다.(SQL구문과 바인드변수저장). 만약 100개의 세션이 Capture되면 100개의 wcr_.rec파일이 생성됩니다.
 
-- 디스크 공간할당시 고려사항
-  - Capture파일이 저장되는 디스크는 일반적인 Datafile과 동일한 스토리지로 권고합니다.
-    - Capture파일이 저장되는 속도가 느리면 SQL를 실행하는 세션까지 영향이 발생됩니다.
-  - RAC환경에서는 Shared 공간을 권고하지만 Local 공간에 저장할수 있습니다.
-    - Local공간에 저장했을대는 Capture완료이후에 하나의 디렉토리에 Merge해주는 작업이 필요합니다.
+**디스크 공간할당시 고려사항**
+
+- Capture파일이 저장되는 디스크는 일반적인 Datafile과 동일한 스토리지로 권고합니다.
+  - Capture파일이 저장되는 속도가 느리면 SQL를 실행하는 세션까지 영향이 발생됩니다.
+- RAC환경에서는 Shared 공간을 권고하지만 Local 공간에 저장할수 있습니다.
+  - Local공간에 저장했을대는 Capture완료이후에 하나의 디렉토리에 Merge해주는 작업이 필요합니다.
 
 
 **부하발생(OLTP)**
@@ -394,14 +400,15 @@ SQL>
 
 Capture 작업을 하면 OS상에 I/O가 발생되므로 업무에 영향을 줄수 있습니다. 업무유형에 따라서 영향도가 상이하므로 직접 테스트를 해서 확인하는 수 밖에 없습니다. 운영서버에 테스트해본다는것이 리스크가 있다고 판단될수 있습니다. 테스트서버에서 Capture작업절차를 검증하고, 운영서버에서 가장 부하가 적은 시점에 작업해보고 검증하고나서 Capture대상 업무에 수행하는식으로 단계적인 접근이 필요합니다. 
 
-- Capture 작업에 대한 부하(Overhead) 
-  - Client에서 전송되는 데이터량에 따라 비례하여 성능에 영향을 받습니다. 
-    - Client에서 전송되는 데이터는 SQL을 의미하며, SQL의 유형에 따라서 업무 영향도가 다릅니다.
-    - SQL처리시 SQL문장과 바인드변수를 Capture파일로 저장하는 작업(Disk I/O)이 수반되어 성능에 영향이 발생됩니다. (세션별 PGA 메모리중 64Kb 메모리를 요구됩니다.)
-  - SQL업무 유형에 따라 영향받는 부하가 다릅니다. 
-    - DSS와 같이 Long runing SQL유형은 SQL처리시간중에 SQL저장하는 시간이 차지하는 비율이 적으므로 Capture부하가 적습니다.
-    - OLTP성 Query는 Short DML이므로 SQL처리시간중 SQL 저장시간이 차지하는 비중이 커질수 밖에 없으므로 DSS유형 SQL에 비해서 Capture부하가 더 발생될수 있습니다. 
-  - 관련문서 : 오라클 문서(MOS)에는 Capture시 0~3%의 CPU부하가 추가 발생된다고 언급되어 있습니다. (Real Application Testing: Database Capture FAQ (Doc ID 1920275.1))
+**Capture 작업에 대한 부하(Overhead)**
+
+- Client에서 전송되는 데이터량에 따라 비례하여 성능에 영향을 받습니다. 
+  - Client에서 전송되는 데이터는 SQL을 의미하며, SQL의 유형에 따라서 업무 영향도가 다릅니다.
+  - SQL처리시 SQL문장과 바인드변수를 Capture파일로 저장하는 작업(Disk I/O)이 수반되어 성능에 영향이 발생됩니다. (세션별 PGA 메모리중 64Kb 메모리를 요구됩니다.)
+- SQL업무 유형에 따라 영향받는 부하가 다릅니다. 
+  - DSS와 같이 Long runing SQL유형은 SQL처리시간중에 SQL저장하는 시간이 차지하는 비율이 적으므로 Capture부하가 적습니다.
+  - OLTP성 Query는 Short DML이므로 SQL처리시간중 SQL 저장시간이 차지하는 비중이 커질수 밖에 없으므로 DSS유형 SQL에 비해서 Capture부하가 더 발생될수 있습니다. 
+- 관련문서 : 오라클 문서(MOS)에는 Capture시 0~3%의 CPU부하가 추가 발생된다고 언급되어 있습니다. (Real Application Testing: Database Capture FAQ (Doc ID 1920275.1))
 
 Capture로 인한 부하를 줄이기 위해서는 원하지 않는 작업들과 워크로드는 Filter할수 있습니다. JOB, OMS, EM 등의 백그라운드 작업들은 Filter하여 제외합니다. Capture부하를 확인하기 위하여 처음에는 약 30분이내로 짧게 수행하여 부하발생량과 Capture파일 발생량을 테스트하는것이 좋습니다.
  
@@ -411,6 +418,7 @@ Swingbench로 30분간 부하발생하고 있는 상태에서 5분의 성능정�
   - 비교시점 #1(Capture미수행시 업무 부하) vs  비교시점 #2(Capture수행시 업무부하)
 
 Swingbench는 두가지 방식을 제공합니다. 
+
 1. Order Entry (PLSQL) V2(SOE_Server_Side_V2.xml) : PLSQL기반으로 트랜잭션 처리 방식
    - Capture작업할때 약 9%정도의 트랜잭션 처리량이 감소되었습니다. 이는 Swingbench 부하 발생방법이 PL/SQL기반하기 때문에 더 영향을 받았습니다. PL/SQL내에서 업무 처리할경우 네트워크 전송이 없이 DB내에서 로직이 처리되므로 일반적으로 네트워크로 round robin되어 처리되는 방식에 대해서 더 영향을 받은것으로 판단됩니다.
 2. Order Entry (jdbc)(SOE_Client_Side.xml) : SQL기반으로 트랜잭션 처리 
@@ -499,27 +507,29 @@ Capture 작업이 수행되면 Capture file를 생성하기 위하여 "WCR: capt
 "log file sync"시간도 기존 2.14ms에서 2.39ms로 증가되었습니다. 테스트 환경 영향으로 local disk에 online redo log영역과 Capture flie를 같은 위치에 잇어서 약 11%정도의 영향이 발생된것 같습니다.
 스토리지가 분리되거나, 고성능 스토리지를 사용하면 영향도는 감소될것입니다.
 
-## 테스트서버(preprocess, replay, report)
+## 테스트서버(preprocess, replay, report 작업)
 
 테스트 서버에서 DB구성시에는 운영DB와 동일한 데이터셋으로 구성해야합니다.
 Capture시점의 데이터로 구성하여 replay의 반복적인 테스트를 위하여 flashback설정하는 방법이 필요합니다. 
 
-Capture시점의 데이터 구성방법
+**Capture시점의 데이터 구성방법**
+
 - PDB의 Clone기능을 사용
 - RMAN을 통한 백업/복구방법
 - Datapump을 이용한 데이터 이관
 
-replay의 반복적인 테스트 
+**replay의 반복적인 테스트**
+
 - replay시작전에 restore point를 생성후에 replay작업완료후 데이터베이스를 flashback하여 이전 시점으로 변경합니다.
 - 혹은 다시 rman을 통한 백업/복구, datapump를이용한 데이터 이관방법이 있습니다.
 
 
 테스트서버에서는 3단계작업을 수행합니다. 
 
-- 테스트서버에서 작업 단계
-  1. preprocessing 작업 : capture파일을 가져와서 replay가 가능한 메타데이터를 생성합니다.
-  2. replay 작업 : replay client를 통해서 운영서버에서 Capture한 워크로드를 그대로 재생(replay)합니다
-  3. report 작업 : Capture된 워크로드와 Replay된 워크로드를 비교하여 성능차이를 확인합니다.
+**테스트서버에서 작업 단계**
+1. preprocessing 작업 : capture파일을 가져와서 replay가 가능한 메타데이터를 생성합니다.
+2. replay 작업 : replay client를 통해서 운영서버에서 Capture한 워크로드를 그대로 재생(replay)합니다
+3. report 작업 : Capture된 워크로드와 Replay된 워크로드를 비교하여 성능차이를 확인합니다.
 
 **테스트 DB시작**
 
@@ -627,6 +637,7 @@ SQL>
 **워크로드 분석(Workload Analyzer)**
 
 Capture파일을 이용하여 워크로드를 분석합니다. 
+
 - Capture하기 전에 접속한 세션을 in-flight session이라고 합니다. Capture안되어 있는 워크로드로 인하여 영향을 받을수 있습니다.
 - PL/SQL워크로드는 내부적으로 재현하기 어렵습니다. 
 - SYSDATE를 참조하는 데이터는 replay시에 바뀔수도 있습니다(정확하게 테스트하기 위해서는 서버시간을 변경해야될수도 있습니다.)
@@ -659,18 +670,18 @@ Non captured workload : Maximum Workload Impact: 5 % of DB Time
 Rationale : A significant amount of the workload running during the capture period was not captured, most likely because of capture filters.
 Action : This part of the workload will not be replayed and will not appear in the AWR reports.
 ```
-### 2.replay 작업
+### 2. replay 작업
 
 Replay Client는 DB서버내에서 실행하지 않고, 외부 서버에서 실행합니다.(DB서버내에서 같이 Client가 실행되면 환경 변경에 따른 SQL영향도 분석이 힘들어집니다.)
 Replay를 수행할때는 아무런 변경없이 수행하여 baseline으로 설정합니다. 
 한번에 하나만 변경하여 replay작업을 반복합니다. 
 
-Replay 작업시 고려사항
-  - Replay Client(wrc프로세스)가 실행되어야 합니다.
-  - Replay Client는 replay가 가능한 형식을 변환된 파일을 읽어서 DB서버로 워크로드를 요청 합니다. 
-  - 하나의 Replay Client 프로세스는 Thread기반으로 여러개의 session을 만듭니다(최대 50개정도 만듭니다.)
-  - calibrate작업을 수행하면 권고되는 프로세스 Replay Client 개수를 계산해줍니다.
-  - Replay Client의 접속방식을 변경할수 있습니다. connection mapping작업을 통해서 테스트서버접속정보로 변경합니다.(RAC환경일경우 접속정보변경을 통해 노드를 지정하거나, loadbalancing작업이 가능하도록 할수도 있습니다.) 
+**Replay 작업시 고려사항**
+- Replay Client(wrc프로세스)가 실행되어야 합니다.
+- Replay Client는 replay가 가능한 형식을 변환된 파일을 읽어서 DB서버로 워크로드를 요청 합니다. 
+- 하나의 Replay Client 프로세스는 Thread기반으로 여러개의 session을 만듭니다(최대 50개정도 만듭니다.)
+- calibrate작업을 수행하면 권고되는 프로세스 Replay Client 개수를 계산해줍니다.
+- Replay Client의 접속방식을 변경할수 있습니다. connection mapping작업을 통해서 테스트서버접속정보로 변경합니다.(RAC환경일경우 접속정보변경을 통해 노드를 지정하거나, loadbalancing작업이 가능하도록 할수도 있습니다.) 
 
 **테스트 DB에서 준비 작업**
 
@@ -696,13 +707,14 @@ SQL> select conn_id,replay_id, replay_conn  from dba_workload_connection_map;
 --SQL> exec DBMS_WORKLOAD_REPLAY.REMAP_CONNECTION (connection_id => 1,replay_connection =>'TEST서버');
 ```
 
-Replay 작업시 옵션
-  - synchronization : SCN(TRUE)혹은 TIME(FALSE)기반으로 수행됩니다. SCN은 Commit순서를 유지하여 실행하고 TIME은 Capture된 실행시간을 기반으로 수행합니다. 
-  - connect_time_scale : Connection간의 간격을 의미합니다. 단위는 %이고 기본 100%입니다. 감소시킬경우 동시접속자가 많아지는 효과를 볼수 있습니다.
-    - 예로 50으로 지정할경우, Connection과 Connection Capture당시는 동시에 2개세션접속되었지만, replay시점에는 동시에 3개, 4개의 세션이 접속되어 수행할수 있습니다.
-  - think_time_scale : 같은 세션에 있는 실행되는 SQL간격을 의미합니다. 단위는 %이고 기본 100%입니다. 감소시킬경우 세션안에서 SQL실행간격이 줄어들어, 전체적으로 SQL 실행횟수가 증가되는 효과를 볼수 있습니다. 
-  - think_time_auto_correct : captrue한것보다 replay성능이 느릴경우 think_time_scale을 조정(감소)하는 작업을 수행합니다. (기본 True입니다.)
-  - scale_up_multiplier : DML중에 Query작업을 더 수행합니다. SELECT구문의 부하를 추가할수 있어 Capture부하보다 더 많은 부하를 발생시키도록 조정할수 있습니다. 
+**Replay 작업시 옵션**
+
+- synchronization : SCN(TRUE)혹은 TIME(FALSE)기반으로 수행됩니다. SCN은 Commit순서를 유지하여 실행하고 TIME은 Capture된 실행시간을 기반으로 수행합니다. 
+- connect_time_scale : Connection간의 간격을 의미합니다. 단위는 %이고 기본 100%입니다. 감소시킬경우 동시접속자가 많아지는 효과를 볼수 있습니다.
+  - 예로 50으로 지정할경우, Connection과 Connection Capture당시는 동시에 2개세션접속되었지만, replay시점에는 동시에 3개, 4개의 세션이 접속되어 수행할수 있습니다.
+- think_time_scale : 같은 세션에 있는 실행되는 SQL간격을 의미합니다. 단위는 %이고 기본 100%입니다. 감소시킬경우 세션안에서 SQL실행간격이 줄어들어, 전체적으로 SQL 실행횟수가 증가되는 효과를 볼수 있습니다. 
+- think_time_auto_correct : captrue한것보다 replay성능이 느릴경우 think_time_scale을 조정(감소)하는 작업을 수행합니다. (기본 True입니다.)
+- scale_up_multiplier : DML중에 Query작업을 더 수행합니다. SELECT구문의 부하를 추가할수 있어 Capture부하보다 더 많은 부하를 발생시키도록 조정할수 있습니다. 
 
 ```sql
 -- repaly를 위한 준비 작업을 합니다.
@@ -808,18 +820,21 @@ REP_SOE            1 COMPLETED         16216720 YES          2023-12-08 04:57:21
 
 ```
 
-### 3.report 작업
+### 3. report 작업
 
-Report 작업시 고려사항
-  - Capture한 결과와 Replay한 결과를 비교하여 성능 분석이 가능합니다.
-  - Replay중에는 Error가 발생될수 있습니다.(external table, dblink, sysdate) 
-  - Capture한 시점의 데이터와 Replay한 시점의 데이터가 틀릴경우 데이터 결과가 틀릴수 있습니다.
+**Report 작업시 고려사항**
+
+- Capture한 결과와 Replay한 결과를 비교하여 성능 분석이 가능합니다.
+- Replay중에는 Error가 발생될수 있습니다.(external table, dblink, sysdate) 
+- Capture한 시점의 데이터와 Replay한 시점의 데이터가 틀릴경우 데이터 결과가 틀릴수 있습니다.
 
 DB replay는 운영DB의 워크로드를 재현할수 있지만 완벽하게 동일하게 수행되지 않으므로 아래와 같은 목표를 가지고 수행하는것이 좋습니다. 
+
 - 기능적 요건 : Replay수행시 SQL 수행 비율(Capture대비) : 약 80~90%을 목표
 - 성능 분석 : 기능적 요건이 만족되면 워크로드 분석합니다(AWR, ADDM, Report등)
 
 **Capture작업와 Replay작업 비교**
+
 ```sql
 SQL> set pagesize 0 long 30000000 longchunksize 1000
 SQL> select DBMS_WORKLOAD_REPLAY.REPORT(replay_id=>1, format=>'TEXT') tt from dual;
@@ -1049,6 +1064,7 @@ spool off
 
 Capture당시의 SQL Tuning Set과 Replay작업의 SQL Tuning Set정보를 이용하여 성능 분석이 가능합니다. 
 
+(Multitenant환경에서 발생되는 예외사항으로 추청)
 STS를 이용하여 SPA수행하면 DBID가 불일치가 되어 SQL_ID가 동일하더라도 성능비교가 잘 안됩니다.
 SQL Tuning Set의 DBID 변경작업을 우선수행합니다.
 Capture당시의 SQL Tuning Set상세 정보를 보면 DBID가 다른것을 확인할수 있습니다.
@@ -1230,16 +1246,11 @@ SQL>
 ```
 ## 마무리
 
-Database Replay 작업 방식 및 고려사항에 대해서 알아보았습니다. 
-Database Replay작업이외 SQL Performance Analyzer를 사용하고 각종 Report를 생성하는 작업이 추가되면서 작업 절차가 복잡해 보일수 있습니다.
-운영서버에 Database 워크로드를 Capture하는 작업이 필요하므로 고려사항에 대해서 좀더 자세히 정리하려고 노력했습니다. 
+Database Replay 작업 방식 및 고려사항에 대해 살펴보았습니다. Database Replay 작업 외에도 SQL Performance Analyzer를 사용하고 다양한 보고서를 생성하는 작업이 추가되면서 작업 절차가 좀 더 복잡해 보일 수 있습니다. 특히, 운영 서버에서 Database 워크로드를 캡처하는 작업이 필요하기 때문에 고려해야 할 사항에 대해 자세히 정리하려고 노력했습니다.
 
-운영환경에서 Database Replay를 위한 워크로드 Capture작업이 부담으로 느껴지실수 있습니다. (스토리지 공간 필요, Capture부하등등)
-하지만 테스트 환경에서 절차를 검증하고, 좀더 적은 부하상황에서 적용해봄으로써 리스크를 줄일수 있습니다. (실제 해보기전까지 모르는 부분이기도 합니다.)
+운영 환경에서 Database Replay를 위한 워크로드 캡처 작업은 부담으로 느껴질 수 있습니다(스토리지 공간 필요, 캡처 부하 등). 그러나 테스트 환경에서 절차를 검증하고, 좀 더 적은 부하 상황에서 적용해봄으로써 리스크를 줄일 수 있습니다(실제 해보기 전까지 모르는 부분이기도 합니다).
 
-시스템에 대한 변경, DB변경에 의한 영향도를 파악하기에는 너무 많은 인력과 업무 협력이 필요합니다.
-당장 업그레이드 작업을 준비할때도 느껴지실것 같습니다. 
-DB자체 기능으로 워크로드를 생산하고 성능을 비교할수 있는 기능을 이용한다면 좀더 운영의 안정성을 확보할수 있는 기회가 되지 않을까 싶습니다.
+시스템에 대한 변경, DB 변경에 의한 영향을 파악하기에는 많은 인력과 업무 협력이 필요합니다. 당장 업그레이드 작업을 준비할 때도 느껴질 것 같습니다. DB 자체 기능을 활용하여 워크로드를 생성하고 성능을 비교할 수 있는 기능을 사용한다면 운영의 안정성을 좀 더 확보할 수 있는 기회가 될것입니다.
 
 ## 참고문서
 
