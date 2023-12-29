@@ -120,6 +120,8 @@ Export할때 통계정보를 같이 export하지 않는것이 좋습니다. 왜�
 $> expdp admin@pdb1 SCHEMAS=HR DIRECTORY=my_data_pump_dir DUMPFILE=hr_exclude_static.dmp  EXCLUDE=STATISTICS
 ```
 
+> 최근에 4TB데이터를 Import할때 통계정보때문에 성능 이슈가 있지는 않았습니다. 혹시라도 통계정보단계에서 성능 이슈가 발생되면 별도로 분리하여 작업하시기 바랍니다.
+
 **- stage테이블을 이용한 통계정보 이관 방법**
 
 특정 유저의 데이터를 이관할때 해당 유저의 통계정보를 stage테이블에 저장하여 다른 DB로 이관할수 있습니다.
@@ -150,7 +152,7 @@ $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=stats_tab.dmp log=implog
 SQL> EXEC DBMS_STATS.IMPORT_SCHEMA_STATS (OWNNAME=>'HR',STATTAB=>'STATS_TAB',STATID=>'HR_BACKUP',STATOWN=>'ADMIN');
 ```
 
-## EXPORT와 IMPORT 과정을 분석하기 위한 파리미터 설정은?
+## EXPORT와 IMPORT 과정을 분석하기 위한 파라미터 설정은?
 
 export작업의 로그에 timestamp을 표시하려면 LOGTIME=ALL을 설정할수 있습니다. LOGTIME은 12.2부터 추가되었으며 export 및 import의 성능 측정하는데 도움이 됩니다.
 
@@ -247,6 +249,46 @@ JOB_NAME=par4_job
 -- %L : 2-digit, %은 3-digit to 10-digit
 
 $> expdp admin@pdb1 SCHEMAS=HR DIRECTORY=my_data_pump_dir DUMPFILE=par_hr_%L.dmp PARALLEL=4
+Starting "ADMIN"."SYS_EXPORT_SCHEMA_01":  admin/********@pdb1 SCHEMAS=HR DIRECTORY=my_data_pump_dir DUMPFILE=par_hr_%L.dmp PARALLEL=4
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+. . exported "HR"."EMPLOYEES"                            17.07 KB     107 rows
+. . exported "HR"."LOCATIONS"                            8.437 KB      23 rows
+. . exported "HR"."JOB_HISTORY"                          7.195 KB      10 rows
+. . exported "HR"."JOBS"                                 7.109 KB      19 rows
+. . exported "HR"."DEPARTMENTS"                          7.125 KB      27 rows
+. . exported "HR"."REGIONS"                              5.546 KB       5 rows
+. . exported "HR"."COUNTRIES"                            6.398 KB      25 rows
+Master table "ADMIN"."SYS_EXPORT_SCHEMA_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for ADMIN.SYS_EXPORT_SCHEMA_01 is:
+  /oradata/datapump/par_hr_01.dmp <-- 여러개 파일이 생성됨
+  /oradata/datapump/par_hr_02.dmp <-- 여러개 파일이 생성됨
+  /oradata/datapump/par_hr_03.dmp <-- 여러개 파일이 생성됨
+Job "ADMIN"."SYS_EXPORT_SCHEMA_01" successfully completed at Fri Dec 29 04:29:56 2023 elapsed 0 00:00:18
+
+$> ls -arlt
+-rw-r-----.  1 oracle oinstall 106496 Dec 29 04:29 par_hr_03.dmp
+-rw-r-----.  1 oracle oinstall  65536 Dec 29 04:29 par_hr_02.dmp
+-rw-r-----.  1 oracle oinstall 561152 Dec 29 04:29 par_hr_01.dmp
+-rw-r--r--.  1 oracle oinstall   2435 Dec 29 04:29 export.log
 ```
 
 하나의 파일에 병렬 쓰기가 되면 성능이 개선되지 않습니다. 하나의 worker프로세스가 해당파일에 대한 exclusive lock을 가지고 있기 때문에 다른 worker 프로세스가 blocking되기 때문입니다.
@@ -312,7 +354,6 @@ Dump file set for ADMIN.SYS_EXPORT_SCHEMA_01 is:
   /oradata/datapump/estimate_stat.dmp
 Job "ADMIN"."SYS_EXPORT_SCHEMA_01" successfully completed at Sun Dec 17 12:53:46 2023 elapsed 0 00:00:25
 ```
-
 
 ## 적절한 리소스를 할당해라
 
@@ -381,7 +422,7 @@ $> ls -al
 -rw-r-----.  1 oracle oinstall 221184 Dec 17 13:08 hr_comp.dmp
 
 ```
-> Data Pump에서 Data 압축은 Advnaced Compression Option이 필요합니다. COMPRESSION=MEDATA_ONLY 설정을 하거나 압축된 datapump을 import할때는 라이센스가 요구되지 않습니다.
+> Data Pump에서 Data 압축은 Advanced Compression Option이 필요합니다. COMPRESSION=MEDATA_ONLY 설정을 하거나 압축된 datapump을 import할때는 라이센스가 요구되지 않습니다.
 
 ## DATA PUMP JOB을 실행하기 전에 데이터베이스를 점검해라.
 
@@ -449,6 +490,361 @@ CREATE TABLE "HR"."LOCATIONS"
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "TS_SOE_01" ;  <-- 테이블스페이스가 변경된것을 확인할수 있습니다.
 ```
+
+## (추가) 데이터 먼저 import하고 인덱스는 나중에 생성해라.
+
+대용량 DB를 이관해야될경우 데이터 이관절차에 대해서 고민을 해야합니다.
+여러번의 절차를 구분하면 작업실수에 대한 영향을 줄이면서 빠르게 수행할수 있습니다. 
+
+작업절차 
+0. expdp수행 (예시: schemas단위로)
+1. impdp수행 - 메타데이터만 생성(인덱스제외)
+2. impdp수행 - 데이터만 적재
+3. impdp수행 - 인덱스 및 constraint생성
+4. impdp수행 - 통계정보 적재
+
+> 고려사항 : 대용량데이터를 이관작업할때는 Parallel 설정하여 병렬처리하시기 바랍니다. (메타데이터 생성시는 parallel=1로 설정합니다.)
+
+### 0. expdp수행 (예시: schemas단위로)
+
+HR유저가 소유하고 있는 모든 정보를 export합니다. impdp작업시 hr.dmp을 반복적으로 사용합니다.
+
+```bash
+$> expdp admin@pdb1 SCHEMAS=HR DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp LOGFILE=hr_exp.log
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+```
+
+HR유저가 가지고 있는 오브젝트 개수를 확인합니다. 이후에 impdp작업시에 어떻게 변화되는지 확인하겠습니다.
+
+```sql
+SQL> select object_type, count(*) from dba_objects where owner = 'HR' group by object_type order by 1;
+OBJECT_TYPE               COUNT(*)
+----------------------- ----------
+INDEX                           19
+PROCEDURE                        2
+SEQUENCE                         3
+TABLE                            7
+TRIGGER                          2
+VIEW                             1
+```
+
+### 1. impdp수행 - 메타데이터만 생성(인덱스제외)
+
+HR유저가 가지고 있는 오브젝트를 생성합니다. 인덱스 및 Constraints는 제외하도록 하겠습니다.
+데이터 적재과 인덱스 및 Constraints생성작업을 분리하는것면 에러 발생가능성을 줄이고 성능을 개선시킬수 있습니다.
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY EXCLUDE=INDEX,CONSTRAINT,STATISTICS LOGFILE=hr_imp_without_index.log
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+
+-- 제외됨
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+```
+
+메타데이터만 생성하였을때 index는 19개중에 1개만 생성되었습니다.
+인덱스가 생성된 이유는 CONTURIES테이블이 IOT테이블이기 때문입니다.
+
+```sql
+SQL> select object_type, count(*) from dba_objects where owner = 'HR' group by object_type order by 1;
+OBJECT_TYPE               COUNT(*)
+----------------------- ----------
+INDEX                            1  <-- IOT테이블로 생성이 됨
+PROCEDURE                        2
+SEQUENCE                         3
+TABLE                            7
+TRIGGER                          2
+VIEW                             1
+```
+
+### 2. impdp수행 - 데이터만 적재
+
+테이블이 생성되이 있기 때문에 데이터 적재 작업을 수행합니다.
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=DATA_ONLY LOGFILE=hr_data.log
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "HR"."COUNTRIES"                            6.398 KB      25 rows
+. . imported "HR"."DEPARTMENTS"                          7.125 KB      27 rows
+. . imported "HR"."EMPLOYEES"                            17.07 KB     107 rows
+. . imported "HR"."JOBS"                                 7.109 KB      19 rows
+. . imported "HR"."JOB_HISTORY"                          7.195 KB      10 rows
+. . imported "HR"."LOCATIONS"                            8.437 KB      23 rows
+. . imported "HR"."REGIONS"                              5.546 KB       5 rows
+Job "ADMIN"."SYS_IMPORT_FULL_01" successfully completed at Fri Dec 29 05:02:45 2023 elapsed 0 00:00:12
+```
+
+> 타켓 테이블이 파티션 테이블일 경우 파티션별로 worker프로세스가 병렬로 수행되도록 data_options=TRUST_EXISTING_TABLE_PARTITIONS를 설정합니다. 
+
+### 3. impdp수행 - 인덱스 및 constraint생성
+
+인덱스를 생성후에 constraints 생성작업을 수행합니다. 
+impdp명령어를 통해서 일괄수행할수 있지만, 스크립트를 생성후에 직접 수행할수도 있습니다. 
+
+INCLUDE속성에 INDEX/INDEX,CONSTRAINT를 지정하였습니다. INCLUDE속성에 INDEX,CONSTRAINT를 지정할경우 INDEX생성시에 INDEX/INDEX와 INDEX/STATISTICS가 같이 생성되어 INDEX통계정보가 같이 적재됩니다. 뒤에서 별도로 통계정보를 적재할 예정이므로 INDEX/INDEX만 설정하였습니다. 
+
+**방법 #1 - impdp로 직접 생성**
+
+```bash 
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=INDEX/INDEX,CONSTRAINT LOGFILE=hr_index.log
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+```
+
+**방법 #2 - impdp로 스크립트 생성후에 수동으로 생성**
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=INDEX/INDEX,CONSTRAINT LOGFILE=hr_index.log SQLFILE=hr_index.sql
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+
+$> cat hr_index.sql
+-- new object type path: SCHEMA_EXPORT/TABLE/INDEX/INDEX
+-- CONNECT HR
+CREATE INDEX "HR"."LOC_COUNTRY_IX" ON "HR"."LOCATIONS" ("COUNTRY_ID")
+  PCTFREE 10 INITRANS 2 MAXTRANS 255
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" PARALLEL 1 ;
+(생략)
+-- new object type path: SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+-- CONNECT ADMIN
+ALTER TABLE "HR"."LOCATIONS" ADD CONSTRAINT "LOC_ID_PK" PRIMARY KEY ("LOCATION_ID")
+  USING INDEX "HR"."LOC_ID_PK"  ENABLE;
+(생략)
+-- new object type path: SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+ALTER TABLE "HR"."DEPARTMENTS" ADD CONSTRAINT "DEPT_LOC_FK" FOREIGN KEY ("LOCATION_ID")
+          REFERENCES "HR"."LOCATIONS" ("LOCATION_ID") ENABLE;
+
+```
+
+HR유저의 오브젝트 개수를 확인합니다. EXPDP에서 확인했던 오브젝트와 동일하게 생성되었습니다. 
+
+```sql
+SQL> select object_type, count(*) from dba_objects where owner = 'HR' group by object_type order by 1;
+OBJECT_TYPE               COUNT(*)
+----------------------- ----------
+INDEX                           19
+PROCEDURE                        2
+SEQUENCE                         3
+TABLE                            7
+TRIGGER                          2
+VIEW                             1
+```
+
+### 4. impdp수행 - 통계정보 적재   
+
+테이블와 인덱스에 대한 통계정보 적재작업을 수행합니다. 소스테이블과 동일하게 통계정보를 넣을수도 있고, 통계정보를 새로 생성할수도 있습니다. 
+
+**방법 #1 - 기존통계정보 사용**
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=STATISTICS  LOGFILE=hr_stats.log
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+```
+
+**방법 #2 - 통계정보 신규생성**
+
+```sql
+SQL> exec dbms_stats.GATHER_SCHEMA_STATS(OWNNAME=>'HR');
+```
+
+통계계정보여부를 확인합니다. 마지막 통계정보 시간이 있으면 통계정보가 수집된것으로 판단합니다. 
+
+```sql
+SQL> select count(*) from dba_tables where owner = 'HR' and LAST_ANALYZED is null;
+  COUNT(*)
+----------
+         0
+SQL> select count(*) from dba_indexes where owner = 'HR' and LAST_ANALYZED is null;
+  COUNT(*)
+----------
+         0
+```
+
+## (추가) 파티션 테이블인 경우 data_options을 사용해라.
+
+원본이 파티션 테이블인 경우 파티션별로 타켓DB에 데이터를 그대로 옮길수 있습니다. 
+타켓 DB에 각 파티션별로 데이터를 Import할때 동작방식에 대해서 이해하면 성능 개선하는데 많은 도움이 됩니다. 
+
+각 WORKER프로세스들은 각 파티션별로 데이터를 읽지만 데이터 INSERT되는 대상테이블에 대한 LOCK점유상태에 따라서 성능 차이가 극명하게 차이가 납니다.
+
+그래서 DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS으로 설정이 필요합니다. 
+각 파티션별로 개별 LOCK을 점유하여 병렬 처리가 가능합니다. 
+
+**파티션 테이블 생성** 
+
+테스트를 위하여 파티션 테이블을 생성하였습니다. LIST 파티션이고 총 4개의 파티션을 가지고 있습니다.
+
+```sql
+CREATE TABLE hr.sample_part_tb
+(part_key    NUMBER,
+ part_value varchar2(1000) )
+PARTITION BY list  (part_key)
+(PARTITION part1 VALUES (1),
+ PARTITION part2 VALUES (2),
+ PARTITION part3 VALUES (3),
+ PARTITION part4 VALUES (4));
+ 
+insert into hr.sample_part_tb 
+select mod(level,4)+1, 'value'||level from dual connect by level <=1000;
+commit;
+```
+
+타켓 DB에 데이터 이관 작업을 위하여 소스DB에서 Export작업을 수행합니다. 파티션별로 데이터가 export됩니다.
+
+```bash
+$> expdp admin@pdb1 tables=hr.sample_part_tb DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp LOGFILE=sample_part_tb_exp.log parallel=4 metrics=YES logtime=ALL
+29-DEC-23 06:35:56.155: W-4 Processing object type TABLE_EXPORT/TABLE/TABLE
+29-DEC-23 06:35:56.186: W-4      Completed 1 TABLE objects in 2 seconds
+29-DEC-23 06:35:56.391: W-1 . . exported "HR"."SAMPLE_PART_TB":"PART1"               9.367 KB     250 rows in 0 seconds using direct_path
+29-DEC-23 06:35:56.410: W-1 . . exported "HR"."SAMPLE_PART_TB":"PART2"               9.367 KB     250 rows in 0 seconds using direct_path
+29-DEC-23 06:35:56.428: W-1 . . exported "HR"."SAMPLE_PART_TB":"PART3"               9.367 KB     250 rows in 0 seconds using direct_path
+29-DEC-23 06:35:56.446: W-1 . . exported "HR"."SAMPLE_PART_TB":"PART4"               9.367 KB     250 rows in 0 seconds using direct_path
+29-DEC-23 06:35:56.713: W-2      Completed 4 TABLE_EXPORT/TABLE/TABLE_DATA objects in 0 seconds
+29-DEC-23 06:35:57.066: W-2 Master table "ADMIN"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+```
+
+타켓DB에서 Import작업을 수행합니다. 
+
+DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS 설정여부에 따라서 동작방식이 변경되는것을 확인할수 있습니다. 
+
+**CASE #1 - DATA_OPTIONS사용안할경우**
+
+먼저 DATA_OPTIONS을 제거하고 나서 수행하겠습니다. 
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE
+```
+
+v$SQL에서 datapump가 수행했던 SQL구문을 확인했습니다. external table에서 읽어서 SAMPLE_PART_TB테이블에 데이터를 insert하고 있습니다. 
+Parallel DML이고 Append이므로 테이블 Lock(TM)을 점유후에 작업이 될것입니다. 4개의 파티션에 적재되므로 4번 실행되지만 파티션 별로 Parallel하게 동작하지 못하고 결국 Serial하게 동작합니다. 
+성능이 나오지 않습니다. import하려는 대상이 파티션 테이블과 논파티션 테이블이 섞여있을경우 성능차이가 크지 않겠지만 몇백개의 파티션이 있는테이블에 import작업할때는 성능이 거의 나오지 않습니다. 
+
+```sql
+-- sql_id = dys31bakaxmbm,  loads = 4, executions= 1 
+INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELATIONAL("HR"."SAMPLE_PART_TB" NOT XMLTYPE) ("PART_KEY", "PART_VALUE")     SELECT "PART_KEY", "PART_VALUE"     FROM "ADMIN"."ET$007E13A60001" KU$ 
+-- sql_id = 0k4uq58sdkmg5, loads = 1, executions= 4 
+DECLARE     stmt            VARCHAR2(2000);     TABLE_NOT_EXIST exception;     pragma          EXCEPTION_INIT(TABLE_NOT_EXIST, -942);    BEGIN      stmt := 'DROP TABLE "ADMIN"."ET$007E13A60001" PURGE';      EXECUTE IMMEDIATE stmt;    EXCEPTION       WHEN TABLE_NOT_EXIST THEN NULL;    END;     
+```
+
+PL/SQL구문으로 실행되는 DROP구문(0k4uq58sdkmg5)은 각 파티션별로 INSERT하고 나서 수행되는 구문입니다. (ET$007E13A60001은 데이터 적재를 위한 external table입니다. )
+파티션 작업할때 마다 DROP구문이 실행되므로 총 실행횟수(Executions)는 4개되고, 이후에 해당  INSERT구문(dys31bakaxmbm)이 실행되지만 오브젝트변경으로 인한 cursor invalid가 되어 항상 SQL구문이 새로 로드가 되어야하므로 loads개수가 4까지 늘어났습니다. 
+
+**CASE #2 - DATA_OPTIONS사용할경우**
+
+DATA_OPTIONS에 TRUST_EXISTING_TABLE_PARTITIONS을 설정하고나서 수행했습니다. 
+타켓 DB에 파티션이 있다고 선언해주는것이므로 각 파티션 별로 작업하게 됩니다. 
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE data_options=TRUST_EXISTING_TABLE_PARTITIONS
+```
+
+v$SQL에서 datapump가 수행했던 SQL구문을 확인했습니다. external table에서 읽어서 SAMPLE_PART_TB테이블에 데이터를 insert하고 있습니다. 
+SQL구문이 CASE #1과 다른다는것을 확인할수 있습니다. 개별 파티션별로 INSERT 가 실행됩니다. 그렇기 때문에 각 Lock의 범위는 파티션으로 줄어들게 되어 각 WORKER프로세스들이 Parallel작업로 동시에 파티션에 데이터 적재 작업이 가능합니다. 
+
+```sql
+-- sql_id = 9u542c5mcys2a, loads = 1, executions= 1 
+INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELATIONAL("HR"."SAMPLE_PART_TB" NOT XMLTYPE) PARTITION ( "PART2" ) ("PART_KEY", "PART_VALUE")     SELECT "PART_KEY", "PART_VALUE"     FROM "ADMIN"."ET$009C02560001" KU$ 
+-- sql_id = 327j7zqtnytcy, loads = 1, executions= 1 
+INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELATIONAL("HR"."SAMPLE_PART_TB" NOT XMLTYPE) PARTITION ( "PART1" ) ("PART_KEY", "PART_VALUE")     SELECT "PART_KEY", "PART_VALUE"     FROM "ADMIN"."ET$009C02560001" KU$ 
+-- sql_id = 96h488525uz3u, loads = 1, executions= 1 
+INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELATIONAL("HR"."SAMPLE_PART_TB" NOT XMLTYPE) PARTITION ( "PART3" ) ("PART_KEY", "PART_VALUE")     SELECT "PART_KEY", "PART_VALUE"     FROM "ADMIN"."ET$009C02560001" KU$ 
+-- sql_id = 9t2gt6x2myzfq, loads = 1, executions= 1 
+INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELATIONAL("HR"."SAMPLE_PART_TB" NOT XMLTYPE) PARTITION ( "PART4" ) ("PART_KEY", "PART_VALUE")     SELECT "PART_KEY", "PART_VALUE"     FROM "ADMIN"."ET$009C02560001" KU$ 
+
+-- sql_id = 5ta6pzrt7hp6b, executions= 4
+ DECLARE     stmt            VARCHAR2(2000);     TABLE_NOT_EXIST exception;     pragma          EXCEPTION_INIT(TABLE_NOT_EXIST, -942);    BEGIN      stmt := 'DROP TABLE "ADMIN"."ET$009C02560001" PURGE';      EXECUTE IMMEDIATE stmt;    EXCEPTION       WHEN TABLE_NOT_EXIST THEN NULL;    END;     
+```
+
+## (추가) 파티션 테이블인 경우 Truncate를 조심해라.
+
+"특정"파티션 테이블에만 데이터를 적재할 경우 있겠지요.
+그래서 TABLE_EXISTS_ACTION를 이용하여 작업할 경우 예기치 않는 실수를 할수 있습니다.
+TABLE_EXISTS_ACTION는 데이터 적재전에 "테이블레벨"에서 수행하는 작업입니다. 그렇기 때문에 "특정"파티션 테이블만 데이터를 적재할경우 사용하면 전체 테이블 데이터가 삭제되는 실수를 범하게 됩니다.
+
+아래 예제를 보면 4개의 파티션에 각 250건씩 존재합니다.
+
+```sql
+SQL> select part_key, count(*) from hr.sample_part_tb group by part_key;
+
+  PART_KEY   COUNT(*)
+---------- ----------
+         1        250
+         2        250
+         3        250
+         4        250
+```
+
+첫번째 파티션데이터에 잘못되어서 기존 export받은 데이터를 적재하려고 합니다. 
+TABLE_EXISTS_ACTION=TRUNCATE를 사용했습니다. 
+
+```bash
+$> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb:part1 parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE
+29-DEC-23 07:32:18.327: W-1 Startup took 0 seconds
+29-DEC-23 07:32:18.497: W-1 Master table "ADMIN"."SYS_IMPORT_TABLE_01" successfully loaded/unloaded
+29-DEC-23 07:32:18.807: Starting "ADMIN"."SYS_IMPORT_TABLE_01":  admin/********@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb:part1 parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE
+29-DEC-23 07:32:18.881: W-1 Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+29-DEC-23 07:32:19.363: W-1 . . imported "HR"."SAMPLE_PART_TB":"PART1"               9.367 KB     250 rows in 0 seconds using external_table
+29-DEC-23 07:32:19.483: W-1      Completed 4 TABLE_EXPORT/TABLE/TABLE_DATA objects in 3383 seconds
+29-DEC-23 07:32:19.612: Job "ADMIN"."SYS_IMPORT_TABLE_01" successfully completed at Fri Dec 29 07:32:19 2023 elapsed 0 00:00:02
+```
+
+"HR"."SAMPLE_PART_TB":"PART1"  에 데이터가 250건 적재되었습니다. 
+
+파티션별 데이터건수를 확인해보겠습니다. 
+내가 Import하려했던 파티션만 존재하고 나머지 파티션에는 데이터가 삭제되었습니다. 
+
+```sql
+SQL> select part_key, count(*) from hr.sample_part_tb group by part_key;
+  PART_KEY   COUNT(*)
+---------- ----------
+         1        250
+```
+
+> 꼭 파티션별로 작업할때 TRUNCATE작업을 수동으로 작업하신후에 IMPDP작업을 수행하시깁 바랍니다.
+> ```sql
+> alter table "HR"."SAMPLE_PART_TB" truncate partition "PART1"  ;
+> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb:part1 parallel=4 metrics=YES logtime=ALL 
+> ```
 
 ## 오라클 클라우드로 데이터마이그레이션시 고려사항
 
