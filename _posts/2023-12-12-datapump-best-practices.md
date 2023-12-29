@@ -616,7 +616,7 @@ impdp명령어를 통해서 일괄수행할수 있지만, 스크립트를 생성
 
 INCLUDE속성에 INDEX/INDEX,CONSTRAINT를 지정하였습니다. INCLUDE속성에 INDEX,CONSTRAINT를 지정할경우 INDEX생성시에 INDEX/INDEX와 INDEX/STATISTICS가 같이 생성되어 INDEX통계정보가 같이 적재됩니다. 뒤에서 별도로 통계정보를 적재할 예정이므로 INDEX/INDEX만 설정하였습니다. 
 
-**방법 #1 - impdp로 직접 생성**
+**- 방법 #1 - impdp로 직접 생성**
 
 ```bash 
 $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=INDEX/INDEX,CONSTRAINT LOGFILE=hr_index.log
@@ -625,7 +625,7 @@ Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
 Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
 ```
 
-**방법 #2 - impdp로 스크립트 생성후에 수동으로 생성**
+**- 방법 #2 - impdp로 스크립트 생성후에 수동으로 생성**
 
 ```bash
 $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=INDEX/INDEX,CONSTRAINT LOGFILE=hr_index.log SQLFILE=hr_index.sql
@@ -672,7 +672,7 @@ VIEW                             1
 
 테이블와 인덱스에 대한 통계정보 적재작업을 수행합니다. 소스테이블과 동일하게 통계정보를 넣을수도 있고, 통계정보를 새로 생성할수도 있습니다. 
 
-**방법 #1 - 기존통계정보 사용**
+**- 방법 #1 - 기존통계정보 사용**
 
 ```bash
 $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=hr.dmp CONTENT=METADATA_ONLY INCLUDE=STATISTICS  LOGFILE=hr_stats.log
@@ -681,7 +681,7 @@ Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
 Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
 ```
 
-**방법 #2 - 통계정보 신규생성**
+**- 방법 #2 - 통계정보 신규생성**
 
 ```sql
 SQL> exec dbms_stats.GATHER_SCHEMA_STATS(OWNNAME=>'HR');
@@ -710,7 +710,7 @@ SQL> select count(*) from dba_indexes where owner = 'HR' and LAST_ANALYZED is nu
 그래서 DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS으로 설정이 필요합니다. 
 각 파티션별로 개별 LOCK을 점유하여 병렬 처리가 가능합니다. 
 
-**파티션 테이블 생성** 
+**- 파티션 테이블 생성 및 EXPDP 수행** 
 
 테스트를 위하여 파티션 테이블을 생성하였습니다. LIST 파티션이고 총 4개의 파티션을 가지고 있습니다.
 
@@ -743,11 +743,13 @@ $> expdp admin@pdb1 tables=hr.sample_part_tb DIRECTORY=my_data_pump_dir DUMPFILE
 29-DEC-23 06:35:57.066: W-2 Master table "ADMIN"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
 ```
 
+**- IMPDP 테스트** 
+
 타켓DB에서 Import작업을 수행합니다. 
 
 DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS 설정여부에 따라서 동작방식이 변경되는것을 확인할수 있습니다. 
 
-**CASE #1 - DATA_OPTIONS사용안할경우**
+**- CASE #1 - DATA_OPTIONS사용안할경우**
 
 먼저 DATA_OPTIONS을 제거하고 나서 수행하겠습니다. 
 
@@ -769,7 +771,7 @@ DECLARE     stmt            VARCHAR2(2000);     TABLE_NOT_EXIST exception;     p
 PL/SQL구문으로 실행되는 DROP구문(0k4uq58sdkmg5)은 각 파티션별로 INSERT하고 나서 수행되는 구문입니다. (ET$007E13A60001은 데이터 적재를 위한 external table입니다. )
 파티션 작업할때 마다 DROP구문이 실행되므로 총 실행횟수(Executions)는 4개되고, 이후에 해당  INSERT구문(dys31bakaxmbm)이 실행되지만 오브젝트변경으로 인한 cursor invalid가 되어 항상 SQL구문이 새로 로드가 되어야하므로 loads개수가 4까지 늘어났습니다. 
 
-**CASE #2 - DATA_OPTIONS사용할경우**
+**- CASE #2 - DATA_OPTIONS사용할경우**
 
 DATA_OPTIONS에 TRUST_EXISTING_TABLE_PARTITIONS을 설정하고나서 수행했습니다. 
 타켓 DB에 파티션이 있다고 선언해주는것이므로 각 파티션 별로 작업하게 됩니다. 
