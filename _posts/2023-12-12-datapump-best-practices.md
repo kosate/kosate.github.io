@@ -357,7 +357,7 @@ Job "ADMIN"."SYS_EXPORT_SCHEMA_01" successfully completed at Sun Dec 17 12:53:46
 
 ## 적절한 리소스를 할당해라
 
-STREAMS_POOL_SIZE 파라미터는 64MB ~ 256MB 정도는 할당되어 있어야합니다. Data Pump는 Advanced Queuing(AW)기능을 사용하여 프로세스간에 통신을 합니다. SGA_TARGET 파라미터가 설정되어 있으면 STREAMS_POOL_SIZE 파라미터는 데이터베이스 사용량에 적합한 최소값으로 설정되어 있어야합니다.
+STREAMS_POOL_SIZE 파라미터는 64MB ~ 256MB 정도는 할당되어 있어야합니다. Data Pump는 Advanced Queuing(AQ)기능을 사용하여 프로세스간에 통신을 합니다. SGA_TARGET 파라미터가 설정되어 있으면 STREAMS_POOL_SIZE 파라미터는 데이터베이스 사용량에 적합한 최소값으로 설정되어 있어야합니다.
 
 **- 19c부터 Multitenant환경의 경우 PDB별로 Data Pump Job의 개수를 관리**
 
@@ -437,7 +437,7 @@ NAME                                 TYPE        VALUE
 aq_tm_processes                      integer     1
 ```
 
-**- _OPTIMIZER_GATHER_STATS_ON_LOAD 파리미터 확인**
+**- "_OPTIMIZER_GATHER_STATS_ON_LOAD" 파라미터 확인**
 
 12c부터 CTAS(Create Table as Select)나 insert /*+ append */ 사용하는 direct path insert와 같은 데이터 로딩작업시에 자동으로 통계정보를 수집하는 기능이 추가되었습니다. _OPTIMIZER_GATHER_STATS_ON_LOAD의 Default값이 true이므로 import작업시에 성능이 느려질수 있으므로  false설정 후 import작업 이후에 수동으로 통계정보를 수집하는것이 더 좋습니다.
 
@@ -445,7 +445,7 @@ aq_tm_processes                      integer     1
 SQL> alter system set "_OPTIMIZER_GATHER_STATS_ON_LOAD"=false;
 ```
 
-**- RAC환경에서 _lm_share_lock_opt 파라미터 확인**
+**- RAC환경에서 "_lm_share_lock_opt" 파라미터 확인**
 
 12.2의 RAC환경부터 library cache에서 SHARE lock(S-Lock)이 가능하게 되었습니다. impdp 작업시 parallel을 1부터 크게 설정할 경우 'Library Cache Lock' (Cycle)' 이벤트가 발생되며 성능이 느려질수 있습니다. impprot작업시이 _lm_share_lock_opt=false설정하거나, metadata import에는 paralel=1로 설정하는것이 좋습니다.
 
@@ -707,8 +707,9 @@ SQL> select count(*) from dba_indexes where owner = 'HR' and LAST_ANALYZED is nu
 
 각 WORKER프로세스들은 각 파티션별로 데이터를 읽지만 데이터 INSERT되는 대상테이블에 대한 LOCK점유상태에 따라서 성능 차이가 극명하게 차이가 납니다.
 
-그래서 DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS으로 설정이 필요합니다. 
-각 파티션별로 개별 LOCK을 점유하여 병렬 처리가 가능합니다. 
+DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS를 설정하면 각 파티션별로 개별 LOCK을 점유하여 병렬 처리가 가능합니다. 
+
+TRUST_EXISTING_TABLE_PARTITIONS 설정여부에 따라 동작하는 방식에 대해서 알아보겠습니다.
 
 **- 파티션 테이블 생성 및 EXPDP 수행** 
 
@@ -757,6 +758,8 @@ DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS 설정여부에 따라서 동작방
 $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE
 ```
 
+**DataPump수행시 모니터링되는 SQL구문**
+
 v$SQL에서 datapump가 수행했던 SQL구문을 확인했습니다. external table에서 읽어서 SAMPLE_PART_TB테이블에 데이터를 insert하고 있습니다. 
 Parallel DML이고 Append이므로 테이블 Lock(TM)을 점유후에 작업이 될것입니다. 4개의 파티션에 적재되므로 4번 실행되지만 파티션 별로 Parallel하게 동작하지 못하고 결국 Serial하게 동작합니다. 
 성능이 나오지 않습니다. import하려는 대상이 파티션 테이블과 논파티션 테이블이 섞여있을경우 성능차이가 크지 않겠지만 몇백개의 파티션이 있는테이블에 import작업할때는 성능이 거의 나오지 않습니다. 
@@ -780,6 +783,8 @@ DATA_OPTIONS에 TRUST_EXISTING_TABLE_PARTITIONS을 설정하고나서 수행했�
 $> impdp admin@pdb2 DIRECTORY=my_data_pump_dir DUMPFILE=sample_part_tb_%U.dmp CONTENT=DATA_ONLY tables=hr.sample_part_tb parallel=4 metrics=YES logtime=ALL TABLE_EXISTS_ACTION=TRUNCATE data_options=TRUST_EXISTING_TABLE_PARTITIONS
 ```
 
+**DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS 설정시 모니터링되는 SQL구문**
+
 v$SQL에서 datapump가 수행했던 SQL구문을 확인했습니다. external table에서 읽어서 SAMPLE_PART_TB테이블에 데이터를 insert하고 있습니다. 
 SQL구문이 CASE #1과 다른다는것을 확인할수 있습니다. 개별 파티션별로 INSERT 가 실행됩니다. 그렇기 때문에 각 Lock의 범위는 파티션으로 줄어들게 되어 각 WORKER프로세스들이 Parallel작업로 동시에 파티션에 데이터 적재 작업이 가능합니다. 
 
@@ -796,6 +801,9 @@ INSERT /*+ APPEND ENABLE_PARALLEL_DML PARALLEL("SAMPLE_PART_TB",1)+*/ INTO RELAT
 -- sql_id = 5ta6pzrt7hp6b, executions= 4
  DECLARE     stmt            VARCHAR2(2000);     TABLE_NOT_EXIST exception;     pragma          EXCEPTION_INIT(TABLE_NOT_EXIST, -942);    BEGIN      stmt := 'DROP TABLE "ADMIN"."ET$009C02560001" PURGE';      EXECUTE IMMEDIATE stmt;    EXCEPTION       WHEN TABLE_NOT_EXIST THEN NULL;    END;     
 ```
+
+> 소스와 동일한 파티션 구조로 데이터를 적재할 경우 DATA_OPTIONS=TRUST_EXISTING_TABLE_PARTITIONS을 설정하시기 바랍니다. 
+
 
 ## (추가) 파티션 테이블인 경우 Truncate를 조심해라.
 
