@@ -30,7 +30,7 @@ GoldenGate는 Oracle 사에서 제공하는 CDC(Change Data Capture) 제품입�
 
 2022년 10월 18일부터 라이센스없이 무료로 사용가능한 GodlenGate Free버전을 제공하고 있습니다. (초기에 나오는 Free버전은 21c였지만 지금은 23c 버전으로 제공합니다.)
 
-별도의 비용없이 없기 때문에, 
+별도의 비용이 발생되 않기 때문에, 
 CDC 솔루션을 학습하거나 데이터 복제를 하려는 업무에 부담없이 설치하여 테스트해볼수 있습니다. (사이드 프로젝트 사용하면 좋지 않을까요?)
 
 **Oracle GoldenGate Free는 누구를 위해 제공되는가?**
@@ -73,7 +73,7 @@ GoldenGate Free는 Docker Image와 Binary 파일 두가지 설치 방법을 제�
 GoldenGate Free의 기본 아키텍쳐는 MSA(MicroServices Architecture) 기반입니다. 
 그래서 단순히 바이너리 설치만 하는것이 아니라 내부적으로 서비스들을 만드는 작업이 필요합니다. 
 
-두가지 설치 방안을 제공합니다. 
+두가지 설치 절차을 제공합니다. 
 
 1. 바이너리 설치이후에 곧바로 서비스 생성하는 절차
    - runinstaller 하나의 명령어로 바이너리설치와 서비스 생성을 모두 수행합니다.
@@ -131,7 +131,7 @@ Deployment내 여러 구성요소들은 HTTP인터페이스로 쉽게 관리될�
   - Administrator Server : Admin Server는 Extract(데이터추출)와 Replicat(데이터 적재)프로세스를 생성관리합니다.
   - Distribution Server : Trail File을 전송하는 역할을 담당합니다.
   - Receive Server : Trail file을 받는 역할을 담당합니다.
-  - Performance Metrice Server : 각 프로세스들의 성능정보를 수집하는 역할을 담당합니다.
+  - Performance Metric Server : 각 프로세스들의 성능정보를 수집하는 역할을 담당합니다.
 
 참고로 GoldenGate Free에서는 하나의 Deployment만 지원합니다.
 
@@ -269,7 +269,7 @@ GoldenGate Free UI에 접속하여 Data Replication 작업을 구성할수 있�
 
 ## Data Replication 절차
 
-Oracle GoldenGate Free버전이 설치가 되었으니 지에 데이터베이스간에 데이터 복제 작업을 구성하려고 합니다.
+Oracle GoldenGate Free버전이 설치가 되었으니 데이터베이스간에 데이터 복제 작업을 구성하겠습니다.
 
 - 업무 요건 : Oracle Database 23c Free간 데이터 복제 
 - 대상 방식 : SRCPDB -> TGTPDB (단방향)
@@ -282,7 +282,7 @@ Oracle Database 23c Free 생성작업을 아래 절차를 참고하시기 바랍
 **소스/타켓 데이터베이스 생성**
 
 SRCPDB 에서 데이터를 추출하여 TGTPDB로 데이터를 실시간 복제작업을 수행하기 위하여 
-데이터베이스를 신규로 생성하도록 하겠습니다. 
+데이터베이스를 신규로 생성합니다.
 
 - SRCPDB : 데이터 추출 DB
 - TGTPDB : 데이터 적재 DB
@@ -663,7 +663,7 @@ operation extract/replicat 차트에서 operation에 대한 자세한 정보를 
 지금까지 GoldenGate Free버전에 대해서 알아보았습니다. 
 GoldenGate Free버전을 설치하는 절차와 실제 데이터 복제를 위한 pipeline 작업까지 구성해보았는데요. 생각보다 에러없이 너무 간편하게 설정했습니다. 
 
-사실 GoldenGate 상용버전을 사용할때는 CLI기반으로 하나부터 열까지 세세하게 관리해야되지만, FREE버전에서는 보다 사용자 중심의 UI와 간편함을 장점으로 사용자 확대를 위해 노력한다는 느낌을 받았습니다. GoldenGate Free는 GoldenGate MSA컴포넌트와 GoldenGate Free UI로 구성이 됩니다.  GoldenGate MSA컴포넌트는 내부적으로 설치되어 있기 때문에 adminclient를 통해서 세부적으로 관리가 가능하고, GoldenGate Free UI에서 REST API를 통해서 recipe라는 개념을 추가하여 보다 쉽게 데이터 복제가 가능합니다.
+사실 GoldenGate 상용버전을 사용할때는 CLI기반으로 하나부터 열까지 세세하게 관리해야되지만, FREE버전에서는 보다 사용자 중심의 UI와 간편함을 장점으로 사용자 확대를 위해 노력한다는 느낌을 받았습니다. GoldenGate Free는 GoldenGate MSA컴포넌트와 GoldenGate Free UI로 구성이 됩니다.  GoldenGate MSA컴포넌트는 내부적으로 설치되어 있기 때문에 adminclient를 통해서 세부적으로 관리가 가능하고, GoldenGate Free UI에서 REST API를 통해서 recipe라는 개념을 추가하여 데이터 복제 절차를 간소화하였습니다.
 
 다만 아쉬운 점은 Oracle Database간에만 데이터 복제가 가능한점, 리소스의 제약이 있다는점인데요,  Free이기 때문에 어쩔수 없지만, 좀더 다양한 환경(Non-Oracle, Bigdata, Cloud), 최신 앱기술들을 지원하는 기능이 추가되었으면 좋겠습니다. 
 
