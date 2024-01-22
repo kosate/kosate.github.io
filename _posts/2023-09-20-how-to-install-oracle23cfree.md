@@ -20,7 +20,8 @@ toc_sticky: true
 
 오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. 
 그리고 2023년 9월에 클라우드서비스와 같이 업그레이드 버전(23.3)이 출시되었습니다. 
-Oracle Database 23c은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 소규모 시스템에서 Oracle Database 23c Free버전을 사용해볼수 있을것 같습니다. 
+Oracle Database 23c은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 
+테스트 시스템(or 사이드프로젝트)에서 Oracle Database 23c Free버전을 사용해볼수 있을것 같습니다. 
 
 Oracle Database 23c Free 설치 방법에 대해서 알아보겠습니다. 
 

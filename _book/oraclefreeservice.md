@@ -25,26 +25,29 @@ Oracle에서는 무료로 사용할수 있는 서비스와 제품들을 제공�
 - Free 제품
   - Oracle Database Free (Container Image, RPM)
     - 오라클 데이터베이스 최신버전을 무료로 사용할수 있습니다. 거의 모든 옵션을 제공합니다.
-    - [Oracle Database 23c Free 설치(RPM)](/blog/oracle/how-to-install-oracle23cfree/){: target="_blank"}
-    - 참고문서 - <https://www.oracle.com/database/free/>
+    - 참고블로그
+      - [Oracle Database 23c Free 설치(RPM)](/blog/oracle/how-to-install-oracle23cfree/){: target="_blank"}
+    - 참고문서 - <https://www.oracle.com/database/free/>{: target="_blank"}
   - Oracle GoldenGate Free (Container Image, zip)
     - CDC 솔루션을 무료로 사용할수 있습니다. (UI기반으로 실시간 데이터 동기화 작업을 수행할수 있습니다. )
-    - 참고문서 - <https://www.oracle.com/kr/integration/goldengate/free/>
+    - 참고블로그
+      - [Oracle GoldenGate 23c Free 설치 방법(바이너리파일)](/blog/oracle/how-to-install-oraclegoldengate23cfree/){: target="_blank"}
+    - 참고문서 - <https://www.oracle.com/kr/integration/goldengate/free/>{: target="_blank"}
   - Autonomous Database Free Container Image
     - 오라클 자율주행 데이터베이스를 무료로 설치해서 사용할수 있습니다. 
     - Rest API 및 Web기반 Wosksheet를 제공합니다.
-    - 참고문서 - <https://blogs.oracle.com/datawarehousing/post/autonomous-database-free-container-image>
+    - 참고문서 - <https://blogs.oracle.com/datawarehousing/post/autonomous-database-free-container-image>{: target="_blank"}
   - Transaction Manager for Microservices Free(Zip)
     - 분산된 애플리케이션환경에서 트랜잭션을 제어할수 있습니다.
-    - 참고문서 - <https://www.oracle.com/database/transaction-manager-for-microservices/>
+    - 참고문서 - <https://www.oracle.com/database/transaction-manager-for-microservices/>{: target="_blank"}
   - Coherence Comminity Edition 
     - In-Memory Data Grid제품이 오픈소스로 제공되고 있습니다. UPL 1.0 라이센스정책에 적용됩니다.
-    - 참고문서 - <https://blogs.oracle.com/oraclecoherence/post/announcing-coherence-community-edition>
+    - 참고문서 - <https://blogs.oracle.com/oraclecoherence/post/announcing-coherence-community-edition>{: target="_blank"}
 
 - Free 서비스 
   - Oracle Cloud Infrastructure Free Tier - Always Free 
     - 평생 무료로 사용할수 있는 클라우드 서비스를 제공합니다.
-    - 참고문서 - <https://www.oracle.com/kr/cloud/free/>
+    - 참고문서 - <https://www.oracle.com/kr/cloud/free/>{: target="_blank"}
 
 ## 마무리 
 
