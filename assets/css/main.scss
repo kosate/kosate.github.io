@@ -21,6 +21,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'NanumBarunpen';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumBarunpen.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 html {
     /* apply a natural box layout model to all elements */
     box-sizing: border-box;
