@@ -110,7 +110,8 @@ GRE Tunnel중에 Layer 2에서 동작하는 GRETAP(Generic Routing Encapsulation
 
 - 고려사항
   - 리눅스 서버 환경인 경우 broadcast 패킷이 무시되지 않기 위하여 커널 파라미터를 변경해야합니다.
-```bash
+{% include codeHeader.html %} 
+```bash 
 sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
 ```
   - 클라우드 VM안에서는 OS 방화벽과 클라우드 네트워크 방화벽(Security List)이 있습니다. 모두 적절하게 GRE 통신이 가능하도록 해제합니다.
@@ -121,6 +122,7 @@ sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
 
 "bridge0"라는 이름의 브리지 인터페이스를 생성합니다. 브리지에 IP 주소 "172.16.254.1/24"를 할당합니다. 브리지를 활성화합니다.
 
+{% include codeHeader.html %} 
 ```bash
 ip link add name bridge0 type bridge
 ip addr add 172.16.254.1/24 dev bridge0
@@ -131,6 +133,7 @@ ip link set bridge0 up
 
 호스트 1과 연결한 "gretap1"라는 이름의 GRE Tap 인터페이스를 생성합니다. 해당 GRE Tap 인터페이스를 활성화합니다.GRE Tap 인터페이스를 "bridge0" 브리지에 연결합니다.
 
+{% include codeHeader.html %} 
 ```bash
 ip link add gretap1 type gretap remote 10.0.0.25
 ip link set dev gretap1 up
@@ -138,6 +141,8 @@ ip link set dev gretap1 master bridge0
 ```
 
 호스트 2과 연결한 "gretap2"라는 이름의 GRE Tap 인터페이스를 생성합니다. 해당 GRE Tap 인터페이스를 활성화합니다.GRE Tap 인터페이스를 "bridge0" 브리지에 연결합니다.
+
+{% include codeHeader.html %} 
 ```bash
 ip link add gretap2 type gretap remote 10.0.0.131
 ip link set dev gretap2 up
@@ -150,6 +155,7 @@ ip link set dev gretap2 master bridge0
 
 Multicast를 위하여 Multicast 주소범위인 224.0.0.0/8의 트래픽을 "bridge0" 인터페이스로 라우팅합니다.
 
+{% include codeHeader.html %} 
 ```bash
 ip route add 224.0.0.0/8 dev bridge0
 ```
@@ -160,7 +166,8 @@ ip route add 224.0.0.0/8 dev bridge0
 
 "gretap1"이라는 이름의 GRE Tap 인터페이스를 생성합니다. 해당 GRE Tap 인터페이스를 특정 마스터 IP로 설정합니다. IP 주소 "172.16.254.2/24"를 할당합니다. GRE Tap 인터페이스를 활성화합니다.
 
-```shell
+{% include codeHeader.html %} 
+```bash
 ip link add gretap1 type gretap remote 10.0.0.197
 ip addr add 172.16.254.2/24 dev gretap1
 ip link set gretap1 up
@@ -170,6 +177,7 @@ ip link set gretap1 up
 
 Multicast 주소 범위인 224.0.0.0/8의 트래픽을 "gretap1" 인터페이스로 라우팅합니다.
 
+{% include codeHeader.html %} 
 ```bash
 ip route add 224.0.0.0/8 dev gretap1
 ```
@@ -180,7 +188,8 @@ ip route add 224.0.0.0/8 dev gretap1
 
 "gretap1"이라는 이름의 GRE Tap 인터페이스를 생성합니다. 해당 GRE Tap 인터페이스를 특정 마스터 IP로 설정합니다. IP 주소 "172.16.254.3/24"를 할당합니다. GRE Tap 인터페이스를 활성화합니다.
 
-```shell
+{% include codeHeader.html %} 
+```bash
 ip link add gretap2 type gretap remote 10.0.0.197
 ip addr add 172.16.254.3/24 dev gretap2
 ip link set gretap2 up
@@ -190,6 +199,7 @@ ip link set gretap2 up
 
 Multicast 주소 범위인 224.0.0.0/8의 트래픽을 "gretap2" 인터페이스로 라우팅합니다.
 
+{% include codeHeader.html %} 
 ```bash
 ip route add 224.0.0.0/8 dev gretap2
 ```
