@@ -212,6 +212,7 @@ Broadcast는 아이피주소 대역의 가장 마지막 주소인 172.16.254.255
 
 **Broadcast 전송하는 스크립트 (bcast_send.py)**
 
+{% include codeHeader.html %} 
 ```python
 ## 스크립트 작성합니다.
 $> cat bcast_send.py
@@ -241,6 +242,7 @@ $> python bcast_send.py
 
 **Broadcast 수신하는 스크립트 (bcast_rev.py)**
 
+{% include codeHeader.html %} 
 ```python
 ## 스크립트 작성합니다.
 $> cat bcast_rev.py
@@ -368,6 +370,8 @@ Mutlicast 테스트를 위하여 python으로 작성했습니다.
 대부분 그대로 작성하였지만, Send스크립트에서 loop하는 부분을 추가하였습니다.
 
 **Multicast 전송하는 스크립트 (mcast_send.py)**
+
+{% include codeHeader.html %} 
 ```python 
 $> vi mcast_send.py
 import socket
@@ -399,6 +403,8 @@ while True:
 
 ```
 **Multicast 수신하는 스크립트 (mcast_rev.py)**
+
+{% include codeHeader.html %} 
 ```python
 $> vi mcast_rev.py
 import socket
