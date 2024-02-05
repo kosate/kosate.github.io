@@ -72,7 +72,7 @@ AWS에서는 Transit Gateway기능에서 Multicast Domain관리 기능을 통해
 예로 원래 UDP의 Multicast 통신했던 프로그램을 Unicast도 지원하도록 추가 개발하는것이지요.
 특히 노드간에 클러스터로 관리되어야 하는 솔루션들은 multicast에서 unicast로 추가 지원하도록 기능을 추가하는것 같습니다. 
 
-## 클라우드에서 Multicat와 broadcast를 연결 위한 방법??
+## 클라우드에서 Multicat와 broadcast 통신을 위한 방법??
 
 진짜 업무상에서 필요해서 사용해야할 경우 어떻게 해야될까요?
 
