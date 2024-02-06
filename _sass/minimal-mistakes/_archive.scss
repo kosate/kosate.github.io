@@ -237,42 +237,6 @@
 
 
 .book__item {
-  @include breakpoint($small) {
-
-    &:nth-child(2n + 1) {
-      clear: both;
-      margin-left: 0;
-    }
-
-    &:nth-child(2n + 2) {
-      clear: none; 
-    }
-  }
-
-  @include breakpoint($medium) {
-    margin-left: 0; /* override margin*/
-    margin-right: 0; /* override margin*/ 
-
-    &:nth-child(2n + 1) {
-      clear: none;
-    }
-
-    &:nth-child(4n + 1) {
-      clear: both;
-    }
-
-    &:nth-child(4n + 2) {
-      clear: none; 
-    }
-
-    &:nth-child(4n + 3) {
-      clear: none; 
-    }
-
-    &:nth-child(4n + 4) {
-      clear: none; 
-    }
-  }
 
   .page__meta {
     margin: 0 0 4px;
@@ -303,7 +267,7 @@
 
   .archive__item-teaser {
     @include breakpoint($small) {
-      max-height: 200px;
+      max-height: 150px;
     }
 
     @include breakpoint($medium) {
