@@ -49,6 +49,7 @@ Oracle Database Free버전은 웹에서 직접 다운로드 받아서 설치할�
   - [Database Licensing Information User Manual 참조](https://docs.oracle.com/en/database/oracle/oracle-database/23/dblic/Licensing-Information.html#GUID-B6113390-9586-46D7-9008-DCC9EDA45AB4)메뉴얼에서 Free 에 해당되는 기능을 사용할수 있습니다.
     - 상당부분의 옵션을 무료로 사용할수 있습니다.(Partioning, Diagnostic & Tunning Pack, Compression, Security, In-Memory, SQL firewall, Spatial & graph등 )
     - 주로 가용성기능의 대해서는 제약이 있습니다.(Active DataGuard, Real Application Testing, Real Application Cluster)
+    - ORDS(Oracle REST Data Services)와 Low-code 개발플랫폼인 APEX를 같이 사용할수 있습니다.
 
 ## 설치 환경
 
