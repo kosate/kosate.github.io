@@ -2,6 +2,8 @@
 layout: single
 title: Container DB 구성시 고려사항
 date: 2023-09-18 01:00
+books:
+ - multitenant
 categories: 
   - Oracle
 author: 

@@ -4,6 +4,8 @@ title: 시스템 트레이딩를 위한 매매처리 방안
 date: 2023-09-11 02:00
 categories: 
   - system-trading
+books:
+ - system-trading
 author: 
 tags: 
    - bitcoin

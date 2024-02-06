@@ -3,21 +3,23 @@ layout: single
 title: Oracle GoldenGate 23c Free 설치 방법(바이너리파일)
 date: 2024-01-20 02:00
 categories: 
-  - Oracle
+ - Oracle
 author: 
-tags: 
-   - Oracle
-   - 23c
-   - GoldenGate
+books:
+ - oraclefreeservice 
+tags:
+ - Oracle
+ - 23c
+ - GoldenGate
 excerpt : Oracle GoldenGate 23c Free버전 설치하는 방법에 대해서 정리했습니다.
 header :
   teaser: /assets/images/blog/oracle23c.jpg
   overlay_image: /assets/images/blog/oracle23c.jpg
 toc : true  
 toc_sticky: true
----
-
-## 개요
+--- 
+ 
+## 개요 
 
 Oracle GoldenGate를 무료로 사용할수 있는 Free버전에 대해서 소개합니다. 
 

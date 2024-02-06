@@ -1,13 +1,13 @@
 ---
 layout: single
 title: Oracle에서 제공되는 무료서비스와 제품들
+book: oraclefreeservice
 date: 2023-10-04 11:00
 categories: 
   - Oracle
 author: 
 tags: 
    - oracle
-   - 
 excerpt : Oracle에서는 제공하는 무료서비스와 제품들에 대해서 설명합니다.
 header :
   teaser: /assets/images/blog/free-service.jpg

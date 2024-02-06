@@ -4,6 +4,8 @@ title: 23c신기능 - Automatic Transaction Rollback
 date: 2023-10-26 02:00
 categories: 
   - Oracle
+books:
+  - oracle23newfeature
 author: 
 tags: 
    - Oracle

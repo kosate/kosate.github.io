@@ -4,6 +4,8 @@ title: 시스템 트레이딩의 구성요소 - 매매관리방안
 date: 2023-09-24 03:00
 categories: 
   - system-trading
+books:
+ - system-trading
 author: 
 tags: 
    - bitcoin

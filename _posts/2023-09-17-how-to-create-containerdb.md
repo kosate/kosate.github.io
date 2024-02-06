@@ -4,6 +4,8 @@ title: Container DB 생성 및 기동
 date: 2023-09-17 11:00
 categories: 
   - Oracle
+books:
+ - multitenant
 author: 
 tags: 
    - Oracle

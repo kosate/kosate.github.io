@@ -5,6 +5,8 @@ date: 2023-09-08 12:00
 categories: 
   - Oracle
 author: 
+books: 
+ - multitenant
 tags: 
    - Oracle
    - multitenant

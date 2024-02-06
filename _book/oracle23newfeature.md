@@ -1,6 +1,7 @@
 ---
 layout: single
 title: 오라클 23c 신기능 모음 
+book: oracle23newfeature
 date: 2023-09-17 11:00
 categories: 
   - Oracle

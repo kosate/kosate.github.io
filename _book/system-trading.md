@@ -1,6 +1,7 @@
 ---
 layout: single
 title: 시스템트레이딩 개발하기 
+book: system-trading
 date: 2023-09-17 11:00
 categories: 
   - bitcoin

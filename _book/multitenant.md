@@ -1,6 +1,7 @@
 ---
 layout: single
 title: 미래 DBMS아키텍쳐 - Multitenant 
+book: multitenant
 date: 2023-09-17 11:00
 categories: 
   - Oracle

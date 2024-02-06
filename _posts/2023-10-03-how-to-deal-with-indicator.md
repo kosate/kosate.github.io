@@ -4,6 +4,8 @@ title: 시스템 트레이딩의 구성요소 - 지표관리방안
 date: 2023-10-03 01:00
 categories: 
   - system-trading
+books:
+ - system-trading
 author: 
 tags: 
    - bitcoin

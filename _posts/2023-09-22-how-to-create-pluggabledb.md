@@ -4,6 +4,8 @@ title: Pluggable DB 생성과 기동
 date: 2023-09-22 01:00
 categories: 
   - Oracle
+books:
+ - multitenant
 author: 
 tags: 
    - Oracle

@@ -4,6 +4,8 @@ title: CDB환경에서 AWR관리 방법
 date: 2023-12-15 15:00
 categories: 
   - Oracle
+books:
+ - multitenant
 author: 
 tags: 
    - Oracle

@@ -5,6 +5,10 @@ date: 2023-09-19 02:00
 categories: 
   - Oracle
 author: 
+books:
+  - multitenant
+  - oracle23newfeature
+  - oraclefreeservice  
 tags: 
    - Oracle
    - 23c
@@ -15,7 +19,7 @@ header :
 toc : true  
 toc_sticky: true
 ---
-
+ 
 ## 개요
 
 오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. 

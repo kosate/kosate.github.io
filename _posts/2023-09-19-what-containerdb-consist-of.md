@@ -4,6 +4,8 @@ title: Container DB의 파일 구조
 date: 2023-09-19 02:00
 categories: 
   - Oracle
+books:
+ - multitenant
 author: 
 tags: 
    - Oracle

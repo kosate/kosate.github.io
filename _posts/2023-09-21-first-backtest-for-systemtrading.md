@@ -4,6 +4,8 @@ title: 시스템 트레이딩의 백테스트 방안
 date: 2023-09-21 02:00
 categories: 
   - system-trading
+books:
+ - system-trading
 author: 
 tags: 
    - bitcoin

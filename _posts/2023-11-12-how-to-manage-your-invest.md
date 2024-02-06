@@ -4,6 +4,8 @@ title: 시스템 트레이딩의 구성요소 - 자금관리자객체
 date: 2023-11-12 01:00
 categories: 
   - system-trading
+books:
+ - system-trading
 author: 
 tags: 
    - bitcoin
