@@ -3,12 +3,13 @@ layout: single
 title: 클라우드 네트워크에서 Broadcast/Multicast 통신방법
 date: 2024-01-30 21:00
 categories: 
-  - oci
+  - cloud
 author: 
 tags: 
-   - Oracle
-   - oci
-   - Oracle Cloud Infrastructure
+   - OCI
+   - AWS
+   - Azure
+   - GCP
 excerpt : 일반적인 네트워크 통신 프로토콜과 GRE프로토콜 구현방법에 대해서 정리했습니다.
 header :
   teaser: /assets/images/blog/cloud2.jpg
