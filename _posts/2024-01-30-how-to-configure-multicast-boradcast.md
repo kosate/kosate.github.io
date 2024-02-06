@@ -10,6 +10,9 @@ tags:
    - oci
    - Oracle Cloud Infrastructure
 excerpt : 일반적인 네트워크 통신 프로토콜과 GRE프로토콜 구현방법에 대해서 정리했습니다.
+header :
+  teaser: /assets/images/blog/cloud2.jpg
+  overlay_image: /assets/images/blog/cloud2.jpg
 toc : true  
 toc_sticky: true
 ---
