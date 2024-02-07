@@ -18,12 +18,15 @@ layout: archive
 
  
   <div class="grid__wrapper">
-    {% for post in  posts %}
+    {% for post in  posts %} 
       {% include archive-single.html type="grid" %}
     {% endfor %}
   </div> 
 
 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/getComments.js"></script>
+  
 
 {% include paginator.html %}
 

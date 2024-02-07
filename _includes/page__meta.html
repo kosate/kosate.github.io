@@ -25,7 +25,12 @@
         {% else %}
           {{ words | divided_by: words_per_minute }} {{ site.data.ui-text[site.locale].minute_read | default: "minute read" }}
         {% endif %}
+      </span> 
+      <span class="page__meta-comments">
+        <i class="far fa-fw fa-comment-dots" aria-hidden="true"></i>
+        <span class="comment_txt">0</span> Comments
       </span>
     {% endif %}
+
   </p>
 {% endif %}
