@@ -25,12 +25,15 @@
         {% else %}
           {{ words | divided_by: words_per_minute }} {{ site.data.ui-text[site.locale].minute_read | default: "minute read" }}
         {% endif %}
-      </span> 
+      </span>  
+    {% endif %}
+    <!--- 댓글 개수 표시 -->
+    {% if document.comments  %}<span class="page__meta-sep"></span>{% endif %}
+    {% if document.comments %}
       <span class="page__meta-comments">
         <i class="far fa-fw fa-comment-dots" aria-hidden="true"></i>
-        <span class="comment_txt">0</span> Comments
+        <span class="comment_count" pathname="{{ document.id }}">0</span> Comments
       </span>
     {% endif %}
-
   </p>
 {% endif %}

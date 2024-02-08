@@ -12,6 +12,7 @@ excerpt : Oracle에서는 제공하는 무료서비스와 제품들에 대해서
 header :
   teaser: /assets/images/blog/free-service.jpg
   overlay_image: /assets/images/blog/free-service.jpg
+comments: true
 ---
 
 ## 개요

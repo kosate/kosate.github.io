@@ -18,6 +18,7 @@ excerpt : Multitenat 아키텍쳐에 대한 전반적인 내용들을 정리하�
 header :
   teaser: /assets/images/blog/multitenant.jpg
   overlay_image: /assets/images/blog/multitenant.jpg
+comments: true
 ---
 
 ## 개요 

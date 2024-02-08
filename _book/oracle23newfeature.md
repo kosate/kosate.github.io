@@ -13,6 +13,7 @@ excerpt : 오라클 23c의 신기능에 대해 예제로 정리하였습니다.
 header :
   teaser: /assets/images/blog/oracle23c.jpg
   overlay_image: /assets/images/blog/oracle23c.jpg
+comments: true
 ---
 
 ## 개요 

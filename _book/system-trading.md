@@ -13,6 +13,7 @@ excerpt : 시스템트레이딩 구축시 고려사항에 정리하였습니다.
 header :
   teaser: /assets/images/blog/system-trading.jpg
   overlay_image: /assets/images/blog/system-trading.jpg
+comments: true
 ---
 
 **참고사항** 시스템 트레이딩 관련 블로그들은 개인 경험을 바탕으로 작성되었습니다. 각자 자신만의 투자방식과 매매전략을 만들어 가시기 바랍니다.

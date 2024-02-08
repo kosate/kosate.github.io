@@ -19,20 +19,21 @@ $(document).ready(function() {
                 // Map에 저장
                 issueDataMap.set("/"+issueTitle, commentsCount);
             }
-         
-            // archive__item 클래스 내의 a 태그 정보 가져오기
-            var archiveItemATags = $('.archive__item a');
-            var archiveCommentsTags = $('.archive__item .comment_txt');
-
-            for (var i = 0; i < archiveItemATags.length; i++) {
-                var key = archiveItemATags.eq(i).attr('href');
+          
+            // comment_count 클래스 내의 모든 객체 가져오기. 
+            var countTags = $('.comment_count');  
+            
+            for (var i = 0; i < countTags.length; i++) {
+                var key = countTags.eq(i).attr('pathname')+"/";
+ 
                 var value = issueDataMap.get(key); 
                 // value가 undefined인 경우 0으로 대체
                 if (value === undefined) {
                     value = 0;
                 }
+ 
                 // 해당 이슈의 댓글 수를 표시
-                archiveCommentsTags.eq(i).text(value);
+                countTags.eq(i).text(value); 
             }
         }
     },
