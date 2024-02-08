@@ -26,7 +26,7 @@
           {{ words | divided_by: words_per_minute }} {{ site.data.ui-text[site.locale].minute_read | default: "minute read" }}
         {% endif %}
       </span>  
-    {% endif %}
+    {% endif %} 
     <!--- 댓글 개수 표시 -->
     {% if document.comments  %}<span class="page__meta-sep"></span>{% endif %}
     {% if document.comments %}
