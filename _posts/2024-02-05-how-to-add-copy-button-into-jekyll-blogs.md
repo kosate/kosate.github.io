@@ -122,10 +122,10 @@ copyCodeButtons.forEach((copyCodeButton, index) => {
 
 생성한 javascript을 호출될수 있도록 footer에 넣습니다. 
 
-footer로 _include/footer/cutstom.html 파일을 사용했습니다.
+footer로 _include/footer/custom.html 파일을 사용했습니다.
 마지막에 javascript가 호출되어야 앞단에 어떤 class가 사용되었는지 javasript에서 인식됩니다.
 
-{% include codeHeader.html  name="/_include/footer/cutstom.html"%} 
+{% include codeHeader.html  name="/_include/footer/custom.html"%} 
 ```html
 <script src="/assets/js/copyCode.js"></script>
 ```
