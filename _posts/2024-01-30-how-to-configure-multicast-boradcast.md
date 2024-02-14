@@ -114,11 +114,17 @@ GRE Tunnel중에 Layer 2에서 동작하는 GRETAP(Generic Routing Encapsulation
 
 - 고려사항
   - 리눅스 서버 환경인 경우 broadcast 패킷이 무시되지 않기 위하여 커널 파라미터를 변경해야합니다.
-{% include codeHeader.html %} 
+
+{% include codeHeader.html %}
 ```bash 
 sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
 ```
-  - 클라우드 VM안에서는 OS 방화벽과 클라우드 네트워크 방화벽(Security List)이 있습니다. 모두 적절하게 GRE 통신이 가능하도록 해제합니다.
+
+> 클라우드 VM안에서는 OS 방화벽과 클라우드 네트워크 방화벽(Security List)이 있습니다. 모두 적절하게 GRE 통신이 가능하도록 해제합니다.
+
+네트워크 다이어그램은 아래와 같습니다.
+
+![](/assets/drawio/cloudnetwork1.svg)
 
 ### 마스터 서버 설정 
 
