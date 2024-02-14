@@ -11,6 +11,9 @@ tags:
 excerpt : Apache Zeppelin노트북에서 Oracle를 조회할수 있도록 연결하는 방법에 대해서 정리하였습니다.
 toc : true  
 toc_sticky: true
+header :
+  teaser: /assets/images/blog/blog3.jpg
+  overlay_image: /assets/images/blog/blog3.jpg
 ---
 
 ## 개요
