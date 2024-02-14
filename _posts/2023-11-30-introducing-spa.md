@@ -110,41 +110,29 @@ post-SQL trial은 테스트환경에서 SQL를 모두 실행하도록 작성하�
 
 ### SPA 작업 수행
 
+{% include codeHeader.html %} 
 ```sql
 SQL> declare
   t_name varchar2(100);
   execute_name1 varchar2(100) := 'EXEC_SPA_SQL#1';
   execute_name2 varchar2(100) := 'EXEC_SPA_SQL#2';
 begin 
- t_name:= DBMS_SQLPA.CREATE_ANALYSIS_TASK(
-      task_name => 'my_spa_task',
-      sqlset_name => 'STS_CaptureAWR',
-      sqlset_owner => 'admin'); 
 
-  DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( 
-     task_name => t_name, 
-     execution_name => execute_name1, 
-     execution_type => 'CONVERT SQLSET', 
-     execution_desc => 'Convert STS'); 
+-- SPA 테스트 TASK 생성
+ t_name:= DBMS_SQLPA.CREATE_ANALYSIS_TASK(task_name => 'my_spa_task',sqlset_name => 'STS_CaptureAWR', sqlset_owner => 'admin'); 
+-- 파라미터 설정
+ DBMS_SQLPA.SET_ANALYSIS_TASK_PARAMETER (TASK_NAME=> ＇spa_task’, PARAMETER=>＇PLAN_LINES_COMPARISON＇, VALUE=>＇AUTO＇) ;
+ DBMS_SQLPA.SET_ANALYSIS_TASK_PARAMETER (TASK_NAME=> ＇spa_task＇, PARAMETER=>＇REPLACE_SYSDATE_WITH＇, VALUE=>＇SOLSET_SYSDATE＇) ;
+ DBMS_SQLPA.SET_ANALYSIS_TASK_PARAMETER (TASK_NAME=> ＇spa_task＇, PARAMETER=>＇COMPARE_RESULTSET＇, VALUE=>＇TRUE＇) ;
 
-  DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( 
-     task_name => t_name, 
-     execution_name => execute_name2, 
-     execution_type => 'TEST EXECUTE', 
-     execution_desc => 'Test Workload in 23c'); 
-     
-   DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( 
-     task_name => t_name, 
-     execution_name => 'Compare BUFFER_GETS', 
-     execution_type => 'COMPARE PERFORMANCE', 
-     execution_params => 
-       DBMS_ADVISOR.ARGLIST( 
-               'comparison_metric', 
-               'buffer_gets', 
-               'execution_name1',execute_name1, 
-               'execution_name2',execute_name2), 
-     execution_desc => 'Compare BUFFER_GETS'
-     ); 
+ -- Pre-Change SQL 테스트
+ DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( task_name => t_name, execution_name => execute_name1, execution_type => 'CONVERT SQLSET', execution_desc => 'Convert STS'); 
+ 
+ -- Post-Change SQL 테스트 
+ DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( task_name => t_name, execution_name => execute_name2, execution_type => 'TEST EXECUTE',  execution_desc => 'Test Workload in 23c'); 
+ -- Compare 작업 수행
+ DBMS_SQLPA.EXECUTE_ANALYSIS_TASK( task_name => t_name, execution_name => 'Compare BUFFER_GETS', execution_type => 'COMPARE PERFORMANCE', execution_params => 
+  DBMS_ADVISOR.ARGLIST( 'comparison_metric', 'buffer_gets', 'execution_name1',execute_name1, 'execution_name2',execute_name2, 'exec_post1','workload_impact_threshold', 0, 'sql_impact_threshold', 0), execution_desc => 'Compare BUFFER_GETS' ); 
 end;
 /
 
@@ -455,7 +443,6 @@ SQL 검증이후 방법
    -- STA 리포트를 확인(SQL Profile이 만들어지면 적용합니다.)
    SQL> select dbms_sqltune.report_tuning_task ('TUNE_TASK1') from dual;
    ```
- 
 
 ## 마무리
 
