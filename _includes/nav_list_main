@@ -44,9 +44,15 @@
                 {% for category in site.categories %}
                      {% if category[0] == "cloud" %}
                         <li>- <a href="/categories/cloud" class="">클라우드 ({{category[1].size}})</a></li>
-                    {% endif %}
+                    {% endif %}                    
                     {% if category[0] == "oci" %}
                         <li>- <a href="/categories/oci" class="">OCI ({{category[1].size}})</a></li>
+                    {% endif %}
+                    {% if category[0] == "container" %}
+                    <li>- <a href="/categories/container" class="">컨테이너 ({{category[1].size}})</a></li>
+                    {% endif %}
+                    {% if category[0] == "linux" %}
+                    <li>- <a href="/categories/linux" class="">리눅스 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
