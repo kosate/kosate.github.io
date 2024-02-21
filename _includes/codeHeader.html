@@ -1,6 +1,24 @@
 <div class="code-header">  
-    {% if include.name %}
-        <div class="copy-code-name">📂 {{ include.name  }}</div>
+    {% if include.codetype %}
+        <span class="copy-code-type"> 
+            <i class="fas fa-code"></i> Code : {{ include.codetype  }}  
+        </span>
     {% endif %}
-    <button class="copy-code-button" title="Copy text to clipboard">Copy</button>
+    {% if include.name %}
+        <span class="copy-code-name"> 
+            <i class="far fa-file-code"></i> File Name : {{ include.name  }}  
+        </span>
+    {% endif %}
+    <button class="copy-code-button far fa-copy {% if include.copyable == 'false' %}  hidden {% endif %}" title="Copy text to clipboard"> Copy </button> 
+    
+    {% if include.runas %}
+        <span class="copy-code-runas"> 
+            <i class="far fa-user" aria-hidden="true"></i> Run As : {{ include.runas }} 
+        </span>
+    {% endif %}    
+    {% if include.elapsedtime %}
+        <span class="copy-code-elapsedtime"> 
+            <i class="far fa-clock" aria-hidden="true"></i> Elapsed Time : {{ include.elapsedtime  }}  
+        </span>
+    {% endif %}    
 </div>

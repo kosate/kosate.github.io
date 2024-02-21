@@ -41,6 +41,8 @@ MiniKube설치를 위한 시스템 요건
 - 설치유저는 sudo 권한이 있어야함.
   
 저는 Redhat 계열 리눅스서버에서 설치하도록 하겠습니다.
+
+{% include codeHeader.html runas="Any User" copyable="false" codetype="Shell" elapsedtime="1 sec" %}
 ```bash
 $> cat /etc/redhat-release
 Red Hat Enterprise Linux release 8.9 (Ootpa)
@@ -50,13 +52,13 @@ Red Hat Enterprise Linux release 8.9 (Ootpa)
 
 root유저로 접속하여 minikube 를 설치합니다.
 
-{% include codeHeader.html%}
+{% include codeHeader.html runas="root" copyable="true" codetype="Shell" elapsedtime="10 sec" %}
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 rpm -Uvh minikube-latest.x86_64.rpm
-```
+``` 
 
-설치 로그입니다.
+설치 로그입니다. 
 
 ```bash
 $> curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
@@ -74,7 +76,7 @@ Updating / installing...
 
 root유저가 아닌 다른 관리자(oracle)유저로 접속하여 Cluster를 기동합니다. 
 
-{% include codeHeader.html%}
+{% include codeHeader.html  runas="oracle" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash
 minikube start
 ```
@@ -95,7 +97,7 @@ X Exiting due to DRV_NOT_DETECTED: No possible driver was detected. Try specifyi
 ```
 
 root유저로 podman을 설치하였습니다.
-{% include codeHeader.html%}
+{% include codeHeader.html runas="root" copyable="true" codetype="Shell" elapsedtime="30 sec" %}
 ```bash
 yum install podman
 ```
@@ -103,14 +105,14 @@ yum install podman
 minikube 클러스터 관리(oracle)유저가 podman을 수행하시키도록 sudo 권한을 추가합니다.
 root유저로 사용자를 추가합니다. 
 
-{% include codeHeader.html name="/etc/sudoers"%}
+{% include codeHeader.html  name="/etc/sudoers" runas="root" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash
 echo 'oracle ALL=(ALL) NOPASSWD: /usr/bin/podman' | tee -a /etc/sudoers
 ```
 
 root유저가 아닌 다른 관리자(oracle)유저로 접속하여 Cluster를 기동합니다. 
 
-{% include codeHeader.html%}
+{% include codeHeader.html  runas="oracle" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash
 minikube start --driver=podman
 ```
@@ -145,7 +147,7 @@ E0218 07:19:00.646554   61763 cache.go:189] Error downloading kic artifacts:  no
 
 kubectl 설치를 합니다. `mimikube`명령어를 이용하면 적절한 kubectl를 다운로드 받아서 설치합니다.
 
-{% include codeHeader.html%}
+{% include codeHeader.html  runas="oracle" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash
 minikube kubectl -- get po -A
 ```
@@ -168,14 +170,14 @@ kube-system   storage-provisioner                1/1     Running   1 (76s ago)  
 
 kubectl명령어에 대한 alias를 설정합니다.
 
-{% include codeHeader.html%}
+{% include codeHeader.html  runas="oracle" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash
 alias kubectl="minikube kubectl --"
 ```
 
 kubectl명령어로 minikube내 component들을 확인합니다. 
 
-{% include codeHeader.html%}
+{% include codeHeader.html  runas="oracle" copyable="true" codetype="Shell" elapsedtime="5 sec" %}
 ```bash 
 kubectl get all
 ```
