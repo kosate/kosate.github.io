@@ -20,6 +20,12 @@ toc : true
 toc_sticky: true
 ---
 
+## 테스트 환경 
+
+|서버환경|서버종류|OS종류|OS버전|DB타입|DB버전|기타|
+|-|-|-|-|-|-|-|
+|OCI|VM(x86)|Oracle Linux|8.7|Oracle|19.3||
+
 ## 개요
 
 Multitenant환경에서도 기존 환경(Non-CDB)과 동일하게 Flashback Database기능을 사용할수 있습니다. 
