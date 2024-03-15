@@ -563,7 +563,7 @@ SELECT sofar, totalwork, units FROM v$session_longops WHERE opname = 'Flashback 
  - 400 GB의 대량의 배치 작업일경우 - 5분이내 처리
  - 8G의 OLTP 작업일 경우 - 2분 이내 처리
 
-- 참고문서 : (Oracle Flashback Performance Observations)<https://docs.oracle.com/en/database/oracle/oracle-database/19/haovw/oracle-flashback-best-practices.html#GUID-D489DBA7-609B-4D81-AD59-097086A52B59>{:target="_blank"}
+- 참고문서 : [Oracle Flashback Performance Observations](https://docs.oracle.com/en/database/oracle/oracle-database/19/haovw/oracle-flashback-best-practices.html#GUID-D489DBA7-609B-4D81-AD59-097086A52B59){:target="_blank"}
 
 
 ## 마무리 
@@ -573,7 +573,7 @@ CDB레벨에서 전체 Flashback 설정을 관리하고 PDB레벨에서는 개�
 
 Guaranteed Restore Point를 사용할경우 flashback log가 삭제되지 않으므로 스토리지에 대한 용량 관리가 필요합니다.  특별한 경우가 아니면 Guaranteed Restore Point사용할 필요 없겠습니다. 
 
-Flashback은 DataGuard로 구성된 Standby DB에서 설정합니다. Snapshot Standby와 같은 기능을 사용하기 위해서입니다. 혹은 Primary DB에서 데이터가 잘못되었을경우 Standby DB에서 복구하여 사용할수 있습니다. 
+Flashback은 주로 DataGuard로 구성된 Standby DB에서 설정합니다. Snapshot Standby와 같은 기능을 사용하기 위해서입니다. 혹은 Primary DB에서 데이터가 잘못되었을경우 Standby DB에서 복구하여 사용할수 있습니다. 
 
 ## 참고문서
 
