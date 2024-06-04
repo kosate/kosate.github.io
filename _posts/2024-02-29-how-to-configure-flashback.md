@@ -26,7 +26,7 @@ toc_sticky: true
 |-|-|-|-|-|-|-|
 |OCI|VM(x86)|Oracle Linux|8.7|Oracle|19.3||
 
-## 개요
+## 들어가며
 
 Multitenant환경에서도 기존 환경(Non-CDB)과 동일하게 Flashback Database기능을 사용할수 있습니다. 
 CDB레벨, PDB레벨에서 Flashback Database수행하는 절차에 대해서 알아보겠습니다. 
