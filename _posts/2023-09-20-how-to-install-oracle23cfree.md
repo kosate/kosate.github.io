@@ -12,6 +12,7 @@ books:
 tags: 
    - Oracle
    - 23c
+   - 23ai
 excerpt : 오라클데이터베이스 23c Free버전을 설치하는 방법에 대해서 정리했습니다.
 header :
   teaser: /assets/images/blog/oracle23c.jpg
@@ -22,12 +23,16 @@ toc_sticky: true
  
 ## 개요
 
-오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. 
-그리고 2023년 9월에 클라우드서비스와 같이 업그레이드 버전(23.3)이 출시되었습니다. 
+~~오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. ~~
+~~그리고 2023년 9월에 클라우드서비스와 같이 업그레이드 버전(23.3)이 출시되었습니다. ~~
 Oracle Database 23c은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 
 테스트 시스템(or 사이드프로젝트)에서 Oracle Database 23c Free버전을 사용해볼수 있을것 같습니다. 
 
 Oracle Database 23c Free 설치 방법에 대해서 알아보겠습니다. 
+
+## 업데이트 
+
+- 2024년 06월 05일 : Oracle Database Free버전이 2024년 5월에 23c에서 23ai로 이름이 변경되어 출시되었습니다.설치 절차는 동일하나 일부 파일명들이 상이할수 있습니다. 사이트에 접속하셔서 정확한 파일들을 다운받으시기 바랍니다. 
 
 ## 리소스 제약
 
