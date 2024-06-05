@@ -1,7 +1,7 @@
 ---
 layout: single
 title: Linux환경에서 VNC서버구성 및 noVNC 설정방법
-date: 2024-03-12 21:00
+date: 2024-06-03 21:00
 categories: 
   - linux
 author: 
@@ -142,7 +142,7 @@ Email Address []:메일주소
 oracle$>
 ```
 
-noVNC를 다운받고 실행합니다. 이따 앞서 만든 SSL인증서를 사용합니다. 
+noVNC를 다운받고 실행합니다. 이때 앞서 만든 SSL인증서를 사용합니다. 
 novnc_proxy를 실행하면 자동으로 websockify(python3)를 다운받고 proxy서버가 실행됩니다. 
 
 {% include codeHeader.html runas="oracle" copyable="true" codetype="shell" elapsedtime="10 sec" %}
