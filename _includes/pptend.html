@@ -1,0 +1,17 @@
+    </div>
+</div>
+<div>
+    ※ 슬라이드에서 f를 누르면 전체화면으로 볼수 있습니다.
+</div>
+ 
+<script>
+  let {{ include.id  }} = new Reveal(document.querySelector('.{{ include.id  }}'), {
+    embedded:true,
+    hash:true,
+    disableLayout: false,
+    slideNumber: 'c/t',
+    plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+  });
+
+  {{ include.id  }}.initialize(); 
+</script>
