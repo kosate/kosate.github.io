@@ -9,8 +9,10 @@
     embedded:true,
     hash:true,
     disableLayout: false,
+    touch: true,
     slideNumber: 'c/t',
     plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+    {% if include.initialize%}{{ include.initialize  }} {% endif %}
   });
 
   {{ include.id  }}.initialize(); 
