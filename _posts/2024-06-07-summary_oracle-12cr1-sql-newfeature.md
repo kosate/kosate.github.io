@@ -39,7 +39,15 @@ SQL 개선사항 별로 프레젠테이션 모드로 간단하게 알아보겠�
 {% include pptstart.html id="sql12r1 stretch" style="height:600px;" %}
 <section data-markdown>
 <textarea data-template>
-## VARCHAR2의 크기 확장
+
+## SQL 신기능 (12cR1)
+### 목차
+  1. VARCHAR2 최대 크기가 32k까지 확장
+  2. IDENTITY 컬럼 (ISO SQL Standard)
+  3. Row Limit OFFSET 절과 FETCH FIRST 절
+  4. SQL의 With절에 PL/SQL 함수 작성
+---
+## 1. VARCHAR2의 크기 확장
 ### 최대 크기가 32k까지 확장
 - 11.2까지는
   - VARCHAR2의 최대 크기는 4000 bytes 였음
@@ -53,7 +61,7 @@ SQL 개선사항 별로 프레젠테이션 모드로 간단하게 알아보겠�
 SQL> ALTER SYSTEM SET MAX_STRING_SIZE = EXTENDED;
 </code></pre>
 ---
-## IDENTITY 컬럼 (ISO SQL Standard)
+## 2. IDENTITY 컬럼 (ISO SQL Standard)
 ### INSERT시 자동으로 숫자가 증가하는 컬럼
 - 11.2까지는
   - 테이블에 추가되는 각 행을 고유하게 식별해야할 경우, 테이블에 INSERT 트리거를 생성하고 사전에 생성한 SEQUENCE번호를 할당, or INSERT구문에서 SEQUENCE호출하여 데이터 추가
@@ -68,7 +76,7 @@ SQL> CREATE TABLE tickets (
 );
 </code></pre>
 ---
-## Row Limit OFFSET 절과 FETCH FIRST 절 (1/2)
+## 3. Row Limit OFFSET 절과 FETCH FIRST 절 (1/2)
 ### 결과를 정렬하고 특정 행만 추출하는 SQL
 - 11.2까지는
   - 질의 결과를 행을 제한할 경우, ROW_NUMBER 함수를 사용함.
@@ -78,7 +86,7 @@ SQL> CREATE TABLE tickets (
   - FETCH FIRST 절에서는 반환되는 행수나 행의 비율을 지정
   - OFFSET절을 생략하고 FETCH FIRST n ROWS ONLY로 설정하면 Top N개의 행을 조회
 ---
-## Row Limit OFFSET 절과 FETCH FIRST 절 (2/2)
+## 3. Row Limit OFFSET 절과 FETCH FIRST 절 (2/2)
 ### 실행예시
 - OFFSET 과  FETCH FIRST 절을 사용시
 
@@ -97,7 +105,7 @@ SQL> SELECT employee_id, last_name
  109          Faviet 
 </code></pre>
 ---
-## SQL의 With절에 PL/SQL 함수 작성
+## 4. SQL의 With절에 PL/SQL 함수 작성
 ### SQL문을 복잡하게 만드는것을 방지하기 위하여 복잡한 계산은 SQL의 외부로 분리함
 - WITH절 내에서 PL/SQL함수를 포함
 - 별도 함수를 생성할 필요가 없음

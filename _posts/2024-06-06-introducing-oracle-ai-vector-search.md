@@ -36,6 +36,12 @@ toc_sticky: true
 <section data-markdown>
 <textarea data-template>
 
+## 비정형 데이터를 검색하는 기술 (Oracle AI Vector Search)
+### 목차
+  1. 기존 RDBMS의 한계  
+  2. 벡터 검색 기술의 등장  
+  3. Oracle AI Vector Search기능
+---
 ## 데이터 환경의 새로운 변화 : 비정형 데이터의 관리
 ### 비정형 데이터는 빠르게 증가되고 있지만, 기업내 비즈니스에 활용하기는 어려움
   
