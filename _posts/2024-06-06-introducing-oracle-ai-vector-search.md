@@ -6,7 +6,7 @@ categories:
   - Oracle
 books:
  - oracle23newfeature
-author: 
+contents: PPT
 tags: 
    - Oracle
    - 23ai

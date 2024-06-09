@@ -4,7 +4,7 @@ title: SQL 신기능 (12.1)
 date: 2024-06-07 15:00
 categories: 
   - Oracle 
-author: 
+contents: PPT
 tags: 
    - Oracle  
    - SQL

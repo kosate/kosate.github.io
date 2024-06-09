@@ -22,6 +22,7 @@
         <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}
         <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
+        {% if post.contents %}<button class="{{ post.contents }}_btn" role="button">{{ post.contents }}</button>{% endif %}
       {% endif %}
     </h2>
     {% include page__meta.html type=include.type %}
