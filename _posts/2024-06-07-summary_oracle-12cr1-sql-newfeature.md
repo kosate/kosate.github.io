@@ -11,14 +11,19 @@ tags:
    - PL/SQL
    - new feature
 excerpt : 오라클 데이터베이스 SQL 신기능(12cR1 기준)에 대해서 알아봅니다.
+header :
+  teaser: /assets/images/blog/writing1.jpg
+  overlay_image: /assets/images/blog/writing1.jpg
 toc : true  
 toc_sticky: true
 ---
 
 ## 들어가며
 
-오라클 데이터베이스 12cR1기준으로 새로 추가된 SQL 기능에 대해서 정리하였습니다. 
-간단하게 프레젠테이션 형식으로 간략하게 보시면 좋을것 같습니다. 
+오라클 12c는 2013년 정도에 출시되었습니다. (약 11년 전이네요 )
+SQL기능에 대해서 이미 잘알고 사용할 수도 있지만, 업무에 집중하다보면 간편한 기능이 있음에도 불구하고 모르고 있는경우가 있습니다.
+
+오라클 데이터베이스 12cR1기준으로 새로 추가된 SQL 기능에 대해서 간략적으로 정리하였습니다.
 
 ## SQL 신기능 (12cR1)
 
@@ -29,13 +34,13 @@ toc_sticky: true
 3. Row Limit OFFSET 절과 FETCH FIRST 절
 4. SQL의 With절에 PL/SQL 함수 작성
 
-### 프레젠테이션 화면
+SQL 개선사항 별로 프레젠테이션 모드로 간단하게 알아보겠습니다.
 
-{% include pptstart.html id="deck1" style="width:100%;height:650px;" %}
+{% include pptstart.html id="sql12r1 stretch" style="height:600px;" %}
 <section data-markdown>
 <textarea data-template>
-# VARCHAR2의 크기 확장
-## 최대 크기가 32k까지 확장
+## VARCHAR2의 크기 확장
+### 최대 크기가 32k까지 확장
 - 11.2까지는
   - VARCHAR2의 최대 크기는 4000 bytes 였음
 - 12.1부터는
@@ -48,8 +53,8 @@ toc_sticky: true
 SQL> ALTER SYSTEM SET MAX_STRING_SIZE = EXTENDED;
 </code></pre>
 ---
-# IDENTITY 컬럼 (ISO SQL Standard)
-## INSERT시 자동으로 숫자가 증가하는 컬럼
+## IDENTITY 컬럼 (ISO SQL Standard)
+### INSERT시 자동으로 숫자가 증가하는 컬럼
 - 11.2까지는
   - 테이블에 추가되는 각 행을 고유하게 식별해야할 경우, 테이블에 INSERT 트리거를 생성하고 사전에 생성한 SEQUENCE번호를 할당, or INSERT구문에서 SEQUENCE호출하여 데이터 추가
 - 12.1부터는
@@ -63,8 +68,8 @@ SQL> CREATE TABLE tickets (
 );
 </code></pre>
 ---
-# Row Limit OFFSET 절과 FETCH FIRST 절 (1/2)
-## 결과를 정렬하고 특정 행만 추출하는 SQL
+## Row Limit OFFSET 절과 FETCH FIRST 절 (1/2)
+### 결과를 정렬하고 특정 행만 추출하는 SQL
 - 11.2까지는
   - 질의 결과를 행을 제한할 경우, ROW_NUMBER 함수를 사용함.
 - 12.1부터는
@@ -73,8 +78,8 @@ SQL> CREATE TABLE tickets (
   - FETCH FIRST 절에서는 반환되는 행수나 행의 비율을 지정
   - OFFSET절을 생략하고 FETCH FIRST n ROWS ONLY로 설정하면 Top N개의 행을 조회
 ---
-# Row Limit OFFSET 절과 FETCH FIRST 절 (2/2)
-## 실행예시
+## Row Limit OFFSET 절과 FETCH FIRST 절 (2/2)
+### 실행예시
 - OFFSET 과  FETCH FIRST 절을 사용시
 
 <pre><code data-trim data-noescape>
@@ -92,8 +97,8 @@ SQL> SELECT employee_id, last_name
  109          Faviet 
 </code></pre>
 ---
-# SQL의 With절에 PL/SQL 함수 작성
-## SQL문을 복잡하게 만드는것을 방지하기 위하여 복잡한 계산은 SQL의 외부로 분리함
+## SQL의 With절에 PL/SQL 함수 작성
+### SQL문을 복잡하게 만드는것을 방지하기 위하여 복잡한 계산은 SQL의 외부로 분리함
 - WITH절 내에서 PL/SQL함수를 포함
 - 별도 함수를 생성할 필요가 없음
 - 복잡한 계산을 SQL 외부로 분리하여 SELECT문의 복잡성을 방지
@@ -111,16 +116,15 @@ SELECT with_function(column1) FROM my_table;
 </code></pre>
 </textarea>
 </section>
-{% include pptend.html id="deck1" initialize="center: false,"%}
+{% include pptend.html id="sql12r1" initialize="center: false,"%}
 
 ## 마무리
 
-오라클 12c는 2013년 정도에 출시되었습니다. (약 11년 전이네요 )
-SQL기능에 대해서 이미 잘알고 사용할 수도 있지만, 업무에 집중하다보면 간편한 기능이 있음에도 불구하고 모르고 있는경우가 있습니다.
+오라클 12cR1기준으로 추가된 SQL기능에 대해서 간략하게 알아보았습니다. 
 
-오라클의 옵티마이저에는 SQL실행계획작성전에 Query Transformer단계가 수행됩니다. 
+오라클의 옵티마이저는 SQL실행계획작성전에 Query Transformer단계가 수행됩니다. 
 Query Transformer는 사용자 작성한 Query를 좀더 효율적으로 처리 될수 있도록 의미적으로 동일한 SQL문으로 변환해주는 기능입니다. 
 
 오라클은 Query Transformer기능을 개선하여 사용자들이 SQL을 좀더 간단하게 사용할수있도록 SQL syntax관련하여 많은 개선사항들을 추가하고 있습니다.
 
-오라클 버전별로 하나하나씩 찾아서 정리해보려고 합니다.
+다음으로 12R2기준으로 추가된 SQL기능에 대해서 정리할 예정입니다.

@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 오라클 23c 신기능 모음 
+title: 오라클 23ai 신기능 모음 
 book: oracle23newfeature
 date: 2023-09-17 11:00
 categories: 
@@ -8,8 +8,8 @@ categories:
 author: 
 tags: 
    - Oracle
-   - 23c
-excerpt : 오라클 23c의 신기능에 대해 예제로 정리하였습니다.
+   - 23ai
+excerpt : 오라클 23ai의 신기능에 대해 예제로 정리하였습니다.
 header :
   teaser: /assets/images/blog/oracle23c.jpg
   overlay_image: /assets/images/blog/oracle23c.jpg
@@ -18,6 +18,7 @@ comments: true
 
 ## 개요 
 Oracle Database 23c 신기능관련 블로그목록입니다.
+2024년 5월 2일부터 23 버전의 이름이 23c에서 23ai로 변경되었습니다.
 
 ## 목차
 
