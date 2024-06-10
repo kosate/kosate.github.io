@@ -1,6 +1,6 @@
 ---
 layout: single
-title: SQL 신기능 (12.1)
+title: 오라클 SQL 신기능 (12.1)
 date: 2024-06-07 15:00
 categories: 
   - Oracle 
