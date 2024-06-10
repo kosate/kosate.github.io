@@ -36,7 +36,7 @@ SQL기능에 대해서 이미 잘알고 사용할 수도 있지만, 업무에 �
 
 SQL 개선사항 별로 프레젠테이션 모드로 간단하게 알아보겠습니다.
 
-{% include pptstart.html id="sql12r1 stretch" style="height:600px;" %}
+{% include pptstart.html id="sql12r1 stretch" style="" %}
 <section data-markdown>
 <textarea data-template>
 
