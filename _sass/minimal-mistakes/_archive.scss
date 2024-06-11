@@ -171,7 +171,7 @@
   @include breakpoint($medium) {
     margin-left: 0; /* override margin*/
     margin-right: 0; /* override margin*/
-    width: span(3 of 12);
+    width: span(3 of 15);
 
     &:nth-child(2n + 1) {
       clear: none;
@@ -183,17 +183,17 @@
 
     &:nth-child(4n + 2) {
       clear: none;
-      margin-left: gutter(1 of 12);
+      margin-left: gutter(1 of 15);
     }
 
     &:nth-child(4n + 3) {
       clear: none;
-      margin-left: gutter(1 of 12);
+      margin-left: gutter(1 of 15);
     }
 
     &:nth-child(4n + 4) {
       clear: none;
-      margin-left: gutter(1 of 12);
+      margin-left: gutter(1 of 15);
     }
   }
 
