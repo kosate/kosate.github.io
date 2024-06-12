@@ -1,7 +1,7 @@
 ---
 layout: single
 title: 시스템 트레이딩의 실전거래 방안
-date: 2024-06-10 02:00
+date: 2023-10-10 02:00
 categories: 
   - system-trading
 books:
