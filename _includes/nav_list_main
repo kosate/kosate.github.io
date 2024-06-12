@@ -13,69 +13,72 @@
       </li>
       <li>
         <!--span 태그로 카테고리들을 크게 분류 ex) C/C++/C#-->
-        <span>프로그래밍</span>
-            <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
-            <ul>
-                <!--Cpp 카테고리 글들을 모아둔 페이지인 /categories/cpp 주소의 글로 링크 연결-->
-                <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
-                {% for category in site.categories %}
-                    {% if category[0] == "frontend" %}
-                        <li>- <a href="/categories/frontend" class="">프론트엔드 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul> 
-            <ul> 
-                {% for category in site.categories %}
-                    {% if category[0] == "backend" %}
-                        <li>- <a href="/categories/backend" class="">백엔드 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul> 
-        <span>데이터베이스</span>
+        
+        <span class="nav__sub-title">프로그래밍</span>
+        <!--ul 태그로 같은 카테고리들 모아둔 페이지들 나열-->
+        <ul>
+            <!--Cpp 카테고리 글들을 모아둔 페이지인 /categories/cpp 주소의 글로 링크 연결-->
+            <!--category[1].size 로 해당 카테고리를 가진 글의 개수 표시--> 
+            {% for category in site.categories %}
+                {% if category[0] == "frontend" %}
+                    <li><a href="/categories/frontend" class="">프론트엔드 ({{category[1].size}})</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul> 
+        <ul> 
+            {% for category in site.categories %}
+                {% if category[0] == "backend" %}
+                    <li><a href="/categories/backend" class="">백엔드 ({{category[1].size}})</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul> 
+        
+            
+        <span class="nav__sub-title">데이터베이스</span>
           <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "Oracle" %}
-                        <li>- <a href="/categories/Oracle" class="">오라클 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/Oracle" class="">오라클 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
-        <span>인프라</span>
+        <span class="nav__sub-title">인프라</span>
           <ul>
                 {% for category in site.categories %}
                      {% if category[0] == "cloud" %}
-                        <li>- <a href="/categories/cloud" class="">클라우드 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/cloud" class="">클라우드 ({{category[1].size}})</a></li>
                     {% endif %}                    
                     {% if category[0] == "oci" %}
-                        <li>- <a href="/categories/oci" class="">OCI ({{category[1].size}})</a></li>
+                        <li><a href="/categories/oci" class="">OCI ({{category[1].size}})</a></li>
                     {% endif %}
                     {% if category[0] == "container" %}
-                    <li>- <a href="/categories/container" class="">컨테이너 ({{category[1].size}})</a></li>
+                    <li><a href="/categories/container" class="">컨테이너 ({{category[1].size}})</a></li>
                     {% endif %}
                     {% if category[0] == "linux" %}
-                    <li>- <a href="/categories/linux" class="">리눅스 ({{category[1].size}})</a></li>
+                    <li><a href="/categories/linux" class="">리눅스 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
-        <span>재테크(투자)</span>
+        <span class="nav__sub-title">재테크(투자)</span>
            <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "system-trading" %}
-                        <li>- <a href="/categories/system-trading" class="">시스템트레이딩 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/system-trading" class="">시스템트레이딩 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
             <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "stock" %}
-                        <li>- <a href="/categories/stock" class="">주식 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/stock" class="">주식 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
-         <span>블로그운영</span>
+         <span class="nav__sub-title">블로그운영</span>
              <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "blogs" %}
-                        <li>- <a href="/categories/blogs" class="">Github 블로그 ({{category[1].size}})</a></li>
+                        <li><a href="/categories/blogs" class="">Github 블로그 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul> 
