@@ -9,8 +9,6 @@
             <i class="far fa-file-code"></i> File Name : {{ include.name  }}  
         </span>
     {% endif %}
-    <button class="copy-code-button far fa-copy {% if include.copyable == 'false' %}  hidden {% endif %}" title="Copy text to clipboard"> Copy </button> 
-    
     {% if include.runas %}
         <span class="copy-code-runas"> 
             <i class="far fa-user" aria-hidden="true"></i> Run As : {{ include.runas }} 
@@ -21,4 +19,6 @@
             <i class="far fa-clock" aria-hidden="true"></i> Elapsed Time : {{ include.elapsedtime  }}  
         </span>
     {% endif %}    
+
+    <button class="btn btn--primary copy-code-button far fa-copy {% if include.copyable == 'false' %}  hidden {% endif %}" title="Copy text to clipboard"> Copy </button> 
 </div>

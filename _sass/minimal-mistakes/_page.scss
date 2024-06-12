@@ -586,24 +586,11 @@ body {
 
   .copy-code-button {
     float: right;
-    cursor: pointer; 
-    text-align: center; 
-    background-color: #fff;
-    color: #100f0e;
-   border: 1px solid #dedad6;
-    min-width: 60px;
-    padding-left: 5px;
   // margin-top: -40px;
   }
 
   .hidden{
     display:none;
-  }
-
-  .copy-code-button:hover
-  {
-    color: #fcfbfa;
-    background-color: #45413e;
   }
 
   .copy-code-name {
