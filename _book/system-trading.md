@@ -43,7 +43,7 @@ comments: true
       - [매매관리방안](/blog/system-trading/how-to-manage-trade/){: target="_blank"} 
     - [구성요소(자금관리자객체)](/blog/system-trading/how-to-manage-your-invest/){: target="_blank"} 
   - [매매처리 방안](/blog/system-trading/how-to-make-trading-logic/){: target="_blank"}
-  - (작성예정)실전거래 방안
+  - [실전거래 방안](blog/system-trading/it-is-my-real-trading/){: target="_blank"}
 - 시스템 트레이딩 매매방안
   - (작성예정)추세추종 매매전략 적용예시 및 결과
 
