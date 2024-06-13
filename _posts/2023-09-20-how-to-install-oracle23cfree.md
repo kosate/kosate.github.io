@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Oracle Database 23c Free 설치 방법(Linux RPM)
+title: Oracle Database 23ai Free 설치 방법(Linux RPM)
 date: 2023-09-19 02:00
 categories: 
   - Oracle
@@ -11,28 +11,27 @@ books:
   - oraclefreeservice  
 tags: 
    - Oracle
-   - 23c
    - 23ai
-excerpt : 오라클데이터베이스 23c Free버전을 설치하는 방법에 대해서 정리했습니다.
+   - 23ai
+excerpt : 오라클데이터베이스 23ai Free버전을 설치하는 방법에 대해서 정리했습니다.
 header :
   teaser: /assets/images/blog/oracle23c.jpg
   overlay_image: /assets/images/blog/oracle23c.jpg
 toc : true  
 toc_sticky: true
 ---
- 
-## 개요
-
-~~오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. ~~
-~~그리고 2023년 9월에 클라우드서비스와 같이 업그레이드 버전(23.3)이 출시되었습니다. ~~
-Oracle Database 23c은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 
-테스트 시스템(or 사이드프로젝트)에서 Oracle Database 23c Free버전을 사용해볼수 있을것 같습니다. 
-
-Oracle Database 23c Free 설치 방법에 대해서 알아보겠습니다. 
 
 ## 업데이트 
 
-- 2024년 06월 05일 : Oracle Database Free버전이 2024년 5월에 23c에서 23ai로 이름이 변경되어 출시되었습니다.설치 절차는 동일하나 일부 파일명들이 상이할수 있습니다. 사이트에 접속하셔서 정확한 파일들을 다운받으시기 바랍니다. 
+- 2024년 09월 : Oracle Database Free버전 23c(23.3)가 출시되었습니다. 
+- 2024년 06월 05일 : Oracle Database Free버전이 2024년 5월에 23c에서 23ai(23.4)로 이름이 변경되어 출시되었습니다.설치 절차는 23ai기준으로 수정하였습니다.
+
+## 들어가며
+
+<s>오라클에서 Oracle Database Free버전을 2023년 4월에 처음 출시했습니다. 그리고 2023년 9월에 클라우드서비스와 같이 업그레이드 버전(23.3)이 출시되었습니다. Oracle Database 23은 프로덕트환경용으로 아직 정식으로 출시되지 않았지만, 
+테스트 시스템(or 사이드프로젝트)에서 Oracle Database 23 Free버전을 사용해볼수 있을것 같습니다. </s>
+
+Oracle Database 23ai Free 설치 방법에 대해서 알아보겠습니다. 
 
 ## 리소스 제약
 
@@ -48,10 +47,10 @@ Oracle Database Free버전은 웹에서 직접 다운로드 받아서 설치할�
 - 오라클 지원 제약
   - 서비스요청을 할수 없음 
   - 패치는 제공되지 않음.
-  - Commnutiry Forum에서 질문가능([Oracle Database Free Forum](https://forums.oracle.com/ords/apexds/domain/dev-community/category/oracle-database-free))
+  - Commnutiry Forum에서 질문가능([Oracle Database Free Forum](https://forums.oracle.com/ords/apexds/domain/dev-community/category/oracle-database-free){:target="_blank"})
 
 - 오라클 기능 제약
-  - [Database Licensing Information User Manual 참조](https://docs.oracle.com/en/database/oracle/oracle-database/23/dblic/Licensing-Information.html#GUID-B6113390-9586-46D7-9008-DCC9EDA45AB4)메뉴얼에서 Free 에 해당되는 기능을 사용할수 있습니다.
+  - [Database Licensing Information User Manual 참조](https://docs.oracle.com/en/database/oracle/oracle-database/23/dblic/Licensing-Information.html#GUID-B6113390-9586-46D7-9008-DCC9EDA45AB4){:target="_blank"}메뉴얼에서 Free 에 해당되는 기능을 사용할수 있습니다.
     - 상당부분의 옵션을 무료로 사용할수 있습니다.(Partioning, Diagnostic & Tunning Pack, Compression, Security, In-Memory, SQL firewall, Spatial & graph등 )
     - 주로 가용성기능의 대해서는 제약이 있습니다.(Active DataGuard, Real Application Testing, Real Application Cluster)
     - ORDS(Oracle REST Data Services)와 Low-code 개발플랫폼인 APEX를 같이 사용할수 있습니다.
@@ -65,7 +64,7 @@ Oracle Database Free버전을 설치하기 위한 RPM패키지나 VM이미지를
   - Virtual Box 이미지 제공
   - Linux RPM 제공 (Oracle Linux 8, Redhat 호환Linux환경)
 
-- 참조문서<https://www.oracle.com/database/free/get-started/#installing>
+- 참조문서 : <https://www.oracle.com/database/free/get-started/>{:target="_blank"}
 
 ※ 윈도우에서는 Docker이미지 혹은 Virutal box이미지를 사용해야합니다. (아직 윈도우에서 설치버전은 출시되지 않았습니다. )
 
@@ -76,30 +75,34 @@ Oracle Database Free버전을 설치하기 위한 RPM패키지나 VM이미지를
 Oracle Linux 8이 설치된 환경에서 설치 작업을 시작하겠습니다.
 
 - 설치 절차 
-  1. OS 환경 설정(Oracle유저 및 커널값변경) (dnf -y localinstall oracle-database-preinstall-23c-1.0-1.el8.x86_64.rpm)
+  1. OS 환경 설정(Oracle유저 및 커널값변경) (dnf -y oracle-database-preinstall-23ai.x86_64)
   2. Linux RPM 다운로드 및 설치(yum -y localinstall oracle-database-free*)
-  3. 23c DB 생성 (/etc/init.d/oracle-free-23c configure)
+  3. 23ai DB 생성 (/etc/init.d/oracle-free-23ai configure)
  
 ### 1. OS 환경 설정(Oracle유저 및 커널값변경)
 
 Oracle Database설치를 위한 OS 유저와 커널 파라미터 설정이 필요합니다. 
 Linux RPM에는 Oracle Database설치를 위한 preinstall rpm을 제공합니다. 
 
+Oracle preinstall rpm을 설치합니다. 
+
+{% include codeHeader.html copyable="true" runas="root or opc" codetype="shell"%}
 ```bash
-## preinstall 패키지를 다운로드 받습니다.
-[root@freedbserver ~]# curl -L -o oracle-database-preinstall-23c-1.0-1.el8.x86_64.rpm https://yum.oracle.com/repo/OracleLinux/OL8/developer/x86_64/getPackage/oracle-database-preinstall-23c-1.0-1.el8.x86_64.rpm
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 31212  100 31212    0     0   179k      0 --:--:-- --:--:-- --:--:--  178k
+sudo dnf -y install oracle-database-preinstall-23ai.x86_64
+```
+
+설치 화면입니다. 
+
+```bash
 ## preinstall 패키지를 실행하여 환경설정을 합니다.
-[root@freedbserver ~]# dnf -y localinstall oracle-database-preinstall-23c-1.0-1.el8.x86_64.rpm
+[root@freedbserver ~]# dnf -y install oracle-database-preinstall-23ai.x86_64
 Last metadata expiration check: 0:26:38 ago on Fri 22 Sep 2023 07:12:00 AM GMT.
 Dependencies resolved.
 ================================================================================================================
  Package                                 Architecture       Version                    Repository          Size
 ================================================================================================================
 Installing:
- oracle-database-preinstall-23c          x86_64             1.0-1.el8                  @commandline        30 k
+ oracle-database-preinstall-23ai          x86_64             1.0-1.el8                  @commandline        30 k
 Installing dependencies:
  compat-openssl10                        x86_64             1:1.0.2o-4.el8_6           ol8_appstream      1.1 M
  ksh                                     x86_64             20120801-257.0.1.el8       ol8_appstream      929 k
@@ -177,8 +180,8 @@ Running transaction
   Running scriptlet: ksh-20120801-257.0.1.el8.x86_64                    18/20
   Installing       : compat-openssl10-1:1.0.2o-4.el8_6.x86_64           19/20
   Running scriptlet: compat-openssl10-1:1.0.2o-4.el8_6.x86_64           19/20
-  Installing       : oracle-database-preinstall-23c-1.0-1.el8.x86_64    20/20
-  Running scriptlet: oracle-database-preinstall-23c-1.0-1.el8.x86_64    20/20
+  Installing       : oracle-database-preinstall-23ai-1.0-1.el8.x86_64    20/20
+  Running scriptlet: oracle-database-preinstall-23ai-1.0-1.el8.x86_64    20/20
   Verifying        : compat-openssl10-1:1.0.2o-4.el8_6.x86_64            1/20
   Verifying        : ksh-20120801-257.0.1.el8.x86_64                     2/20
   Verifying        : libICE-1.0.9-15.el8.x86_64                          3/20
@@ -198,7 +201,7 @@ Running transaction
   Verifying        : libdmx-1.1.4-3.el8.x86_64                          17/20
   Verifying        : xorg-x11-utils-7.5-28.el8.x86_64                   18/20
   Verifying        : xorg-x11-xauth-1:1.0.9-12.el8.x86_64               19/20
-  Verifying        : oracle-database-preinstall-23c-1.0-1.el8.x86_64    20/20
+  Verifying        : oracle-database-preinstall-23ai-1.0-1.el8.x86_64    20/20
 
 Installed:
   compat-openssl10-1:1.0.2o-4.el8_6.x86_64    ksh-20120801-257.0.1.el8.x86_64    
@@ -209,7 +212,7 @@ Installed:
   libXt-1.1.5-12.el8.x86_64                   libXtst-1.2.3-7.el8.x86_64         
   libXv-1.0.11-7.el8.x86_64                   libXxf86dga-1.1.5-1.el8.x86_64      
   libXxf86misc-1.0.4-1.el8.x86_64             libXxf86vm-1.1.4-9.el8.x86_64               
-  libdmx-1.1.4-3.el8.x86_64                   oracle-database-preinstall-23c-1.0-1.el8.x86_64    
+  libdmx-1.1.4-3.el8.x86_64                   oracle-database-preinstall-23ai-1.0-1.el8.x86_64    
   xorg-x11-utils-7.5-28.el8.x86_64            xorg-x11-xauth-1:1.0.9-12.el8.x86_64
 
 Complete!
@@ -222,16 +225,26 @@ Oracle DB유저가 생성된것을 확인할수 있습니다.
 
 ### 2. RPM 다운로드 및 설치
 
-Oracle Database 23c Free설치를 위한 RPM을 다운로드합니다.
+Oracle Database 23ai Free설치를 위한 RPM을 다운로드합니다.
 아래 참조문서에서 Free RPM의 경로를 확인할수 있습니다. 
 
 - 참조문서 <https://www.oracle.com/database/free/get-started/#installing>
 
 RPM이 다운로드되면 설치 작업을 수행합니다. (RPM 크기는 약 1.6G입니다.)
 
+Oracle Database 엔진을 설치합니다. 
+
+{% include codeHeader.html copyable="true" runas="root or opc" codetype="shell"%}
+```bash
+wget https://download.oracle.com/otn-pub/otn_software/db-free/oracle-database-free-23ai-1.0-1.el8.x86_64.rpm
+sudo dnf install -y oracle-database-free*
+```
+
+설치화면입니다. 
+
 ```bash
 ## RPM 다운로드를 합니다.
-[root@freedbserver ~]# curl -L -o oracle-database-free-23c-1.0-1.el8.x86_64.rpm https://download.oracle.com/otn-pub/otn_software/db-free/oracle-database-free-23c-1.0-1.el8.x86_64.rpm
+[root@freedbserver ~]# wget https://download.oracle.com/otn-pub/otn_software/db-free/oracle-database-free-23ai-1.0-1.el8.x86_64.rpm
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
@@ -239,14 +252,14 @@ RPM이 다운로드되면 설치 작업을 수행합니다. (RPM 크기는 약 1
 100 1670M  100 1670M    0     0  66.3M      0  0:00:25  0:00:25 --:--:-- 66.0M
 
 ## RPM 설치 작업수행을 수행합니다.
-[root@freedbserver ~]# dnf -y localinstall oracle-database-free-23c-1.0-1.el8.x86_64.rpm
+[root@freedbserver ~]# sudo dnf install -y oracle-database-free*
 Last metadata expiration check: 0:35:27 ago on Fri 22 Sep 2023 07:12:00 AM GMT.
 Dependencies resolved.
 ========================================================================================================
  Package                             Architecture      Version            Repository               Size
 ========================================================================================================
 Installing:
- oracle-database-free-23c            x86_64            1.0-1              @commandline            1.6 G
+ oracle-database-free-23ai            x86_64            1.0-1              @commandline            1.6 G
 
 Transaction Summary
 ========================================================================================================
@@ -261,36 +274,44 @@ Running transaction test
 Transaction test succeeded.
 Running transaction
   Preparing        :                                                                                 1/1
-  Running scriptlet: oracle-database-free-23c-1.0-1.x86_64                                           1/1
-  Installing       : oracle-database-free-23c-1.0-1.x86_64                                           1/1
-  Running scriptlet: oracle-database-free-23c-1.0-1.x86_64                                           1/1
+  Running scriptlet: oracle-database-free-23ai-1.0-1.x86_64                                           1/1
+  Installing       : oracle-database-free-23ai-1.0-1.x86_64                                           1/1
+  Running scriptlet: oracle-database-free-23ai-1.0-1.x86_64                                           1/1
 [INFO] Executing post installation scripts...
 [INFO] Oracle home installed successfully and ready to be configured.
-To configure Oracle Database Free, optionally modify the parameters in '/etc/sysconfig/oracle-free-23c.conf' and then run '/etc/init.d/oracle-free-23c configure' as root.
+To configure Oracle Database Free, optionally modify the parameters in '/etc/sysconfig/oracle-free-23ai.conf' and then run '/etc/init.d/oracle-free-23ai configure' as root.
 
-  Verifying        : oracle-database-free-23c-1.0-1.x86_64                                           1/1
+  Verifying        : oracle-database-free-23ai-1.0-1.x86_64                                           1/1
 
 Installed:
-  oracle-database-free-23c-1.0-1.x86_64
+  oracle-database-free-23ai-1.0-1.x86_64
 
 Complete!
 [root@freedbserver ~]#
 
 ```
 
-### 3. 23c DB 설치
+### 3. 23ai DB 설치
 
-RPM을 설치되면 DB를 설치를 위하여 "/etc/init.d/oracle-free-23c" 파일이 생성됩니다.
+RPM을 설치되면 DB를 설치를 위하여 "/etc/init.d/oracle-free-23ai" 파일이 생성됩니다.
 파일내용을 변경하면 데이터베이스이름과 설치 위치를 변경할수 있습니다. 
-/etc/init.d/oracle-free-23c confgiure 명령어를 통해서 DB유저 패스워드 및 리스너 설정, DB생성작업이 수행됩니다.
+/etc/init.d/oracle-free-23ai confgiure 명령어를 통해서 DB유저 패스워드 및 리스너 설정, DB생성작업이 수행됩니다.
 
+데이터베이스 설치 작업을 수행합니다. 
+
+{% include codeHeader.html copyable="true" runas="root or opc" codetype="shell"%}
+```bash
+sudo /etc/init.d/oracle-free-23ai configure
+```
+
+설치 화면입니다. 
 ```bash
 ## DB 설치 환경을 확인합니다.
-[opc@freedbserver ~]$ cat /etc/init.d/oracle-free-23c
+[opc@freedbserver ~]$ cat /etc/init.d/oracle-free-23ai
 ...
 
 # DB defaults
-export ORACLE_HOME=/opt/oracle/product/23c/dbhomeFree
+export ORACLE_HOME=/opt/oracle/product/23ai/dbhomeFree
 export ORACLE_SID=FREE
 export TEMPLATE_NAME=FREE_Database.dbc
 export PDB_NAME=FREEPDB1
@@ -299,7 +320,7 @@ export NUMBER_OF_PDBS=1
 export CREATE_AS_CDB=true
 
 ## DB 설치 작업을 수행합니다. 패스워드에 대해서는 prompt에 입력해야합니다.
-[root@freedbserver ~]# /etc/init.d/oracle-free-23c configure
+[root@freedbserver ~]# /etc/init.d/oracle-free-23ai configure
 Specify a password to be used for database accounts. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9]. Note that the same password will be used for SYS, SYSTEM and PDBADMIN accounts: <패스워드 입력>
 Confirm the password: <패스워드 입력>
 Configuring Oracle Listener.
@@ -343,24 +364,85 @@ Connect to Oracle Database using one of the connect strings:
      Pluggable database: freedbserver/FREEPDB1
      Multitenant container database: freedbserver
 [root@freedbserver ~]#
-
 ```
+
+설치가 되면 자동으로 데이터베이스와 리스너프로세스가 기동되지만, 서버 재기동후에는 프로세스가 중지됩니다. 
+
+재기동하는 절차는 아래와 같습니다.
+
+{% include codeHeader.html copyable="true" runas="root or opc" codetype="shell"%}
+```bash
+sudo /etc/init.d/oracle-free-23ai stop
+sudo /etc/init.d/oracle-free-23ai start
+```
+
+재기동 화면 입니다. 
+
+```shell
+[root@freedbserver ~]# sudo /etc/init.d/oracle-free-23ai stop
+Shutting down Oracle Database instance FREE.
+Oracle Database instance FREE shut down.
+Stopping Oracle Net Listener.
+Oracle Net Listener stopped.
+
+[root@freedbserver ~]# sudo /etc/init.d/oracle-free-23ai start
+Starting Oracle Net Listener.
+Oracle Net Listener started.
+Starting Oracle Database instance FREE.
+Oracle Database instance FREE started.
+```
+
 ### 4. 설치 환경 확인
 
 먼저 프로세스를 확인해보겠습니다.  LISTENER와 PMON이 실행되고 있는것을 확인할수 있습니다. 
+
+{% include codeHeader.html copyable="true" runas="root or opc or oracle" codetype="shell"%}
+```bash
+ps -ef| grep tns
+ps -ef| grep pmon
+```
+
 ```bash
 [root@freedbserver ~]# ps -ef| grep tns
 root           6       2  0 07:09 ?        00:00:00 [netns]
-oracle     67702       1  0 07:53 ?        00:00:00 /opt/oracle/product/23c/dbhomeFree/bin/tnslsnr LISTENER -inherit
+oracle     67702       1  0 07:53 ?        00:00:00 /opt/oracle/product/23ai/dbhomeFree/bin/tnslsnr LISTENER -inherit
 [root@freedbserver ~]# ps -ef| grep pmon
 oracle     73210       1  0 08:00 ?        00:00:00 db_pmon_FREE
 [root@freedbserver ~]#
 ```
-Oracle Home은 "/opt/oracle/product/23c/dbhomeFree" 입니다.(Oracle Home을 변경하고 싶을경우 앞서 설정파일에서 변경하여 설치하면 됩니다 )
+Oracle Home은 "/opt/oracle/product/23ai/dbhomeFree" 입니다.(Oracle Home을 변경하고 싶을경우 앞서 설정파일에서 변경하여 설치하면 됩니다 )
 
 DB에 접속해보겠습니다.
 먼저 Oracle 유저로 변경후에 SID 및 Path를 설정하여 DB에 접속합니다.
 23.3버전으로 설치가 되어 있습니다.  
+
+
+Oracle유저로 변경합니다.
+
+{% include codeHeader.html copyable="true" runas="root or opc" codetype="shell"%}
+```bash
+sudo su - oracle
+```
+
+
+데이터베이스로 접속합니다. 
+
+{% include codeHeader.html copyable="true" runas="oracle" codetype="shell"%}
+```bash
+export ORACLE_SID=FREE 
+export ORAENV_ASK=NO 
+. oraenv
+sqlplus "/as sysdba"
+```
+
+{% include codeHeader.html copyable="true" runas="sys" codetype="sql"%}
+```bash
+show pdbs
+show sga
+show parameter target
+```
+
+접속 화면입니다. 
 
 ```sql
 [root@freedbserver ~]# su - oracle
@@ -376,7 +458,7 @@ Version 23.3.0.23.09
 Copyright (c) 1982, 2023, Oracle.  All rights reserved.
 
 Connected to:
-Oracle Database 23c Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Oracle Database 23ai Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
 Version 23.3.0.23.09
 -- PDB목록 확인
 SQL> show pdbs
@@ -422,7 +504,7 @@ Trace Level               off
 Security                  ON: Local OS Authentication
 SNMP                      OFF
 Default Service           FREE
-Listener Parameter File   /opt/oracle/product/23c/dbhomeFree/network/admin/listener.ora
+Listener Parameter File   /opt/oracle/product/23ai/dbhomeFree/network/admin/listener.ora
 Listener Log File         /opt/oracle/diag/tnslsnr/freedbserver/listener/alert/log.xml
 Listening Endpoints Summary...
   (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=freedbserver.subnet.vcn.oraclevcn.com)(PORT=1521)))
@@ -441,9 +523,16 @@ The command completed successfully
 ```
 ## 마무리
 
-Oracle Database Free는 리소스의 제약은 있지만 무료로 운영혹은 테스트환경에 사용할수 있는 버전입니다. 아직 23c의 프로덕션 버전이 나오지 않았지만, Oracle의 23c새로운 기능들을 미리 테스트해볼수 있을것 같습니다.
+Oracle Database Free는 리소스의 제약은 있지만 무료로 사용할수 있는 버전입니다. 
+설치 절자는 매우 간편합니다. /etc/init.d/oracle-free-23ai 스크립트를 통해 간편하게 DB를 설치하고, 데이터베이스를 중지 및 기동 절차를 매우 단순화시켰습니다. 
+
+이제 설치는 했으니, 23ai 신기능에 대해서 테스트해보고 정리할 예정입니다.
+
+<s>아직 23ai의 프로덕션 버전이 나오지 않았지만, Oracle의 23ai새로운 기능들을 미리 테스트해볼수 있을것 같습니다.</s>
 
 ## 참고문서
 
-- [Oracle Database Free](https://www.oracle.com/database/free/)
-- [Introducing Oracle Database 23c Free – Developer Release](https://blogs.oracle.com/database/post/oracle-database-23c-free)
+- [Oracle Database Free](https://www.oracle.com/database/free/){:target="_blank"}
+- [Oracle Database Free Get Started](https://www.oracle.com/database/free/get-started/){:target="_blank"}
+- [Installation Guide for Linux x86-64](https://docs.oracle.com/en/database/oracle/oracle-database/23/xeinl/index.html){:target="_blank"}
+- [Database 23ai: Feature Highlights](https://www.oracle.com/database/23ai/){:target="_blank"}

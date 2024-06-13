@@ -22,7 +22,7 @@ Oracle Database 23c 신기능관련 블로그목록입니다.
 
 ## 목차
 
-- [Oracle Database 23c Free 설치](/blog/oracle/how-to-install-oracle23cfree/){: target="_blank"}
+- [Oracle Database 23ai Free 설치](/blog/oracle/how-to-install-oracle23cfree/){: target="_blank"}
 - Oracle Database 23 New Feature
   - (작성예정) JSON Relational Duality
   - (작성예정) JavaScript stored procedures
