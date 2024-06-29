@@ -14,7 +14,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
 :root {
   --r-background-color: #191919;
   --r-main-font: KOTRA_GOTHIC, Source Sans Pro, Helvetica, sans-serif;
-  --r-main-font-size: 32px;
+  --r-main-font-size: 14;
   --r-main-color: #fff;
   --r-block-margin: 5px;
   --r-heading-margin: 5px 0 0 0;
@@ -22,14 +22,14 @@ section.has-light-background, section.has-light-background h1, section.has-light
   --r-heading-color: #fff;
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
-  --r-heading-text-transform: uppercase;
+  --r-heading-text-transform: ;
   --r-heading-text-shadow: none;
   --r-heading-font-weight: 600; 
   --r-heading1-text-shadow: none;
-  --r-heading1-size: 1.563em;
-  --r-heading2-size: 1.25em;
-  --r-heading3-size: 1.125em;
-  --r-heading4-size: 1.0625em;
+  --r-heading1-size: 2.441em; 
+  --r-heading2-size: 1.953em;
+  --r-heading3-size: 1.563em;
+  --r-heading4-size: 1.25em;
   --r-code-font: D2Coding, monospace;
   --r-cond-font-size : 1.0em;
   --r-link-color: #42affa;
@@ -137,7 +137,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
 .reveal h4:last-child,
 .reveal h5:last-child,
 .reveal h6:last-child {
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 /* Ensure certain elements are never larger than the slide itself */
