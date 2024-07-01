@@ -33,12 +33,12 @@ RAG는 단순히 사전 훈련된 모델의 지식에 의존하는 대신, 최�
 따라서 RAG는 대화형 AI, 고객 지원, 정보 검색 등 다양한 응용 분야에서 필요성과 활용도가 높습니다.
 
 오라클 데이터베이스는 RAG구현을 위하여 DB내에서 LLM과 통신하고 백터 검색을 위한 기능을 제공하고 있습니다. 
-오라클 데이터베이스에서 SQL을 이용하여 RAG구현하는 방법과 활용방법에 대해서 알아보겠습니다. 
+오라클 데이터베이스에서 SQL을 이용하여 RAG구현하는 절차와 활용방법에 대해서 알아보겠습니다. 
 
 ## SQL RAG 
 
-오라클 데이터베이스는 DBMS_VECTOR_CHAIN을 제공하여 DB내에서 LLM통신과 벡터 검색 기능을 지원하고 있습니다. 
-기업에서 사용할수 있는 RAG구현을 위하여 많은 구성요소와 고려사항이 필요하지만, 데이터관련 작업할때 SQL로 RAG 기능을 매우 쉽게 활용할수 있습니다. 
+오라클 데이터베이스는 DBMS_VECTOR_CHAIN 패키지을 제공하여 DB내에서 LLM통신과 벡터 검색 기능을 지원하고 있습니다. 
+기업에서 RAG를 실 서비스에 활용될때는 많은 구성요소와 고려사항이 필요하지만, 데이터관련 작업할때 SQL로 RAG 기능을 매우 쉽게 활용할수 있습니다. 
 
 본 블로그에서는 임베딩 모델으로 sentence-transformers/multi-qa-MiniLM-L6-cos-v1, LLM모델로 mistralai/Mistral-7B-Instruct-v0.1모델을 사용하겠습니다. 
 각 모델의 선택기준은 Multilingual을 지원하는 여부로만 판단했습니다. 성능(답변품질, 속도)에 대해서 고려되지 않았습니다. 
@@ -48,9 +48,7 @@ RAG는 단순히 사전 훈련된 모델의 지식에 의존하는 대신, 최�
 오라클 데이터베이스에 택스트 임베딩 모델을 로딩할수 있습니다. 텍스트 임베딩 및 유사도 검색은 아래 블로그를 참조하시기 바랍니다. 
 - [벡터 검색 기술 활용 - 텍스트유사도검색](/blog/oracle/how-to-use-oracle-ai-vector-search/){:target="_blank"}
 
-본 블로그에서는 임베딩 기능을 활용하는 방안으로,
-- PDF문서가 업로드 되면 DB트리거를 통해 자동으로 벡터 임베딩이 되고, 
-- PDF문서를 업로드를 쉽게하기 위한 프로시저를 생성하겠습니다. 
+본 블로그에서는 임베딩 기능을 활용하여 PDF문서가 업로드 되면 DB트리거를 통해 자동으로 벡터 임베딩이 되고, PDF문서를 업로드를 간편하게 하도록 프로시저를 생성하였습니다.
 
 **테이블 생성**
 
@@ -76,10 +74,30 @@ CREATE TABLE IF NOT EXISTS MY_VECTOR_STORE(
 );
 ```
 
+**임베딩 모델 로딩**
+
+오라클 데이터베이스에 onnx로 만들어진 모델을 로딩할수 있습니다. 
+onnx형식 자체는 모델을 교환하는 표준형식이지만 OML4Py 유틸리티의 omltuils을 통하여 변환된 onnx파일만 로딩이 가능합니다. 
+- <https://huggingface.co/sentence-transformers/multi-qa-MiniLM-L6-cos-v1>{:target = "_blank"}
+
+{% include codeHeader.html copyable="true" codetype="sql"%}
+```sql
+-- 디렉토리 생성(해당 디렉토리에 onnx파일이 있어야함)
+CREATE OR REPLACE DIRECTORY CTX_WORK_DIR AS '/home/oracle/onnx';
+-- 이미 모델이 있는경우 삭제 
+begin DBMS_VECTOR.drop_onnx_model(model_name => 'doc_model_han', force => true); end;
+-- onnx파일을 가져와서 로딩 작업수행
+begin
+  DBMS_VECTOR.LOAD_ONNX_MODEL('CTX_WORK_DIR','multi-qa-MiniLM-L6-cos-v1.onnx','doc_model_han',
+  JSON('{"function" : "embedding", "embeddingOutput" : "embedding", "input":{"input": ["DATA"]}}'));
+end;
+/
+```
+
 **자동 임베딩 트리거 생성**
 
 문서목록을 관리하는 테이블(MY_DOCUMENTS)에 PDF문서가 들어가면 자동으로 트리거에 의해서 임베딩(MY_VECTOR_STORE)이 수행됩니다.  
-이때 임베딩 모델을 DB에 저장되어 있는 모델을 사용합니다. 
+이때 임베딩 모델을 DB에 저장되어 있는 모델(doc_model_han)을 사용합니다. 
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -138,7 +156,7 @@ END;
 ```
 
 DB서버에서 PDF로드 테스트를 수행합니다. 
-테스트를 위하여 임의 파일을 저장했지만, 외부 애플리케이션에서는 웹 UI을 통해서 업로드된 PDF파일을 저장하는 기능을 이 프로시저를 호출하여 사용됩니다. 
+테스트를 위하여 임의 파일을 저장했지만, 외부 애플리케이션에서는 웹 UI을 통해서 업로드된 PDF파일을 저장하는 기능을 이 프로시저를 호출하여 구현할 예정입니다.
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -193,7 +211,7 @@ SQL> select * from my_vector_store where rownum = 1;
 
 오라클 데이터베이스에 보안상 일반적으로 외부 네트워크과 통신을 할수 없습니다. 
 LLM모델을 호출하기 위해서 외부 네트워크 통신이 되어야 하므로 권한설정이 필요합니다. 
-VECTOR라는 DB유저에게 권한을 부여합니다.
+VECTOR라는 DB유저로 작업하고 있어 해당 유저에게 권한을 부여합니다.
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -267,7 +285,8 @@ HF_CRED              NA         TRUE
 Hugging Face의 LLM모델을 사용하기 위해서 LLM모델을 지정합니다.
 Credential명과 프롬프트을 이용하여 LLM에 질의합니다. 
 
-사용하는 함수는 DBMS_VECTOR_CHAIN.UTL_TO_GENERATE_TEXT 입니다. 호출하기 편하도록 함수(generate_text)를 신규로 생성합니다. 
+사용하는 PL/SQ 함수는 DBMS_VECTOR_CHAIN.UTL_TO_GENERATE_TEXT 입니다. 
+질의 요청을 간편하게 하도록 함수(generate_text)를 신규로 생성합니다. 
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -343,7 +362,7 @@ system은 LLM지시사항, question에는 사용자 질의, doc_id는 문서번�
 }
 ```
 
-질의에 대해서 답변하는 함수(generate_text_for_chat)로 생성합니다. 이 함수은 샘플 애플리케이션에서 호출하여 사용됩니다.
+아래와 같이 질의에 대해서 답변하는 함수(generate_text_for_chat)로 생성합니다. 이 함수은 샘플 애플리케이션에서 호출하여 사용됩니다.
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -615,13 +634,13 @@ streamlit run sql_rag.py
 애플리케이션 실행화면입니다. (약 1분 50초의 동영상입니다.)
 
 데모영상의 순서는 아래와 같습니다. 
-- 두개의 파일을 업로드합니다
+1. 두개의 파일을 업로드합니다
   - Oracle AI Vector Search User Guide 문서
   - Transaction Event Queue 문서
-- 아래와 같이 문서를 선택후 질의를 합니다. 
+2. 아래와 같이 문서를 선택후 질의를 합니다. 
   1. 두개의 문서를 선택후 What is the Oracle Vector Search? 질의를 합니다. 질의 관련된 답변!!
   2. Transaction Event Queue문서만 선택후 What is the Oracle Vector Search? 질의를 합니다. 검색된 결과가 없다고 답변!!
-  3. Oracle AI Vector Search User Guide문서만 선택후 What is the Transaction Event Queue? 검색된 결과가 없다고 답변!!
+  3. Oracle AI Vector Search User Guide문서만 선택후 What is the Transaction Event Queue? 질의를 합니다. 검색된 결과가 없다고 답변!!
   4. Transaction Event Queue문서만 선택후 What is the Transaction Event Queue? 질의를 합니다. 질의 관련된 답변!! 
   5. 두개의 문서를 선택후 What is the Transaction Event Queue? 질의를 합니다.  질의 관련된 답변!!
   
@@ -637,7 +656,7 @@ streamlit run sql_rag.py
 웹 UI를 위하여 Python코드를 작성하였지만, 
 오라클 데이터베이스에서 기업내 혹은 클라우드상에 있는 LLM을 PL/SQL을 통해서 직접 연동 할수 있습니다. 
 
-LLM모델로 기업의 데이터를 옮길것이 아니라, 기업의 데이터가 있는 데이터베이스로 LLM을 연동한다면 데이터의 활용이라는 측면에서 다양한 업무에 쉽게 적용할수 있지 않을까 싶습니다. 
+기업의 데이터를 LLM모델로 옮길것이 아니라, 기업의 데이터가 있는 데이터베이스에서 직접 LLM과 연동한다면 기존 애플리케이션 변경을 줄이면서 좀더 다양한 업무에 간편하게 적용할수 있지 않을까 싶습니다. 
 
 ## 참고자료
 
