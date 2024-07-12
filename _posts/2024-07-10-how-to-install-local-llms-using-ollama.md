@@ -18,11 +18,12 @@ toc_sticky: true
 ## 들어가며
 
 Local LLM 구축을 해보고 싶다는 생각에 사이트를 검색하던중 ollama에 대해서 알게되었습니다. 
-자세한 내용을 추가적으로 공부해야겠지만 먼저 설치 절차와 질의방법에 대해서 알아보겠습니다.
+자세한 내용은 추가적으로 공부해야겠지만 먼저 설치 절차와 질의방법에 대해서 알아보겠습니다.
 
 ## Ollama 란?
 
-Ollama는 Open LLM(Llama3, Phi3, Mistral, Gemma 2등)을 쉽게 설치하고 관리하기 위하여 CLI를 제공하고  REST API를 위한 end point를 제공되는 도구입니다. 한마디로 LLM을 쉽게 사용할수 있는 플랫폼입니다. MacOS, Linux, Window를 지원합니다. 고로 PC에서 쉽게 설치해서 사용할수 잇습니다. 
+Ollama는 Open LLM(Llama3, Phi3, Mistral, Gemma 2등)을 쉽게 설치하고 관리하기 위하여 CLI를 제공하고  REST API를 위한 end point를 제공합니다. 
+한마디로 LLM을 쉽게 사용할수 있는 플랫폼입니다. MacOS, Linux, Window를 지원하기 때문에 PC에서 쉽게 설치해서 사용할수 있습니다. 
 
 제가 테스트한 환경은 GPU없는 Linux환경이었습니다. 나중에 GPU나 Mac Notebook이 생기면 꼭 테스트해보고 싶습니다. 
 
@@ -83,7 +84,7 @@ Flags:
 ```
 
 mistral LLM모델을 설치합니다. 참쉽네요.
-저는 Mistral을 설치해보앗씁니다.
+저는 Mistral을 설치해보았습니다.
 
 {% include codeHeader.html copyable="true" codetype="shell"%}
 ```shell
@@ -178,7 +179,7 @@ $> curl -X POST http://localhost:11434/api/generate -d '{
 
 ## 마무리
 
-외부 상용 LLM에서 API로 요청할수는 있지만 Token의 갯수가 비용이고 인터넷에 항상 연결되어야하는 부담이 있습니다. 기업내에서는 데이터 보안을 이유로 혹은 비용을 고려하면 Local LLM구축을 고민할것같습니다. 
+외부 상용 LLM에서 API로 요청할수는 있지만 Token의 갯수가 비용이고 인터넷에 항상 연결되어야하는 부담이 있습니다. 기업내에서는 데이터 보안 및 비용을 고려하면 Local LLM구축을 고민할수도 있습니다 
 
 Ollama을 사용하면 동일한 API로 다양한 모델을 테스트해볼수 있을것 같습니다. 
 
