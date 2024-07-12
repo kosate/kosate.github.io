@@ -37,6 +37,7 @@ Oracle Database 23ai 신기능관련 블로그목록입니다.
     - [벡터 검색 기술 활용(1) - 텍스트유사도검색](/blog/oracle/how-to-use-oracle-ai-vector-search/){: target="_blank"}
     - [벡터 검색 기술 활용(2) - 이미지분류](/blog/oracle/how-to-image-classification-with-vs/){: target="_blank"}
     - [벡터 검색 기술 활용(3) - (SQL)RAG](/blog/oracle/how-to-use-sqlrag-on-oracle-aivs/){: target="_blank"}
+    - [(SQL)RAG - 답변에 필요한 데이터를 스스로 검색 기술 - SQL 생성(Generation)](/blog/oracle/generated_sql_by_llm/){: target="_blank"}
 
 ## 마무리 
 계속 업데이트 됩니다.
