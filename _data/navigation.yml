@@ -4,6 +4,8 @@ main:
     url: /index.html
   - title: "Book"
     url: /book/
+#  - title: "Script"
+#    url:
   - title: "Category"
     url: /categories/
   #  - title: "About"
