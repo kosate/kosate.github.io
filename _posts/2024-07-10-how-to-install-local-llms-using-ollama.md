@@ -9,8 +9,8 @@ tags:
    - LLM
 excerpt : olllma을 이용하여 Local LLM구축하는 방법에 대해서 알아봅니다. 명령어 2개로 설치, 그리고 질문
 header : 
-  teaser: /assets/images/blog/vector_search1.jpg
-  overlay_image: /assets/images/blog/vector_search1.jpg
+  teaser: /assets/images/blog/ai1.jpg
+  overlay_image: /assets/images/blog/ai1.jpg
 toc : true  
 toc_sticky: true
 ---
