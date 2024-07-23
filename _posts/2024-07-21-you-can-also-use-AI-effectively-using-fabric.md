@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 당신도 AI를 잘사용할수 있어!(ft. Fabric)
+title: 당신도 AI를 잘사용할수 있어요!(ft. Fabric)
 date: 2024-07-21 21:00
 categories: 
   - llm 
