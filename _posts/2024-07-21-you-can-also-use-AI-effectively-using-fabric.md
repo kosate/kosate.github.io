@@ -474,109 +474,37 @@ Daniel Meer introduces Fabric, an open-source AI tool designed to augment human 
 # IDEAS:
 
 - Fabric is an open-source AI tool aimed at augmenting human capabilities.
-- Daniel Meer created Fabric to reduce friction in using AI for problem-solving.
-- Fabric's "Extract Wisdom" feature quickly summarizes extensive content.
-- It uses crowdsourced and open-source prompts or "patterns" for AI interaction.
-- Fabric allows users to interact with AI via command line, voice, or GUI.
-- It supports integration with various AI models, including local servers.
-- Fabric's CLI-native approach streamlines the use of AI for developers.
-- Users can create custom patterns to solve specific problems with AI.
-- Fabric encourages a "World of Text" philosophy for efficient information management.
-- It enables quick transcription and analysis of spoken content into text.
-- Fabric's patterns are designed to mimic human note-taking and summarization.
-- The tool helps filter content, highlighting what deserves in-depth attention.
-- Fabric's patterns are constantly improved through community contributions.
-- It facilitates the creation of a personalized AI assistant tailored to individual needs.
-- Daniel Meer's vision for Fabric is to increase human flourishing through AI.
-- Fabric can be used to analyze personal habits and suggest improvements.
-- The tool integrates with note-taking applications like Obsidian for seamless information capture.
-- Fabric's philosophy aligns with augmenting, not replacing, human intelligence.
-- It offers a framework for users to engage deeply with content selectively.
-- Meer's background in cybersecurity and AI shapes Fabric's development focus.
-- Fabric aims to help users navigate the overwhelming amount of digital content.
-- The project represents a practical application of AI for personal development.
-- Users can record and transcribe conversations for analysis and reflection.
-- Fabric supports local and remote AI model usage for flexibility.
-- The tool exemplifies the potential of AI in enhancing personal productivity and learning.
+- Daniel Meer created Fabric to reduce friction in using AI for problem-solving....
+...
 
 # INSIGHTS:
 
 - Open-source AI tools like Fabric democratize access to advanced problem-solving capabilities.
 - Crowdsourcing AI prompts accelerates the development of highly effective interaction patterns.
-- A CLI-native approach to AI integration appeals to developers seeking efficiency.
-- Customizable AI patterns empower users to tailor solutions to their unique challenges.
-- Embracing a "World of Text" philosophy maximizes the utility of digital information.
-- Augmenting human intelligence with AI can enhance our ability to process and understand complex content.
-- Community contributions are vital for refining and expanding the capabilities of AI tools.
-- Personalized AI assistants can significantly improve productivity and decision-making processes.
-- The philosophy behind Fabric underscores the potential of AI to support human flourishing.
-- Engaging selectively with content through AI assistance can optimize learning and comprehension.
+...
 
 # QUOTES:
 
 - "Fabric is all about reducing friction to have AI help you solve problems."
-- "These prompts or patterns have been carefully curated to solve a very specific problem."
-- "You're basically telling it to act like a human. We don't know why it works."
-- "Fabric is CLI native. You do everything here in the CLI."
-- "My whole world is text and the ability to manipulate text."
-- "I capture it immediately in a note and now that it's text... I have this world of text."
-- "It's about getting everything into a text format so it can be used anywhere by anything, especially AI."
-- "What I've done is take any piece of AI from any platform... collecting all these prompts into this concept called patterns."
-- "It's not about replacing humans, but about augmenting humans to help us become better."
-- "There's so much content being produced all the time... staying relevant in your space takes a tremendous amount of time."
-- "I am using it to determine what I should go watch regularly."
-- "Everything shouldn't be a summary. Sometimes you have to put the hard work in."
-- "Don't take the weights out of the gym."
-- "My context file is about increasing human flourishing by helping people identify, articulate, and pursue their purpose in life."
-- "This is literally my soul that I'm translating it to text."
-- "I've got this problem. Here's a pattern that can fix it."
-- "I rarely have time to go back and watch the sermon throughout the week. So if I could just somehow digest it like this, that'd be amazing."
-- "The past six months, I've been on a journey of being very particular, very intentional with what I consume."
-- "This whole fabric project is making me rethink about the role of AI in my life."
+- "These prompts or patterns have been carefully curated to solve a very specific problem."...
 
 # HABITS:
 
 - Daniel Meer uses Fabric daily for personal productivity and problem-solving.
 - Meer captures ideas immediately into notes to avoid storing them in his brain.
-- Transcribes spoken content immediately to integrate into his digital note system.
-- Uses Vim and the Terminal for efficient manipulation of text-based information.
-- Regularly updates and refines custom AI patterns based on personal use cases.
-- Engages deeply with selected content based on AI-recommended prioritization.
-- Records conversations for transcription and analysis to enhance personal reflection.
-- Integrates Fabric with Obsidian for seamless capture of insights into a digital second brain.
-- Employs local and remote AI models depending on the task at hand.
-- Utilizes Fabric's CLI interface for quick access to AI capabilities without GUI distractions.
-- Prioritizes the development of new patterns to solve emerging personal challenges.
-- Actively contributes to the open-source community by sharing improvements to patterns.
-- Adopts a selective engagement approach to content consumption based on AI analysis.
-- Practices immediate transcription of audio recordings into text for comprehensive review.
-- Embraces a text-centric workflow for efficient information management and retrieval.
+...
 
 # FACTS:
 
 - Fabric is an open-source project aimed at augmenting human capabilities with AI.
 - Daniel Meer, a cybersecurity expert, created Fabric after leaving Robinhood in 2022.
-- Fabric utilizes crowdsourced prompts or "patterns" for interacting with various AIs.
-- It supports integration with major AI models from OpenAI, Anthropic, and local servers.
-- Fabric is designed for use via command line, voice commands, or graphical interfaces.
-- The project encourages users to create custom patterns for specific problem-solving needs.
-- Fabric promotes a "World of Text" philosophy for efficient information management.
-- Daniel Meer's vision for Fabric includes increasing human flourishing through technology.
-- The tool allows users to filter digital content effectively, focusing on high-value materials.
-- Community contributions play a crucial role in refining and expanding Fabric's capabilities.
-- Fabric integrates with note-taking applications like Obsidian for seamless information capture.
-- The project reflects a broader trend towards leveraging AI for personal development and productivity.
-- Meer has a background in hacking and cybersecurity, influencing his approach to developing Fabric.
+...
 
 # REFERENCES:
 
 - Daniel Meer introduces Fabric, an open-source tool designed to augment human capabilities with AI.
 - The concept of "Extract Wisdom" as a feature within Fabric for summarizing content efficiently.
-- Open source and crowdsourced prompts or "patterns" used in interacting with AIs through Fabric.
-- Integration of Fabric with major AI models from OpenAI, Anthropic, and local servers like Alama.
-- Use of command line interface (CLI) as a primary method for interacting with Fabric.
-- The philosophy of creating a "World of Text" for efficient information management mentioned by Daniel Mesler.
-- The practice of transcribing spoken content immediately into text format for integration into digital note systems.
+....
 
 # ONE-SENTENCE TAKEAWAY:
 
@@ -585,10 +513,7 @@ Fabric revolutionizes productivity by seamlessly integrating open-source AI into
 # RECOMMENDATIONS:
 
 - Explore using Fabric daily for enhanced productivity and problem-solving capabilities.
-- Integrate spoken content into digital workflows through immediate transcription practices.
-- Utilize Vim and Terminal for efficient manipulation of text-based information systems.
-- Regularly update and refine custom AI patterns based on evolving personal needs.
-- Prioritize deep engagement with content selectively recommended by AI analysis.
+...
 ```
 
 ### 2. 한글로 출력하기
@@ -634,97 +559,42 @@ yt --transcript https://youtube.com/watch?v=UbDyjIIGaxQ | fabric --stream --patt
 
 - Fabric은 인간과 AI 사이의 마찰을 줄여 문제 해결을 돕는다.
 - 오픈 소스 및 크라우드소싱된 패턴을 사용하여 AI에게 명령한다.
-- YouTube 동영상의 전사본을 추출하여 지혜와 통찰을 얻는다.
-- CLI 기반으로 작동하여 AI와의 상호작용을 간소화한다.
-- 다양한 AI 모델과 통합되어 유연한 사용이 가능하다.
-- 사용자가 직접 패턴을 생성하여 문제 해결에 활용할 수 있다.
-- 모든 정보를 텍스트 형식으로 변환하여 AI 처리에 용이하게 한다.
-- Obsidian과 같은 노트 애플리케이션과 연동하여 지식 관리를 용이하게 한다.
-- 인간의 플러리싱을 증진시키기 위해 개발되었다.
-- AI를 인간의 능력을 확장하는 도구로 보고 활용한다.
-- 패턴을 이용해 복잡한 데이터를 간단하게 요약하고 분석한다.
-- 사용자 정의 패턴을 통해 개인화된 AI 경험을 제공한다.
-- 텍스트 기반의 세계에서 AI를 활용하여 정보를 처리한다.
-- AI와의 상호작용을 자연스러운 대화처럼 만들어 효율성을 높인다.
-- 오픈 소스 커뮤니티를 통해 지속적으로 패턴을 개선한다.
-- AI를 사용하여 인간의 삶의 질을 향상시키는 것을 목표로 한다.
-- 인간과 AI의 협력을 통해 새로운 가능성을 탐색한다.
-- AI를 활용하여 대량의 콘텐츠를 효율적으로 소비한다.
-- 인간의 생각과 학습 과정을 AI로 확장하여 깊이 있는 분석을 가능하게 한다.
-- AI를 이용해 개인의 목적과 플러리싱을 지원하는 컨텍스트를 생성한다.
-- AI와의 상호작용을 통해 인간의 창의력과 생산성을 증진시킨다.
+- YouTube 동영상의 전사본을 추출하여 지혜와 통찰을 얻는다.....
+
 
 ## INSIGHTS:
 
 - Fabric은 AI와 인간 사이의 상호작용을 간소화하여 문제 해결력을 강화한다.
 - 오픈 소스 패턴은 AI 사용자 경험을 개인화하고 최적화하는 데 중요하다.
 - 텍스트 기반 정보 처리는 AI를 활용한 지식 관리의 핵심이다.
-- 인간의 플러리싱은 AI 기술을 통해 새로운 차원으로 확장될 수 있다.
-- 사용자 정의 패턴은 개인의 필요에 맞춘 AI 활용을 가능하게 한다.
-- AI와 인간의 협력은 창의적 문제 해결과 혁신을 촉진한다.
-- AI를 활용한 콘텐츠 소비 최적화는 지식 습득 과정을 가속화한다.
-- 인간 중심의 AI 사용은 깊이 있는 학습과 분석을 촉진한다.
-- 컨텍스트 기반 AI 활용은 개인의 목적 달성에 중요한 역할을 한다.
-- AI 기술과 인간의 창의력 결합은 무한한 가능성을 열어준다.
+...
 
 ## QUOTES:
 
 - "Fabric은 인간과 AI 사이의 마찰을 줄여줍니다."
 - "오픈 소스 및 크라우드소싱된 패턴으로 AI에게 명령합니다."
 - "CLI 기반으로 작동하여 사용자 경험을 간소화합니다."
-- "사용자가 직접 패턴을 생성할 수 있습니다."
-- "모든 정보를 텍스트로 변환하여 처리합니다."
-- "Obsidian과 연동하여 지식 관리를 용이하게 합니다."
-- "인간의 플러리싱 증진이 목표입니다."
-- "AI는 인간 능력의 확장 도구입니다."
-- "패턴을 이용해 데이터를 간단하게 요약합니다."
-- "AI와 자연스러운 대화를 통해 효율성을 높입니다."
-- "오픈 소스 커뮤니티로 패턴을 지속적으로 개선합니다."
-- "AI를 사용해 인간 삶의 질을 향상시킵니다."
-- "인간과 AI 협력으로 새로운 가능성을 탐색합니다."
-- "AI로 대량의 콘텐츠를 효율적으로 소비합니다."
-- "AI로 깊이 있는 분석이 가능합니다."
+...
 
 ## HABITS:
 
 - 매일 Fabric 도구를 사용하여 문제 해결에 AI 활용한다.
 - YouTube 동영상 전사본 추출로 시간 절약에 기여한다.
-- CLI 환경에서 모든 작업 수행으로 생산성 향상시킨다.
-- 오픈 소스 패턴 공유 및 개선에 적극 참여한다.
-- Obsidian 노트 애플리케이션과 연동하여 지식 관리한다.
-- 개인화된 패턴 생성으로 Fabric 사용 경험 최적화한다.
-- 정보를 텍스트 형식으로 변환하여 AI 처리 용이하게 한다.
-- 대량 콘텐츠 소비 최적화로 지식 습득 과정 가속화한다.
-- 컨텍스트 기반 AI 활용으로 목적 달성에 집중한다.
-- 인간 중심의 AI 사용으로 깊이 있는 학습 및 분석 촉진한다.
+...
 
 ## FACTS:
 
 - Fabric은 오픈 소스 AI 도구로, 인간과 AI 사이의 마찰을 줄인다.
 - YouTube 동영상 전사본 추출 기능은 시간 절약에 크게 기여한다.
-- CLI 기반 작동은 사용자 경험 간소화에 중요한 역할을 한다.
-- 오픈 소스 및 크라우드소싱된 패턴은 사용자 경험 개인화에 기여한다.
-- Obsidian과 연동 가능성은 지식 관리에 혁신적인 접근 방식을 제공한다.
-- 사용자 정의 패턴 생성 기능은 Fabric의 유연성을 보여준다.
-- 모든 정보를 텍스트 형식으로 변환하는 기능은 AI 처리에 핵심적이다.
-- 대량 콘텐츠 소비 최적화는 정보 과부하 시대에 필수적이다.
-- 컨텍스트 기반 AI 활용은 개인 목적 달성에 중요한 역할을 한다.
-- 인간 중심의 AI 사용은 깊이 있는 학습 및 분석에 기여한다.
+...
+
 
 ## REFERENCES:
 
 - Fabric
 - YouTube
 - Obsidian
-- CLI (Command Line Interface)
-- Open Source Community
-- Crowdsourced Patterns
-- GPT Models from OpenAI and Anthropic
-- Local Models with Alama
-- Twin Gate
-- Notion
-- Vim and Terminal
-- Whisper AI for Transcription
+...
 
 ```
 
@@ -776,23 +646,13 @@ ONE SENTENCE SUMMARY:
 MAIN POINTS:
 1. Fabric은 인간과 AI의 상호작용을 간소화하여 문제 해결을 촉진한다.
 2. 오픈 소스 및 크라우드소싱된 패턴으로 AI 명령을 최적화한다.
-3. YouTube 동영상 전사본 추출 기능으로 시간 절약 및 통찰력 향상에 기여한다.
-4. CLI 기반 작동으로 사용자 경험을 단순화하고 생산성을 높인다.
-5. 다양한 AI 모델과의 통합으로 유연한 사용을 가능하게 한다.
-6. 사용자 정의 패턴 생성으로 개인화된 AI 경험을 제공한다.
-7. 텍스트 형식 변환 기능으로 AI 처리를 용이하게 한다.
-8. Obsidian과 같은 노트 애플리케이션과의 연동으로 지식 관리를 강화한다.
-9. 인간의 능력 확장 도구로서 AI의 활용을 강조한다.
-10. 오픈 소스 커뮤니티를 통한 지속적인 패턴 개선을 추구한다.
+...
 
 TAKEAWAYS:
 1. Fabric은 문제 해결에 있어 인간과 AI의 협력을 강화하는 중요한 도구다.
 2. 오픈 소스 패턴은 AI 사용자 경험을 개인화하고 최적화하는 데 핵심적이다.
-3. CLI 환경에서의 작업 수행은 생산성과 효율성을 높인다.
-4. 정보를 텍스트 형식으로 변환하는 기능은 AI 처리에 있어 필수적이다.
-5. 인간 중심의 AI 사용은 깊이 있는 학습 및 분석을 가능하게 한다.
+...
 ```
-
 
 ### 5. 여러 작업 수행하기
  
@@ -804,7 +664,6 @@ AI의 미래라는 주제로 essay를 작성하고 파일(2024-07-22-essay.md)�
 ```shell
 echo "AI의 미래는 무엇일까?" |  fabric  --pattern write_essay | save essay | fabric --stream --pattern summarize  | save essay_summary
 ```
-
 
 essay 내용입니다. 
 
@@ -890,32 +749,6 @@ echo "최근 AI 기술 동향에 대해서 알려줘" |fabric --stream --pattern
 
 CLI기반으로 직관적으로 처리할수 있고, 필요하면 API화 시켜서 처리할수 있습니다. 
 LLM을 사용하다보면 프롬프트 관리가 필요하게 됩니다. 프롬프트를 관리하는 방법에 대해 고민이 많았으면, 크게 유용하게 사용되는 도구가 될것 같습니다. 만들어진 프롬프트는 system 지시어로 사용되지만, 필요하면 컨텍스트 정보도 추가할수 있습니다. 
-
-아래 내용은 위 활용방법에서 출력된 최종 결과입니다. 
-
-**Fabric 요약 내용**
-
-ONE SENTENCE SUMMARY:
-- Daniel Meer가 만든 오픈 소스 AI 도구 Fabric은 인간과 AI 사이의 마찰을 줄이고 문제 해결을 돕습니다.
-
-MAIN POINTS:
-1. Fabric은 인간과 AI의 상호작용을 간소화하여 문제 해결을 촉진한다.
-2. 오픈 소스 및 크라우드소싱된 패턴으로 AI 명령을 최적화한다.
-3. YouTube 동영상 전사본 추출 기능으로 시간 절약 및 통찰력 향상에 기여한다.
-4. CLI 기반 작동으로 사용자 경험을 단순화하고 생산성을 높인다.
-5. 다양한 AI 모델과의 통합으로 유연한 사용을 가능하게 한다.
-6. 사용자 정의 패턴 생성으로 개인화된 AI 경험을 제공한다.
-7. 텍스트 형식 변환 기능으로 AI 처리를 용이하게 한다.
-8. Obsidian과 같은 노트 애플리케이션과의 연동으로 지식 관리를 강화한다.
-9. 인간의 능력 확장 도구로서 AI의 활용을 강조한다.
-10. 오픈 소스 커뮤니티를 통한 지속적인 패턴 개선을 추구한다.
-
-TAKEAWAYS:
-1. Fabric은 문제 해결에 있어 인간과 AI의 협력을 강화하는 중요한 도구다.
-2. 오픈 소스 패턴은 AI 사용자 경험을 개인화하고 최적화하는 데 핵심적이다.
-3. CLI 환경에서의 작업 수행은 생산성과 효율성을 높인다.
-4. 정보를 텍스트 형식으로 변환하는 기능은 AI 처리에 있어 필수적이다.
-5. 인간 중심의 AI 사용은 깊이 있는 학습 및 분석을 가능하게 한다.
 
 ## 참고자료
 
