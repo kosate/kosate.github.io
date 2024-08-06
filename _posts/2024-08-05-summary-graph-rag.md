@@ -17,7 +17,7 @@ toc_sticky: true
 
 ## 들어가며
 
-본 블로그에서는 Google의 Notebook LM 도구를 사용하여 Graph RAG관련 기술 논문에 대해서 요약 작업을 하였습니다. 
+본 블로그는 Google의 Notebook LM 도구를 사용하여 Graph RAG관련 기술 논문을 요약한 내용입니다. 
  
 - 논문 제목 : From Local to Global: A Graph RAG Approach to Query-Focused Summarization
 - 파일 원본 : <https://arxiv.org/pdf/2404.16130>{:_target="_blank"}
