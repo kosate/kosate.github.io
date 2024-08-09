@@ -18,7 +18,7 @@ toc_sticky: true
 
 ## 들어가며
 
-본 블로그는 Google의 Notebook LM 도구를 사용하여 포름프트관련 기술 논문을 요약한 내용입니다. 
+본 블로그는 Google의 Notebook LM 도구를 사용하여 의사코드를 이용한 프롬프트 작성관련한 기술 논문을 요약한 내용입니다. 
  
 - 논문 제목 : Prompting with Pseudo-Code Instructions
 - 파일 원본 : <https://aclanthology.org/2023.emnlp-main.939.pdf>{:_target="_blank"}
