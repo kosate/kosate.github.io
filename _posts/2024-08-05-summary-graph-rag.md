@@ -1,6 +1,6 @@
 ---
 layout: single
-title: (요약)로컬에서 글로벌로 - 질문 중심 요약을 위한 Graph RAG 접근법
+title: (논문요약)로컬에서 글로벌로 - 질문 중심 요약을 위한 Graph RAG 접근법
 date: 2024-07-25 21:00
 categories: 
   - llm 
