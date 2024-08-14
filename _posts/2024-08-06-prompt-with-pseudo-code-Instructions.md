@@ -3,7 +3,7 @@ layout: single
 title: (논문요약)의사 코드(Pseudo Code)를 이용한 프롬프팅
 date: 2024-08-06 21:00
 categories: 
-  - prompt 
+  - thesis 
 tags: 
    - LLM
    - Pseudo-Code
@@ -15,6 +15,9 @@ header :
 toc : true  
 toc_sticky: true
 ---
+
+**참고사항** 논문이나 기술문서를 요약하여 정보를 전달드리는 목적으로 작성되었습니다. 
+{: .notice} 
 
 ## 들어가며
 

@@ -3,7 +3,7 @@ layout: single
 title: (논문요약)EfficientRAG - 멀티홉 질문 답변를 위한 효율적인 검색기
 date: 2024-08-07 21:00
 categories: 
-  - llm 
+  - thesis 
 tags: 
    - LLM
    - EfficientRAG
@@ -15,6 +15,9 @@ header :
 toc : true  
 toc_sticky: true
 ---
+
+**참고사항** 논문이나 기술문서를 요약하여 정보를 전달드리는 목적으로 작성되었습니다. 
+{: .notice} 
 
 ## 들어가며
 
