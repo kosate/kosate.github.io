@@ -2,6 +2,7 @@
 layout: single
 title: (논문요약)SEA-SQL - 의미 강화된 Text로 SQL 작성
 date: 2024-08-12 21:00
+modified_at: 2024-08-13 21:00
 categories: 
   - thesis 
 tags: 
