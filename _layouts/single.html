@@ -55,6 +55,12 @@ layout: default
            </div> 
           </aside>
         {% endif %}
+
+        <h3 class="notice">
+          이 블로그에 담긴 내용은 순전히 개인적인 견해이며, 특정 제품이나 회사의 공식 입장을 대변하지 않습니다.
+        </h3>
+
+        
         {{ content }}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>
