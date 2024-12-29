@@ -1,18 +1,18 @@
 ---
 layout: single
-title: 벡터 검색 기술 활용(1) - 텍스트유사도검색
+title: "[오라클] 벡터 검색 기술 활용(1) - 텍스트유사도검색"
 date: 2024-06-09 15:00
-contents: PPT
 categories: 
-  - Oracle
+  - vector-search
 books:
+ - oracleaivectorsearch
  - oracle23newfeature 
 tags: 
    - Oracle
    - 23ai
    - Vector Search
    - Similarity Search
-excerpt : 오라클 데이터베이스 23ai에 벡터 검색을 위한 Oracle AI Vector Search기능을 제공합니다. DB안에서 텍스트를 청킹하고 벡터로 임베딩하여 유사도 검색을 하는 절차들을 정리하였습니다.
+excerpt : "🔍 텍스트에서 유사도 검색하는 방법에 대해서 알아봅니다. "
 header :
   teaser: /assets/images/blog/vector_search1.jpg
   overlay_image: /assets/images/blog/vector_search1.jpg
@@ -22,32 +22,41 @@ toc_sticky: true
 
 ## 들어가며
 
-LLM모델을 나오면서 데이터베이스 시장에도 많은 변화가 있습니다. 
-시멘틱 검색(의미 검색, 유사성 검색등)의 필요성이 대두되면서 벡터 데이터베이스(스토어)가 관심을 받기 시작했습니다.
-오라클 데이터베이스도 23ai버전부터 벡터 검색을 위한 벡터 데이터타입, 벡터 인덱스, 유사도 검색을 위한 SQL 연산자들 지원합니다.
-이러한 여러기능들을 묶어서 Oracle AI Vector Search라고 불리웁니다
+AI 기술이 발전하면서 데이터베이스 분야에도 많은 변화가 생기고 있습니다.
+특히, **시멘틱 검색(semantic search)**이라는 새로운 방식이 주목받고 있습니다. 시멘틱 검색은 단순히 키워드로 데이터를 찾는 것이 아니라, 데이터의 의미를 기반으로 검색하는 기술입니다.
+이 기술과 함께 등장한 것이 바로 벡터 데이터베이스인데요, 오라클 데이터베이스는 최신 버전인 23ai부터 벡터 검색을 지원하기 시작했습니다.
 
-좀더 구체적으로 어떻게 사용할수 있는지 기능에 대해서 알아보겠습니다.
-비정형 데이터 중 텍스트 검색관점으로 정리하였고 머신러닝과 같이 복잡한 알고리즘 설명보다는 데이터베이스 사용자 관점으로 정리하였습니다.
+오라클은 텍스트, 이미지 같은 비정형 데이터를 **벡터(숫자로 표현된 데이터)**로 변환하고, 이 벡터들 간의 유사성을 계산해 검색하는 기술을 **Oracle AI Vector Search**라고 부릅니다.
+이번 글에서는 복잡한 AI 모델보다는 데이터베이스 사용자 관점에서 벡터 검색 기술을 쉽게 이해할 수 있도록 설명하겠습니다.
 
 ## 백터 검색 기술 활용
 
-벡터 검색을 위해서는 임베딩 모델을 통해서 데이터를 벡터화 하는 작업이 필요합니다. 이를 벡터 임베딩(Vector Embedding)이라고 합니다. 
-데이터 검색을 할때 내가 조회할려는 조건(텍스트)도 백터로 변환해야하는데 이를 쿼리 벡터(Query Vector)라고 합니다. 데이터벡터들과 쿼리 벡터간간 거리 계산을 통해서 가장 가까운 벡터들을 찾는것이 유사도 검색(Similarity Search)입니다. 
-유사도 검색하면 내가 검색한 조건에 의미가 가장가까운 데이터를 검색할수 있게 됩니다. 
+벡터 검색은 데이터를 검색하기 전에 먼저 임베딩 모델을 통해 데이터를 벡터화하는 작업이 필요합니다.
+이 과정을 **벡터 임베딩(Vector Embedding)**이라고 합니다.
+단순히 데이터를 저장하는 것이 아니라, 숫자로 된 벡터 형태로 변환하여 데이터를 표현하는 방식입니다.
 
-각 단계별로 좀더 자세하게 알아보겠습니다.
+검색을 할 때는 내가 조회하고자 하는 조건(예: 텍스트)을 **쿼리 벡터(Query Vector)**로 변환해야 합니다.
+그 후, 데이터에 저장된 데이터 벡터와 쿼리 벡터 간의 거리 계산을 통해 가장 가까운 벡터들을 찾습니다.
+이렇게 가장 가까운 데이터를 찾는 과정을 **유사도 검색(Similarity Search)**이라고 합니다.
+
+유사도 검색을 사용하면 내가 입력한 조건과 의미적으로 가장 가까운 데이터를 효과적으로 검색할 수 있습니다.
+
+이제, 벡터 검색의 주요 단계를 자세히 알아보겠습니다.
 
 ### 1. 벡터 임베딩 (Vector Embedding)
 
-비정형데이터(텍스트, 이미지등)을 의미 벡터 공간에 표현하는 방법이 벡터 임베딩(Vector Embedding)이라고 합니다. (영어은 Embedding Vector로 표현하는것 같습니다.)
-벡터는 "크기"와 "방향"을 가진 데이터로 유사한 의미를 가진 데이터는 벡터 공간내에서 가까운 위치에 배치됩니다. 
-그래서 비정형 데이터를 벡터로 임베딩하면 임베딩된 벡터(데이터 포인터)간의 수학적 계산법으로 거리측정을 하여 가장 가까운 데이터를 계산해 낼수 있습니다. 
+**벡터 임베딩(Vector Embedding)**이란 텍스트, 이미지 같은 비정형 데이터를 벡터 공간에 표현하는 방법입니다. 영어로는 Embedding Vector라고도 합니다.
+벡터는 “크기”와 “방향”을 가진 데이터로, 비슷한 의미를 가진 데이터는 벡터 공간에서 가까운 위치에 배치됩니다.
+예를 들어, “고양이”와 “강아지”처럼 비슷한 의미를 가진 데이터는 벡터 공간에서도 서로 가깝게 배치됩니다.
 
-그럼 벡터 데이터는 어떻게 저장될까요?
-벡터 데이터는 차원(dimension)과 데이터 형식(number format)으로 표현됩니다. 
+이 과정을 통해 비정형 데이터를 벡터로 변환하면, 변환된 벡터 간의 수학적 거리 계산을 통해 유사한 데이터를 찾아낼 수 있습니다.
 
-오라클 데이터베이스에서는 아래와 같이 벡터 데이터 형식을 정의하여 저장할수 있습니다.
+**벡터 데이터의 저장 방식**
+
+벡터 데이터는 **차원(dimension)**과 **데이터 형식(number format)**으로 표현됩니다.
+오라클 데이터베이스에서는 벡터 데이터를 저장하기 위해 VECTOR 데이터 타입을 제공합니다.
+아래는 벡터 데이터를 저장하는 예제입니다.
+
 {% include codeHeader.html copyable="true" codetype="SQL"%}
 ```sql
 -- VECTOR_STORE 테이블을 생성(EMBED_VECTOR 컬럼은 VECTOR 데이터타입임)
@@ -62,45 +71,53 @@ CREATE TABLE IF NOT EXISTS VECTOR_STORE(
 INSERT INTO VECTOR_STORE VALUES(1, 1, "나는 벡터다", "[1,3,4]");
 COMMIT;
 ```
-오라클 23ai부터 VECTOR 데이터타입이 추가되었습니다. 
-EMBED_VECTOR 컬럼은 VECTOR 타입으로 선언했고, 임의 벡터값을 "[1,3,4]" 넣었습니다. 
-단순히 3차원의 int타입으로 데이터를 넣지만, 일반적으로 임베딩되는 벡터는 300개이상의 차원으로 float, int타입으로 벡터가 생성됩니다
+위 코드에서 EMBED_VECTOR 컬럼은 VECTOR 타입으로 선언되었으며, 예제로 “[1,3,4]“라는 3차원의 벡터 데이터를 입력했습니다.
+일반적으로 임베딩된 벡터는 300차원 이상의 고차원 데이터로, 주로 FLOAT나 INT 타입으로 구성됩니다.
 
-> 오라클 23ai부터 VECTOR 데이터타입을 지원합니다, 64K 차원과 FLOAT32, FLOAT64, INT8 차원 타입을 지원합니다. 
+> 오라클 23ai부터 VECTOR 데이터 타입을 지원하며, 최대 64K 차원과 FLOAT32, FLOAT64, INT8 데이터 타입을 제공합니다.
 
-그럼 벡터 데이터는 어떻게 생성될까요? 임베딩을 위한 ML모델을 통해서 생성됩니다
+**벡터 데이터의 생성 과정**
+
+벡터 데이터는 보통 **임베딩 모델(ML 모델)**을 통해 생성됩니다.
+이 모델들은 비정형 데이터를 분석하고, 이를 벡터로 변환해 주는 역할을 합니다.
+임베딩 모델을 사용하는 방법은 이후 단계에서 더 자세히 알아보겠습니다.
 
 ### 2. 임베딩 모델 (Embedding Model)
 
-임베딩 모델들은 훈련된 데이터에 따라서 지원되는 모달이 정해집니다.
-대표적으로 텍스트 임베딩 모델, 이미지 임베딩 모델이 있고, 텍스트와 이미지를 모두지원하는 멀티 모달의 임베딩 모델이 있습니다. 
-이러한 임베딩 모델들은 직접 훈련하여 개발할수 있지만, 오픈소스를 이용하여 사전 훈련된(pretrained) 임베딩 모델들을 사용하여 외부의 임베딩 모델 API를 사용할수 있습니다. 
+임베딩 모델은 데이터를 벡터로 변환하는 데 사용됩니다.
+이 모델은 훈련된 데이터에 따라 처리 가능한 데이터 유형(모달리티)이 정해지며, 대표적으로 아래와 같은 유형이 있습니다.
+-	텍스트 임베딩 모델: 텍스트 데이터를 벡터로 변환합니다.
+-	이미지 임베딩 모델: 이미지 데이터를 벡터로 변환합니다.
+-	멀티모달 임베딩 모델: 텍스트와 이미지 등 여러 데이터를 동시에 처리할 수 있습니다.
 
-**텍스트 임베딩 모델 유형**
+이러한 모델은 직접 훈련하여 개발할 수도 있지만, 오픈소스의 사전 훈련된(pretrained) 모델을 활용하거나, 외부 임베딩 모델 API를 사용하여 간편하게 처리할 수도 있습니다.
 
-- 사전 훈련된(pretrained) 텍스트 임베딩 모델들 
-  - SBERT.net사이트(<https://www.sbert.net/>{:target="_blank"})에서 Sentence Transformers(Python 모듈)의 Pretrained Model목록들을 확인할수 있습니다. 
-  - 이러한 모델들은 로컬에 다운받아 임베딩을 처리할수 있습니다.
-  - 여러개 모델들에 대해서 평가한 결과도 확인할수 있습니다. 
-  - 모든 임베딩 모델은 Hugging Face에서 제공됩니다. (기계 학습에 특화된 GitHub/GitLab과 같은 플랫폼 : <https://huggingface.co/models>{:target="_blank"})
-- LLM모델을 제공하는 벤더의 임베딩 모델들
-  - 대부분 LLM모델(OpenAI의 ChatGPT, Cohere의 Command등)등은 임베딩 모델 API을 같이 제공합니다. 
-  - 임베딩 모델 API를 호출하여 사용할수 있습니다. 
+**텍스트 임베딩 모델의 예시**
 
-> 임베딩 모델은 사전 훈련된(pretrained) Model을 다운받거나, 외부 임베딩 모델 API를 호출하여 임베딩 처리할수 있습니다.
+1. 사전 훈련된(pretrained) 텍스트 임베딩 모델
+  - Sentence Transformers(SBERT.net)
+    - <https://www.sbert.net/>{:target="_blank"})에서 다양한 pretrained 모델을 확인할 수 있습니다.
+    - 이 모델들은 로컬에서 다운로드받아 벡터화 작업에 사용할 수 있습니다.
+  - Hugging Face
+    - 머신러닝 모델을 공유하는 플랫폼으로, <https://huggingface.co/models>{:target="_blank"})에서 다양한 모델을 검색하고 사용할 수 있습니다.
+2. LLM(대형언어모델)기반 임베딩 모델 
+  - OpenAI(GPT), Cohere(Command) 등 LLM을 제공하는 벤더들은 임베딩 모델 API를 함께 제공합니다.
+  - 이 API를 호출하면 텍스트 데이터를 벡터로 변환할 수 있습니다.
+
+> 임베딩 모델은 사전 훈련된 모델을 다운로드하거나, 외부의 API를 호출해 데이터를 벡터로 변환할 수 있습니다.
 
 그럼 임베딩 모델들은 어떻게 사용할수 있을까요?
 
 **임베딩 모델 사용 방법**
 
-방법1) 애플리케이션 레이어에서 임베딩 모델을 호출하여 데이터를 벡터화 작업을 수행합니다.
-- 사전 훈련된(pretrained) 임베딩 모델 활용
-  - Python의 SentenceTransformer모듈을 호출하여 사전 훈련된(pretrained) 임베딩 모델을 이용하여 encode작업을 수행하여 벡터 수행합니다.
-- LLM모델을 제공하는 벤더의 임베딩 모델 활용
-  - REST API로 임베딩 모델 API를 이용하여 벡터 수행함
+방법1) 애플리케이션 레이어에서 호출
+- 사전 훈련된 모델 활용
+  - Python의 SentenceTransformer 모듀을 사용해 로컬에서 데이터를 백터화합니다.
+- LLM 기반 모델 활용
+  - REST API를 호출해 데이터를 백터화합니다.
 
-방법2) 데이터베이스 레이어에서 임베딩 모델을 호출하여 데이터를 벡터화 작업을 수행합니다. 
-- 사전 훈련된(pretrained) 임베딩 모델 활용
+방법2) 데이터베이스 레이어에서 호출
+- 사전 훈련된 모델 활용
   - 오라클 데이터베이스는 외부의 많은 ML모델들을 사용할수 있도록 모델을 DB내에 저장하는 기능을 제공하고 있습니다. 
   - 오라클 데이터베이스는 ONNX 표준 형식을 이용하여 데이터베이스내에서 임베딩 모델을 저장할수 있습니다. SQL(PL/SQL)로 임베딩 모델을 호출할수 있습니다. 
   - 데이터베이스 내에서 벡터 임베딩 될경우 데이터를 데이터베이스 외부로 이동하지 않고, 대량의 데이터를 빠르게 벡터 임베딩 처리할수 있습니다. 또한 대규모 데이터 이동을 회피할수 있고, 민감한 데이터에 보안을 강화할수 있는 이점이 있습니다. 
@@ -109,6 +126,7 @@ EMBED_VECTOR 컬럼은 VECTOR 타입으로 선언했고, 임의 벡터값을 "[1
 
 > 오라클 데이터베이스내에서 사전 훈련된(pretrained) 임베딩모델을 저장하고 임베딩을 수행 할수 있습니다. 또한 직접 외부의 임베딩 모델 API를 호출할수 있습니다.
 
+**임베딩 모델 로딩과정**
 오라클 데이터베이스에 임베딩 모델을 로딩하는 절차를 알아보겠습니다. 
 
 오라클 데이터베이스는 OML4Py(Oracle Machine Learning for Python) 기능을 제공합니다. 
@@ -119,7 +137,7 @@ OML4Py에는 Pretrainded Model를 ONNX파일로 생성하는 기능을 제공합
   - 설치절차 : <https://docs.oracle.com/en/database/oracle/machine-learning/oml4py/2/mlugp/install-oml4py-premises-database.html>{:target="_blank"}
 
 오픈소스의 Pretrained Model을 가져와서 오라클 데이터베이스에 호환되는 ONNX파일로 생성합니다.
-예제에서는 multi-qa-MiniLM-L6-cos-v1 모델을 사용하겠습니다.
+예시로, multi-qa-MiniLM-L6-cos-v1 모델을 변환하는 과정은 아래와 같습니다.
 
 - 모델 정보(multi-qa-MiniLM-L6-cos-v1)
   - 내용 : Dimension - 384, Pooling-method - mean Pooling, Susitable Score Functions - dot-product (util.dot_score), cosine-similarity (util.cos_sim), or euclidean distance
@@ -166,7 +184,9 @@ oracle$> ls -al *.onnx
 -rw-r--r--. 1 oracle oinstall 90621438 Jun 12 00:20 multi-qa-MiniLM-L6-cos-v1.onnx
 ```
 
-onnx파일을 데이터베이스에 저장(로드)합니다.
+**데이터베이스에 ONNX 파일 로딩** 
+
+생성한 ONNX 파일을 오라클 데이터베이스에 저장하고, 임베딩 작업에 사용할 수 있습니다.
 
 {% include codeHeader.html copyable="true" codetype="SQL"%}
 ```sql
@@ -185,7 +205,7 @@ end;
 SELECT TO_VECTOR(VECTOR_EMBEDDING(doc_model_han USING 'hello' as data)) AS embedding;
 ```
 
-Hello 문자를 임베딩한 결과입니다. 384개의 차원으로 생성되었습니다
+위의 쿼리를 실행하면 "hello"라는 텍스트가 384차원의 벡터로 변환됩니다.
 
 ```sql
 SQL> SELECT TO_VECTOR(VECTOR_EMBEDDING(doc_model_han USING 'hello' as data)) AS embedding;
@@ -210,13 +230,15 @@ EMBEDDING
 |크기| 모델사이즈가 매우 큽니다.(10G이상) | 모델사이즈가 상대적으로 작습니다.(1G이내)| 
 |활용| 주로 번역, 요약, 질문응답등 다양한 작업에 사용됩니다. | 주로 문서 분류, 유사도 계산, 정보 검색등에 사용됩니다. |
 
- > LLM은 텍스트 생성과 문맥을 이해하는데 초점, 임베딩 모델은 텍스트의미를 벡터로 표현하는데 효과적입니다
+ > LLM은 텍스트 생성과 문맥을 이해하는데 초점, 임베딩 모델은 데이터 의미를 벡터로 표현하는데 효과적입니다
 
 ### 3. 텍스트 데이터의 청킹 작업(Chunking)
 
-오라클 데이터베이스는 텍스트를 분할을 위한 유틸리티 패키지인 DBMS_VECTOR_CHAIN 패키지를 제공합니다. 
-문서용 텍스트 데이터, 텍스트 데이터의 청크 분할, 콘텐츠 요약 및 임베딩을 모두 데이터베이스내에서 처리할수 있습니다.
-데이터베이스에 벡터화하려는 데이터가 있는 경우 데이터 이동을 최소화하므로 효율적으로 처리를 할수 있습니다.
+**청킹(Chunking)**은 긴 텍스트 데이터를 의미 있는 작은 조각(청크)으로 나누는 작업입니다.
+이 작업은 텍스트를 더 효과적으로 검색하거나 분석할 수 있도록 도와줍니다.
+
+오라클 데이터베이스는 텍스트 데이터를 청크로 분할하고, 이를 요약하거나 벡터화할 수 있도록 DBMS_VECTOR_CHAIN 패키지를 제공합니다.
+이 패키지는 데이터베이스 내에서 모든 작업을 처리하므로, 데이터를 외부로 이동할 필요가 없어 처리 속도가 빠르고 보안도 강화됩니다.
 
 DBMS_VECTOR_CHAIN 패키지의 프로시저/함수목록
 
@@ -280,6 +302,8 @@ CROSS JOIN JSON_TABLE(
 ) AS et
 ```
 
+위 코드는 PDF 파일에서 텍스트를 읽은 뒤, 300단어씩 청크로 나눕니다. 나눠진 텍스트 조각은 이후 벡터화하거나 요약 작업에 사용할 수 있습니다.
+
 실행 결과입니다. 데이터 건수가 많아서 1건씩만 표시하였습니다. 
 
 ```sql
@@ -325,28 +349,36 @@ CROSS JOIN JSON_TABLE(
 - Explore Chunking Techniques and Examples
   - <https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/explore-chunking-techniques-and-examples.html>{:target="_blank"}
 
-> 데이터 검색 결과의 품질은 청킹에서 많이 좌우됩니다. 청킹을 얼만큼 의미론적으로 단락으로 잘 분리하는지에 따라서 검색 결과의 품질이 결정됩니다. 청킹의 방법론과 노하우가 임베딩 모델만큼 중요하게 됩니다.
+> 청킹 작업은 텍스트 데이터를 효율적으로 분할하고 활용하기 위해 중요한 단계입니다. 데이터를 잘게 나누는 방식과 크기는 검색 결과의 품질에 큰 영향을 미치므로, 작업에 따라 적절한 청킹 전략을 사용하는 것이 중요합니다
 
 ### 4. 유사도 검색(Similarity Search)
 
-벡터 검색 (유사성 검색 - Similarity search) 는 임베딩된 벡터간의 유사성 검색을 통해 데이터의 의미 검색을 가능하게 합니다. 
-단어의 의미를 해석하는 검색 엔진 기술로 검색어와 일치하는 결과 대신 쿼리의 “의미 일치“ 콘텐츠를 반환합니다. 
-그렇기 때문에 벡터 검색을 사용하여 의미가 유사한 데이터를 찾을수 있습니다. 
-벡터간의 거리는 거리함수를 통해 계산하고, 쿼리 벡터로 부터 가장 가까운 데이터를 찾습니다.
-두개의 벡터간의 실제 거리보다 결과 집합의 상대적 거리 순서(RELATIVE ORDER OF DISTANCES )가 더 중요합니다.
+**유사도 검색(Similarity Search)**은 벡터 간의 유사성을 계산하여 데이터의 의미를 기반으로 검색하는 기술입니다.
+이 검색 방식은 단순히 키워드가 일치하는 데이터를 반환하는 대신, 의미가 유사한 콘텐츠를 찾아냅니다.
+예를 들어, “강아지”를 검색하면 “반려견”이나 “포메라니안”과 같은 의미적으로 가까운 데이터를 반환할 수 있습니다.
 
+**백터 검색의 원리**
+
+유사도 검색에서는 임베딩된 데이터 벡터와 쿼리 벡터(Query Vector) 간의 거리를 계산합니다.
+두 벡터 간의 거리가 가까울수록 두 데이터가 의미적으로 더 유사하다고 판단합니다.
+검색의 정확성을 위해 거리의 크기보다 **상대적인 순서(Relative Order of Distances)**가 더 중요합니다.
+ 
+**거리 함수**
+
+유사도 검색에서 벡터 간의 거리를 계산하기 위해 다양한 거리 측정 함수가 사용됩니다.
 두 벡터간 거리를 계산하는 거리 측정 함수 목록들 입니다. 
-- Euclidean and Euclidean Squared Distances : 파타고라스 정리를 이용하여 두 지점간의 직선 거리를 계산(유사한 이미지, 관심사나 선호도 분류)
-- Cosine Similarity : 두 Vector의 Cosine을 계산(자연어 처리, 영상 검색)
-- Dot Product Similarity : 두 Vector의 Cosine에 Vector크기를 곱하여 내적 계산 (단어 유사도, Vector간 유사성)
-- Manhattan Distance : 두 지점간의 각축에 따른 차이 합을 계산 (GPS기반 경로 탐색, 문서 분류)
-- Hamming Similarity : 각 dimension별로 다른갯수를 찾아 계산 (디지털 통신 오류, 유전자분석)
+- Euclidean and Euclidean Squared Distances : 유사도 검색에서 벡터 간의 거리를 계산하기 위해 다양한 거리 측정 함수가 사용됩니다.(유사한 이미지, 관심사나 선호도 분류)
+- Cosine Similarity : 두 벡터 간의 코사인 값을 계산해 유사도를 판단합니다.(자연어 처리, 영상 검색)
+- Dot Product Similarity : 두 벡터의 코사인 값에 벡터 크기를 곱하여 내적을 계산합니다.(단어 유사도, 벡터간 유사성)
+- Manhattan Distance : 각 축을 따라 이동한 거리를 계산합니다. (GPS기반 경로 탐색, 문서 분류)
+- Hamming Similarity : 두 벡터에서 서로 다른 차원의 개수를 계산합니다.(디지털 통신 오류, 유전자분석)
 
 > 데이터 벡터와 쿼리 벡터는 동일한 임베딩 모델을 사용해야합니다.
-> 거리 측정법은 임베딩 모델에 의해서 결정됩니다. 
+> 적합한 거리 측정법은 사용하는 임베딩 모델에 따라 결정됩니다.
 
+**SQL을 활용한 유사도 검색 예제**
 
-특정 질의에 대해서 유사한 데이터를 검색하겠습니다.
+다음은 SQL을 사용해 특정 질의에 대해 의미적으로 유사한 데이터를 검색하는 예제입니다.
 
 {% include codeHeader.html copyable="true" codetype="SQL"%}
 ```sql
@@ -410,53 +442,66 @@ The overlapping words are underlined below. The third chunk overlaps with the la
 which are also underlined.
 ```
 
-사실 SQL구문에서보면 유사도 검색이라는 기술이 특별한것이 아닙니다.거리측정함수에 의해서 계산된 벡터간 거리 계산을 정렬한것입니다. 
-SQL의 ORDER BY 구문에 VECTOR_DISTANCE를 사용하여 정렬하게 되고 상위 Top K건만 추출하기 위하여 FETCH 절을 사용하였습니다. 
+유사도 검색은 SQL의 **ORDER BY**와 거리 계산 함수를 결합한 단순한 방식으로 구현됩니다.
+벡터 간 거리를 정렬해 상위 K개의 데이터를 선택하므로, 원하는 의미와 가장 가까운 데이터를 효과적으로 검색할 수 있습니다.
+
+이처럼 벡터 검색 기술은 데이터를 의미 기반으로 탐색할 수 있는 강력한 도구를 제공합니다.
+특히, 텍스트, 이미지 등 비정형 데이터를 다루는 현대 애플리케이션에서 그 활용도가 높습니다.
 
 ## 마치며
 
-지금까지 오라클 데이터베이스를 통해서 유사도 검색(벡터 검색)을 위한 과정에 대해서 알아보았습니다. 
-문자 데이터를 청킹작업을 통해 작은 텍스트로 쪼개고 각 텍스트는 임베딩 모델을 통해서 벡터화합니다. 
-벡터화된 데이터는 내가 질의하는 쿼리 벡터와 거리계산을 통하여 가장 유사한 데이터를 검색합니다. 
+지금까지 오라클 데이터베이스를 활용한 **유사도 검색(벡터 검색)**의 기본 과정을 알아보았습니다.
+먼저 텍스트 데이터를 **청킹(Chunking)**하여 작은 조각으로 나누고, 이를 임베딩 모델을 사용해 벡터화하는 작업을 수행했습니다.
+이후 벡터화된 데이터와 쿼리 벡터 간의 거리를 계산해 가장 유사한 데이터를 검색하는 방법을 살펴보았습니다.
 
-여기까지가 기본 적인 내용이고, 좀더 중요한 요소들이 많습니다. 
-임베딩모델을 어떤것을 사용하고, 청킹할때 의미를 보존하면서 텍스트를 쪼갤는 방법이 무엇인지는 또 다른 영역입니다. 
+**벡터 검색의 핵심**
 
-오라클 데이터베이스는 기본적으로 SQL작업만으로 간단하게 임베딩 작업 및 유사도 검색작업을 쉽게 할수 있습니다.
-일단 기본적인 내용을 이해하고 나서 우리업무에 적용했을때를 고려하여 좀 더 깊이 있는 고민을 해보는것이 좋을것 같습니다. 
+벡터 검색은 단순한 키워드 검색과 달리, 데이터의 의미를 기반으로 검색을 수행할 수 있는 강력한 기술입니다.
+이번 글에서는 벡터 검색의 기초를 다루었지만, 실제 활용에서는 다음과 같은 중요한 고려 사항이 있습니다
+-	임베딩 모델의 선택: 어떤 임베딩 모델을 사용하느냐에 따라 검색의 정확도가 크게 달라집니다.
+- 데이터 양 : 저장된 벡터 데이터의 양이 검색 결과에 영향을 줄수 있습니다. 검색되는 데이터가 많을 수록 조건과 유사한 데이터가 검색될 확률이 높습니다. 
+-	텍스트 청킹 전략: 텍스트를 의미를 보존하면서 적절히 분할하는 방법은 검색 품질에 중요한 영향을 미칩니다. 
 
-## 요약(Generated By ChatGPT)
+**실무 적용을 위한 제언**
 
-{% include pptstart.html id="aivs" style="" %}
-<section data-markdown>
-<textarea data-template>
-## 벡터 임베딩
-### 데이터의 의미를 벡터 형태로 변환하는 과정.
-- 벡터 임베딩은 텍스트 데이터를 수치 벡터로 변환하여 기계 학습 모델에 사용 가능하게 합니다.
-- 이 과정은 데이터의 의미를 보존하면서 계산 효율성을 높입니다.
-- **오라클 데이터베이스의 장점**: 내장된 임베딩 기능으로 데이터 처리 속도와 보안성이 강화됩니다.
----
-## 임베딩 모델 사용
-### 벡터 임베딩에 필요한 모델을 선택하고 사용하는 방법.
-- 사전 훈련된 임베딩 모델을 사용하여 빠르게 벡터 변환을 수행할 수 있습니다.
-- Oracle Database에서 임베딩 모델을 사용하면 보안성과 효율성이 향상됩니다.
-- **오라클 데이터베이스의 장점**: 다양한 사전 훈련된 모델을 쉽게 통합하여 사용 가능합니다.
----
-## 텍스트 청킹
-### 텍스트 데이터를 작은 청크로 나누는 기술.
-- 긴 텍스트를 작은 청크로 나누어 처리 성능을 최적화합니다.
-- 각 청크는 개별적으로 임베딩되어 벡터 검색에 사용됩니다.
-- **오라클 데이터베이스의 장점**: 텍스트 청킹 기능이 내장되어 있어 대규모 데이터 처리 시 효율적입니다.
----
-## 유사성 검색
-### 임베딩된 벡터를 사용하여 데이터 간의 유사성을 검색.
-- 유사성 검색은 벡터 간의 거리 계산을 통해 수행됩니다.
-- Oracle AI Vector Search를 통해 대규모 데이터베이스에서도 효율적인 유사성 검색이 가능합니다.
-- **오라클 데이터베이스의 장점**: 고성능 검색 엔진으로 대규모 데이터에서도 빠르고 정확한 검색이 가능합니다.
-</textarea>
-</section>
-{% include pptend.html id="aivs" initialize="center: false,"%} 
+오라클 데이터베이스는 SQL만으로 임베딩과 유사도 검색 작업을 간단히 수행할 수 있도록 설계되었습니다.
+이 기본 원리를 이해하고 나면, 실제 업무에 이 기술을 적용할 때 어떤 방식이 가장 적합한지 고민해볼 필요가 있습니다.
+특히, 비정형 데이터가 많아지고 AI 기술이 필수적인 시대에서, 벡터 검색은 매우 유용한 도구가 될 것입니다.
 
+이제 기본 개념을 바탕으로, 여러분의 데이터와 업무 환경에 맞는 활용 방안을 찾아보시기 바랍니다. 작은 시작이 큰 혁신으로 이어질 수 있습니다!
+
+## 업데이트
+
+오라클 데이터베이스에 곧바로 로딩할수 있는 agument된 임베딩 모델을 블로그에서 제공하고 있습니다. 2개의 텍스트 임베딩 모델을 제공하고 있습니다. 
+
+- All-MiniLM-L12-v2(2024년 9월)(영어) : <https://blogs.oracle.com/machinelearning/post/use-our-prebuilt-onnx-model-now-available-for-embedding-generation-in-oracle-database-23ai>{:target="_blank"}
+- Multilingual-e5-small(2024년 9월)(다국어) : <https://blogs.oracle.com/machinelearning/post/enhance-your-semantic-similarity-search-with-multilingual-support>{:target="_blank"}
+
+{% include codeHeader.html copyable="true" codetype="SQL"%}
+```sql
+DECLARE
+  ONNX_MOD_FILE VARCHAR2(100) := 'multilingual_e5_small.onnx';
+  MODNAME VARCHAR2(500) := 'MULTILINGUAL_E5_SMALL';
+  LOCATION_URI VARCHAR2(200) := 'https://adwc4pm.objectstorage.us-ashburn-1.oci.customer-oci.com/p/mbFT6Y4-cDFZr86_BlvZJA8CUiIzFmOCxN7m627gr3DWbksfgTzxf9HBREVgTvn1/n/adwc4pm/b/OML-Resources/o/';
+
+BEGIN
+ -- Object Storage접근을 위하여 Credential 생성
+ BEGIN 
+	DBMS_CLOUD.DROP_CREDENTIAL( credential_name => 'MY_CLOUD_CRED');
+	EXCEPTION WHEN OTHERS THEN NULL; 
+  END;
+  DBMS_CLOUD.CREATE_CREDENTIAL( credential_name => 'MY_CLOUD_CRED', username => 'OMLUSER', password => 'Welcome12345');
+
+ -- Object Storage에 있는 모델을 DB에 로딩
+  BEGIN 
+	DBMS_DATA_MINING.DROP_MODEL(model_name => MODNAME);
+	EXCEPTION WHEN OTHERS THEN NULL; 
+  END;
+    DBMS_CLOUD.GET_OBJECT( credential_name => 'MY_CLOUD_CRED', directory_name => 'DATA_PUMP_DIR', object_uri => LOCATION_URI||ONNX_MOD_FILE);
+    DBMS_VECTOR.LOAD_ONNX_MODEL(directory => 'DATA_PUMP_DIR', file_name => ONNX_MOD_FILE, model_name => MODNAME);
+END;
+/
+```
 
 ## 참고문서 
 

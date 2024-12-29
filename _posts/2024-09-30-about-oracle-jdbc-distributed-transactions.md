@@ -73,7 +73,7 @@ Connection은 항상 다음중 하나의 모드를 가집니다.
 작업에 대한 제약사항
 현재 Connection Mode는 트랜잭션내에서 유효한 작업을 제한할수 있습니다. 
 1. LOCAL_TXN모드에서 애플리케이션이 XAResource에서 prepare, commit, rollback, forget,또는 end를 호출해야서는 안됩니다. 이러한 시도는 XAException을 발생시킵니다.
-2. GLOBAL_TXN모드에서 애플맄에시녕 java.sql.Conneciton에서 commit, rollback, rollback(savepoint), setAutoCommit(true), 또는 setSavepoint를 호출해서는 안되며 oracle.jdbc.OracleConnection에서 OracleSetSavePoint혹은 oracleRollback을 호출해서는 안됩니다. 이러한 시도는 SQLException을 발생시킵니다.
+2. GLOBAL_TXN모드에서 애플리케이션이 java.sql.Connection에서 commit, rollback, rollback(savepoint), setAutoCommit(true), 또는 setSavepoint를 호출해서는 안되며 oracle.jdbc.OracleConnection에서 OracleSetSavePoint혹은 oracleRollback을 호출해서는 안됩니다. 이러한 시도는 SQLException을 발생시킵니다.
 
 ## Oracle XA 패키지
 

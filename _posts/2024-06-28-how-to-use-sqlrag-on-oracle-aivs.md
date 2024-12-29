@@ -1,10 +1,11 @@
 ---
 layout: single
-title: 벡터 검색 기술 활용(3) - (SQL)RAG
-date: 2024-06-28 15:00
+title: "[오라클] RAG 애플리케이션 구현(1) - (SQL)RAG"
+date: 2024-12-26 15:00
 categories: 
-  - Oracle
+  - vector-search
 books:
+ - oracleaivectorsearch
  - oracle23newfeature 
 tags: 
    - Oracle
@@ -12,11 +13,8 @@ tags:
    - Vector Search
    - Similarity Search
    - RAG
-excerpt : 오라클 데이터베이스 23ai에 벡터 검색을 위한 Oracle AI Vector Search기능을 제공합니다. SQL로 RAG구현하는 방법에 대해서 정리하였습니다.
-header :
-  video:
-    id: On7Y5pQIGzU
-    provider: youtube
+excerpt : "📚데이터베이스에서 SQL로 RAG 구현하는 방법에 대해서 알아봅니다"
+header : 
   teaser: /assets/images/blog/vector_search1.jpg
   overlay_image: /assets/images/blog/vector_search1.jpg
 toc : true  
@@ -25,79 +23,119 @@ toc_sticky: true
 
 ## 들어가며
 
-RAG(Retrieval-Augmented Generation) 기술은 대규모 언어 모델(LLM)과 검색 시스템을 결합하여 더 정확하고 관련성 높은 응답을 생성하는 기술입니다. 
-이 기술은 질의에 대한 답변을 생성하기 전에 관련 문서를 검색하여 정보를 추출하고, 이를 기반으로 응답을 만듭니다. 
+RAG(Retrieval-Augmented Generation) 기술은 **대규모 언어 모델(LLM)**과 검색 시스템을 결합해 더 정확하고 관련성 높은 답을 만들어 내는 기술입니다.
+쉽게 말해, 질문에 대한 답을 생성하기 전에 관련 문서를 먼저 찾아내고, 그 정보를 바탕으로 답을 만드는 방식입니다.
 
-RAG는 단순히 사전 훈련된 모델의 지식에 의존하는 대신, 최신 정보와 컨텍스트를 반영할 수 있습니다. 
-특히 방대한 양의 비정형 데이터를 처리하고 분석하는 데 유용합니다. 
-따라서 RAG는 대화형 AI, 고객 지원, 정보 검색 등 다양한 응용 분야에서 필요성과 활용도가 높습니다.
+RAG는 단순히 모델이 기존에 알고 있는 지식에만 의존하지 않고, 최신 정보와 문서 내용을 실시간으로 활용합니다. 그래서 방대한 양의 데이터를 분석하고 처리하는 데 아주 유용합니다.
 
-오라클 데이터베이스는 RAG구현을 위하여 DB내에서 LLM과 통신하고 백터 검색을 위한 기능을 제공하고 있습니다. 
-오라클 데이터베이스에서 SQL을 이용하여 RAG구현하는 절차와 활용방법에 대해서 알아보겠습니다. 
+- RAG의 활용 예:
+	-	대화형 AI: 챗봇이나 가상 비서
+	-	고객 지원 시스템: 고객 문의 해결
+	-	검색 엔진: 원하는 정보를 빠르게 제공
+
+오라클 데이터베이스는 RAG 기술을 지원하기 위해 LLM과 데이터베이스 간 통신과 벡터 검색 기능을 제공합니다.
+이 글에서는 지식검색업무와 관련하여 SQL을 사용해 RAG를 구현하는 방법과 그 활용 사례를 쉽게 설명합니다. 
 
 ## SQL RAG 
 
 오라클 데이터베이스는 DBMS_VECTOR_CHAIN 패키지을 제공하여 DB내에서 LLM통신과 벡터 검색 기능을 지원하고 있습니다. 
 기업에서 RAG를 실 서비스에 활용될때는 많은 구성요소와 고려사항이 필요하지만, 데이터관련 작업할때 SQL로 RAG 기능을 매우 쉽게 활용할수 있습니다. 
 
-본 블로그에서는 임베딩 모델으로 sentence-transformers/multi-qa-MiniLM-L6-cos-v1, LLM모델로 mistralai/Mistral-7B-Instruct-v0.1모델을 사용하겠습니다. 
-각 모델의 선택기준은 Multilingual을 지원하는 여부로만 판단했습니다. 성능(답변품질, 속도)에 대해서 고려되지 않았습니다. 
+### 1. 텍스트 생성요청
 
-### 1. 벡터 검색을 위한 임베딩 모델 로드
+RAG 구현을 위해서는 데이터베이스내에서 생성형AI연동할수 있는 기능이 필요합니다. 
+
+자세한 내용은 텍스트 생성 요청 블로그 글을 참조하시기 바랍니다. vm_my_models등을 포함하여 모델정보를 관리하는 방법에 대해서 작성되어 있습니다. 
+- [생성형 AI와의 연동 - 텍스트 생성 요청](/blog/vector-search/text-genneration-using-gen-ai-on-ai-vector-search/){:target="_blank"}
+ 
+사용자 정의 함수로 모델명과 프롬프트 내용을 입력받아, 결과를 CLOB 형식으로 반환합니다.
+이 함수를 사용하면 단순한 SQL 실행만으로 질문에 대한 답변을 생성할수 있습니다.
+
+{% include codeHeader.html copyable="true" codetype="sql"%}
+```sql
+CREATE OR REPLACE FUNCTION generate_text(p_model_name varchar2, p_prompt CLOB) RETURN CLOB 
+IS 
+   output CLOB;
+   v_model_params json;
+BEGIN 
+    --모델 정보가져오기
+   select model_params into v_model_params from vw_my_models where model = p_model_name;
+   -- REST API 통신할때 문자 인코딩 설정
+   utl_http.set_body_charset('UTF-8'); 
+   -- 결과요청
+   output := dbms_vector_chain.utl_to_generate_text(p_prompt, v_model_params);
+   return output;
+END;
+/
+```
+
+### 2. 임베딩 모델 로드
+
+지식 검색을 위하여 질의와 관련된 콘텐츠를 검색하기 위하여 백터 검색 기술이 필요합니다.
+텍스트 데이터를 벡터데이터로 변환하기 위하여 임베딩 모델이 필요합니다. 
 
 오라클 데이터베이스에 택스트 임베딩 모델을 로딩할수 있습니다. 텍스트 임베딩 및 유사도 검색은 아래 블로그를 참조하시기 바랍니다. 
-- [벡터 검색 기술 활용 - 텍스트유사도검색](/blog/oracle/how-to-use-oracle-ai-vector-search/){:target="_blank"}
+- [벡터 검색 기술 활용 - 텍스트유사도검색](/blog/vector-search/how-to-use-oracle-ai-vector-search/){:target="_blank"}
 
-본 블로그에서는 임베딩 기능을 활용하여 PDF문서가 업로드 되면 DB트리거를 통해 자동으로 벡터 임베딩이 되고, PDF문서를 업로드를 간편하게 하도록 프로시저를 생성하였습니다.
+텍스트 임베딩 모델을 DB에 로딩합니다.
 
-**테이블 생성**
+{% include codeHeader.html copyable="true" codetype="sql"%}
+```sql
+DECLARE
+  ONNX_MOD_FILE VARCHAR2(100) := 'multilingual_e5_small.onnx';
+  MODNAME VARCHAR2(500) := 'MULTILINGUAL_E5_SMALL';
+  LOCATION_URI VARCHAR2(200) := 'https://adwc4pm.objectstorage.us-ashburn-1.oci.customer-oci.com/p/mbFT6Y4-cDFZr86_BlvZJA8CUiIzFmOCxN7m627gr3DWbksfgTzxf9HBREVgTvn1/n/adwc4pm/b/OML-Resources/o/';
 
-문서목록을 관리하는 테이블(MY_DOCUMENTS)과 문서을 작은 텍스트로 나누고 벡터 임베딩을 생성하여 테이블(MY_VECTOR_STORE)을 저장합니다.
+BEGIN
+ -- Object Storage접근을 위하여 Credential 생성
+ BEGIN 
+	DBMS_CLOUD.DROP_CREDENTIAL( credential_name => 'MY_CLOUD_CRED');
+	EXCEPTION WHEN OTHERS THEN NULL; 
+  END;
+  DBMS_CLOUD.CREATE_CREDENTIAL( credential_name => 'MY_CLOUD_CRED', username => 'OMLUSER', password => 'Welcome12345');
+
+ -- Object Storage에 있는 모델을 DB에 로딩
+  BEGIN 
+	DBMS_DATA_MINING.DROP_MODEL(model_name => MODNAME);
+	EXCEPTION WHEN OTHERS THEN NULL; 
+  END;
+    DBMS_CLOUD.GET_OBJECT( credential_name => 'MY_CLOUD_CRED', directory_name => 'DATA_PUMP_DIR', object_uri => LOCATION_URI||ONNX_MOD_FILE);
+    DBMS_VECTOR.LOAD_ONNX_MODEL(directory => 'DATA_PUMP_DIR', file_name => ONNX_MOD_FILE, model_name => MODNAME);
+END;
+/
+```
+
+### 3. 지식 검색 테이블 생성
+
+문서를 저장하기 위한 테이블(MY_DOCUMENTS)과 문서로부터 청킹된 데이터를 저장하고 벡터화하여 데이터 검색하기 위한 테이블(MY_VECTOR_STORE)을 생성합니다. 
 두개의 테이블은 DOC_ID로 연결됩니다. 
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
-CREATE TABLE IF NOT EXISTS MY_DOCUMENTS
+CREATE TABLE IF NOT EXISTS my_documents
 ( 
-    DOC_ID NUMBER GENERATED BY DEFAULT ON NULL AS IDENTITY  PRIMARY KEY, 
-    file_name      VARCHAR2 (900), 
-    file_size      NUMBER , 
-    file_type      VARCHAR2 (100) , 
-    file_content   BLOB
-) ;
-
-CREATE TABLE IF NOT EXISTS MY_VECTOR_STORE( 
-    DOC_ID NUMBER NOT NULL, 
-    EMBED_ID NUMBER, 
-    EMBED_DATA VARCHAR2(4000), 
-    EMBED_VECTOR VECTOR
+    doc_id NUMBER GENERATED BY DEFAULT ON NULL AS IDENTITY  PRIMARY KEY, --문서번호
+    file_name      VARCHAR2 (900) UNIQUE,  -- 파일명
+    file_size      NUMBER ,  -- 파일사이즈
+    file_type      VARCHAR2 (100) ,  -- 파일타입
+    file_content   BLOB -- 파일내용
 );
 ```
 
-**임베딩 모델 로딩**
-
-오라클 데이터베이스에 onnx로 만들어진 모델을 로딩할수 있습니다. 
-onnx형식 자체는 모델을 교환하는 표준형식이지만 OML4Py 유틸리티의 omltuils을 통하여 변환된 onnx파일만 로딩이 가능합니다. 
-- <https://huggingface.co/sentence-transformers/multi-qa-MiniLM-L6-cos-v1>{:target = "_blank"}
-
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
--- 디렉토리 생성(해당 디렉토리에 onnx파일이 있어야함)
-CREATE OR REPLACE DIRECTORY CTX_WORK_DIR AS '/home/oracle/onnx';
--- 이미 모델이 있는경우 삭제 
-begin DBMS_VECTOR.drop_onnx_model(model_name => 'doc_model_han', force => true); end;
--- onnx파일을 가져와서 로딩 작업수행
-begin
-  DBMS_VECTOR.LOAD_ONNX_MODEL('CTX_WORK_DIR','multi-qa-MiniLM-L6-cos-v1.onnx','doc_model_han',
-  JSON('{"function" : "embedding", "embeddingOutput" : "embedding", "input":{"input": ["DATA"]}}'));
-end;
-/
+CREATE TABLE IF NOT EXISTS my_vector_store( 
+    doc_id NUMBER NOT NULL,  -- 문서번호
+    embed_ID NUMBER,         -- 청크번호
+    embed_data VARCHAR2(4000),  -- 청크 텍스트
+    embed_vector VECTOR  -- 청크에 대한 벡터
+);
 ```
 
-**자동 임베딩 트리거 생성**
+### 4. 임베딩 작업 수행 
 
 문서목록을 관리하는 테이블(MY_DOCUMENTS)에 PDF문서가 들어가면 자동으로 트리거에 의해서 임베딩(MY_VECTOR_STORE)이 수행됩니다.  
-이때 임베딩 모델을 DB에 저장되어 있는 모델(doc_model_han)을 사용합니다. 
+이때 임베딩 모델은 DB에 저장되어 있는 모델(MULTILINGUAL_E5_SMALL)을 사용합니다. 
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -106,30 +144,30 @@ FOR INSERT ON MY_DOCUMENTS
 COMPOUND TRIGGER 
     AFTER EACH ROW IS
     BEGIN 
-        INSERT INTO MY_VECTOR_STORE (doc_id, embed_id, embed_data, embed_vector)
+        INSERT INTO MY_VECTOR_STORE (doc_id, embed_id, embed_data, embed_vector) -- 벡터테이블에 데이터 저장
         SELECT :NEW.doc_id as doc_id, 
               et.embed_id, 
               et.embed_data, 
               to_vector(et.embed_vector) AS embed_vector
         FROM TABLE(
-            dbms_vector_chain.utl_to_embeddings(
-                dbms_vector_chain.utl_to_chunks(
-                    dbms_vector_chain.utl_to_text(:NEW.file_content), 
-                    json('{"by":"words","max":"300","split":"sentence","normalize":"all"}')
+            dbms_vector_chain.utl_to_embeddings( -- 3. 벡터 임베딩 수행
+                dbms_vector_chain.utl_to_chunks( -- 2. 데이터 분할(청크)작업
+                    REPLACE(REPLACE(TRIM( dbms_vector_chain.utl_to_text(:NEW.file_content)),'  ',' ') , CHR(10), ''),  -- 1. 텍스트로 변환
+                    json('{"by":"words","max":"200","split":"recursively","normalize":"all"}')
                 ),
-                json('{"provider":"database", "model":"doc_model_han"}')
+                json('{"provider":"database", "model":"MULTILINGUAL_E5_SMALL"}') -- 임베딩모델 선언
             )
         )  t
         CROSS JOIN JSON_TABLE(
             t.column_value, 
-            '$[*]' COLUMNS (
+            '$[*]' COLUMNS ( 
                 embed_id NUMBER PATH '$.embed_id',
                 embed_data VARCHAR2(4000) PATH '$.embed_data',
                 embed_vector CLOB PATH '$.embed_vector'
             )
         ) AS et ;
     END AFTER EACH ROW;
-END trg_my_doc_vectorized; 
+END trg_my_doc_vectorized;
 /
 ```
 
@@ -155,8 +193,13 @@ END;
 /
 ```
 
-DB서버에서 PDF로드 테스트를 수행합니다. 
-테스트를 위하여 임의 파일을 저장했지만, 외부 애플리케이션에서는 웹 UI을 통해서 업로드된 PDF파일을 저장하는 기능을 이 프로시저를 호출하여 구현할 예정입니다.
+DB서버에서 아래 3개의 PDF문서를 로딩합니다. 
+
+- AI Vector Search User's Guide : <https://docs.oracle.com/en/database/oracle/oracle-database/23//vecse/ai-vector-search-users-guide.pdf>{:target="_blank"}
+- Transactional Event Queues and Advanced Queuing User's Guide : <https://docs.oracle.com/en/database/oracle/oracle-database/21/adque/database-transactional-event-queues-and-advanced-queuing-users-guide.pdf>{:target="_blank"}
+- AI 브리프 11월호 : <https://spri.kr/posts?code=AI-Brief>{:target="_blank"}
+
+아래 코드는 oracle-ai-vector-search-users-guide.pdf를 업로드하는 예제입니다.
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
@@ -172,488 +215,185 @@ end;
 select * from my_documents;
 select count(*) from my_vector_store;
 select * from my_vector_store where rownum = 1;
-```
+``` 
 
-SQL 수행결과입니다. 
-1건문의 문서가 들어가고 총 337개의 텍스트로 청킹되었습니다. 
+### 3. SQL을 활용한 RAG 구현
 
-```sql
-SQL> select * from my_documents;
-    DOC_ID FILE_NAME                       FILE_SIZE FILE_TYPE  FILE_CONTE
----------- ------------------------------ ---------- ---------- ----------
-         4 oracle-ai-vector-search-users-        100 pdf        255044462D
-           guide.pdf                                            312E350A25
-                                                                E2E3CFD30D
-                                                                (중략)
-SQL> select count(*) from my_vector_store;
+RAG는 검색 기능을 확장하여 더 정확한 답변을 제공하는 기술입니다.
+이 기술은 질문과 관련된 문서를 먼저 찾아내고, 그 문서를 LLM에 컨텍스트 정보로 제공하여 LLM이 이를 바탕으로 정확한 답변을 생성하도록 합니다.
 
-  COUNT(*)
-----------
-       337
+아래는 SQL을 통해 RAG를 구현한 예제와 처리 방식입니다:
 
-SQL> select * from my_vector_store where rownum = 1;
-    DOC_ID   EMBED_ID EMBED_DATA                               EMBED_VECTOR
----------- ---------- ---------------------------------------- ----------------------------------------
-         4          9 Text Processing: PL/SQL Examples3-57     [-3.60391126E-003,1.94851719E-002,-5.545
-                                                               0581E-002,-3.90438065E-002,-5.27777225E-
-                      D:20240514080434-08'00'                  002,-1.14860926E-002,-7.38332095E-003,2.
-                      (중략)                                   (중략)
-```
+**내부 처리 방식**
+1. 질문에 대한 텍스트 유사도 검색:
+  - 사용자가 입력한 질문을 기반으로 데이터베이스 내에서 관련성이 높은 텍스트를 검색합니다.
+2.	문서 선택:
+	-	검색할 문서는 사용자가 지정한 문서로 한정합니다.
+3.	Multi-Vector Similarity Search:
+	-	여러 문서가 있는 경우, 각 문서에서 관련성이 높은 상위 Top N개의 텍스트를 검색합니다.
+4.	LLM과의 상호작용:
+	-	검색된 텍스트와 사용자의 질문을 함께 LLM에 전달하여, LLM이 정확하고 관련성 높은 답변을 생성할 수 있도록 요청합니다.
 
-### 2. 외부 LLM호출을 위한 인증정보 생성
+**프롬프트 작성**
 
-오라클 데이터베이스는 다양한 외부 LLM제공자를 지원합니다. REST API를 통해서 외부 모델을 호출할수 있습니다.
-- 지원 환경 : Cohere, Google AI, Hugging Face, Oracle Cloud Infrastructure (OCI) Generative AI, OpenAI, Vertex AI
+지식검색을 위한 프롬프트 작성이 필요합니다. 
+지식검색을 반복적으로 사용할수 있도록 프롬프트 데이터를 테이블에 관리하여 저장합니다. 
 
-외부 LLM모델과 통신하기 위해서는 인증정보가 필요하며 오라클 데이터베이스에서 CREDENTIAL을 생성하여 인증정보를 관리합니다. 
+자세한 내용은 텍스트 분석 및 변환 블로그 글을 참조하시기 바랍니다. my_task테이블 및 my_task_output테이블에 대한 정보를 확인합니다. 
+- [생성형 AI와의 연동 - 데이터 분석 및 변환](/blog/vector-search/data-analysis-using-gen-ai-on-ai-vector-search/){:target="_blank"}
 
-**DB유저 권한부여**
-
-오라클 데이터베이스에 보안상 일반적으로 외부 네트워크과 통신을 할수 없습니다. 
-LLM모델을 호출하기 위해서 외부 네트워크 통신이 되어야 하므로 권한설정이 필요합니다. 
-VECTOR라는 DB유저로 작업하고 있어 해당 유저에게 권한을 부여합니다.
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-BEGIN
-  DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host => '*',
-    ace => xs$ace_type(privilege_list => xs$name_list('connect'),
-        principal_name => 'VECTOR',
-        principal_type => xs_acl.ptype_db));
-END;
-/
-
-GRANT DB_DEVELOPER_ROLE, CREATE CREDENTIAL TO VECTOR;
-```
-
-**CREDENTIAL 생성**
-
-Hugging Face의 LLM을 사용할 예정이므로 Hugging Face에 가입하여 API Token생성작업을 합니다. 
-발급된 API Token을 이용하여 Credential을 생성합니다. 
-
-Hugging Face 사이트
- - <https://huggingface.co/>{:target="_blank"}
- - 사이트에 가입하면 "사용자정보" --> Setting -> Access Tokens에서 신규로 생성할수 있습니다. (무료이므로 API 호출횟수가 제약이 있습니다.)
-
-Credential 생성 포멧 예제
- - [DBMS_VECTOR_CHAIN.CREATE_CREDENTIAL 메뉴얼](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/dbms_vector_chain1.html#GUID-A6E28402-DC43-44C6-A1B2-75C3F270DD76){:target="_blank"}
- - Cohere, Google AI, Hugging Face, OpenAI, Vertex AI를 위해서 JSON( ```{ "access_token": "<access token>" }```)형식으로 CREDENTIAL을 생성합니다.
-
-```HF_CRED```라는 Credential을 생성합니다. 
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-declare
-  v_params json_object_t;
-  v_name varchar2(1000) :=  'HF_CRED';
-  v_api_token varchar2(1000) := '<API_TOKEN>'; -- Hugging Face의 API Token으로 변경합니다.
-begin
-   v_params := json_object_t();
-   v_params.put('access_token',v_api_token); 
-   begin
-        DBMS_VECTOR_CHAIN.DROP_CREDENTIAL ( CREDENTIAL_NAME  => v_name);
-   exception 
-     when others then
-        null;
-   end;
-   
-   DBMS_VECTOR_CHAIN.CREATE_CREDENTIAL ( CREDENTIAL_NAME => v_name, PARAMS => json(v_params.to_string));
-end;
-/
-```
-
-생성된 Credential은 아래 view를 통해서 확인할수 있습니다. 
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-select CREDENTIAL_NAME, USERNAME, ENABLED from USER_CREDENTIALS;
-```
-
-실행결과입니다.
-```sql
-SQL> select CREDENTIAL_NAME, USERNAME, ENABLED from USER_CREDENTIALS;
-
-CREDENTIAL_NAME      USERNAME   ENABL
--------------------- ---------- -----
-HF_CRED              NA         TRUE
-```
-
-### 3. LLM연동 테스트
-
-생성된 Credential을 이용하여 LLM과 통신할수 있습니다. 
-Hugging Face의 LLM모델을 사용하기 위해서 LLM모델을 지정합니다.
-Credential명과 프롬프트을 이용하여 LLM에 질의합니다. 
-
-사용하는 PL/SQ 함수는 DBMS_VECTOR_CHAIN.UTL_TO_GENERATE_TEXT 입니다. 
-질의 요청을 간편하게 하도록 함수(generate_text)를 신규로 생성합니다. 
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-CREATE OR REPLACE FUNCTION generate_text(p_model JSON, p_prompt CLOB) RETURN CLOB 
-IS 
-   output CLOB;
-BEGIN 
-   utl_http.set_body_charset('UTF-8'); -- http통신할때 Unicode방식으로 인코딩합니다.
-   output := dbms_vector_chain.utl_to_generate_text(p_prompt, p_model);
-   return output;
-END;
-/
-```
-
-생성된 함수를 이용하여 LLM모델에 답변을 요청해보겠습니다. Hugging Face의 Mistral-7B-Instruct-v0.1모델을 사용하였습니다.
-- <https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1>{:target = "_blank"}
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-set serveroutput on 
-declare
-    p_model json;
-    p_prompt clob;
-begin
-    p_model := json('
-    {
-      "provider":"huggingface",
-      "credential_name": "HF_CRED",
-      "url": "https://api-inference.huggingface.co/models/",
-      "model": "mistralai/Mistral-7B-Instruct-v0.1",
-      "wait_for_model": "true",  
-      "parameters": {
-         "max_new_tokens": 1000,
-         "return_full_text": false
-       }
-    }');
-
-   p_prompt := '[INST]안녕하세요?[/INST]';
-   
-   dbms_output.put_line('답변 : '||generate_text(p_model, p_prompt));
-end;
-/
-```
-
-실행 결과입니다. 
-데이터베이스내에서 LLM과 통신하여 답변을 얻었습니다. 
-프롬프트를 보강하면 더 다양한 요청을 할수 있습니다. 
+지식 검색을 위하여 프롬프트를 작성하고 저장합니다. 
 
 ```sql
-답변 :  안녕하세요! 제가 도와드릴 수 있습니다. 무엇이 필요합니까?
+INSERT INTO my_task(task_name, category_name,task_rules)  VALUES
+  ('지식검색','RAG','당신은 질문에 답변하는 챗봇서비스입니다. 제공된 문서(input_data)기반으로 답변하고, 재공된 문서 외의 정보를 사용하지 않습니다. 문서에서 직접적으로 관련된 답변을 찾을 수 없는 경우 "제공된 문서에는 질의와 관련된 내용이 없습니다."라고 작성하고 소스정보를 제공하지 않습니다. ');
 ```
 
-### 4. SQL RAG 구현 
+각 작업별로 답변결과 형식을 지정합니다. 
 
-RAG은 검색기능을 확장하여 좀더 정확하게 답변을 제공하는 기술입니다. 
-질문에 대해서 관련된 문서를 찾아 LLM에 컨텍스트정보로 제공하면 LLM에서는 이 정보를 기반으로 정확한 답변을 하게 됩니다. 
+```sql
+INSERT INTO my_task_output(output_id, output_name, output_text, output_sample) VALUES 
+(4,'JSON', '답변은 JSON형식으로만 생성합니다. JSON은 명확히 구조화되어야 하며, Markdown 형식으로 표시하지 마세요.','{"user_question":<사용자질문>,"generated_text":"<생성된답변>","source:[{"file_name":"<참조한파일이름>","text_id":"<참조한파일의 상세번호>","content":"<참조한문서내용요약>"}}]');  -- 지식검색시 사용
+```
 
-다음은 SQL을 통해서 RAG로 구현한 예제입니다. 내부 처리 방식은 아래와 같습니다. 
+지식 검색 요청에 대한 프롬프트를 SQL로 생성할수 있습니다.
 
-- 질의 내용을 기반으로 텍스트 유사도 검색합니다. 
-- 텍스트 유사도 검색을 하는 문서는 내가 선택한 문서로 지정하였습니다. 
-- 여러개의 문서가 있을 경우 각 문서별 Top N개의 텍스트를 검색합니다 (이를 Multi-Vector Similarity Search기능이라고 합니다.)
-- LLM에 질의를 할때 검색한 결과와 질의문을 같이 전달하여 답변을 요청합니다. 
+```sql
+SELECT JSON_SERIALIZE(JSON_OBJECT(instruction, output_format  FORMAT JSON,input_data)) prompt
+  FROM (SELECT t.task_rules instruction, 
+               o.output_name,
+               JSON_OBJECT('format' value o.output_text, 'example' value o.output_sample ) output_format,
+	           '<제공된데이터>' input_data 
+          FROM my_task t, my_task_output o
+         WHERE t.task_name = '지식검색'
+           AND o.output_id = 4);
+```
 
-질의는 JSON형식으로 요청하도록 작성하였습니다. 
+작성된 프롬프트는 아래와 같습니다. 
 
-system은 LLM지시사항, question에는 사용자 질의, doc_id는 문서번호를 의미합니다. 
 ```json
 {
-  "system":"Please answer with only facts based on the searched content.", 
-  "question":"What is the Oracle AI Vector Search?", 
-  "doc_id":[4]
+  "instruction":"당신은 질문에 답변하는 챗봇서비스입니다. 제공된 문서(input_data)기반으로 답변하고, 재공된 문서 외의 정보를 사용하지 않습니다. 문서에서 직접적으로 관련된 답변을 찾을 수 없는 경우 \"제공된 문서에는 질의와 관련된 내용이 없습니다.\"라고 작성하고 소스정보를 제공하지 않습니다. ",
+  "output_format":{
+    "format":"답변은 JSON형식으로만 생성합니다. JSON은 명확히 구조화되어야 하며, Markdown 형식으로 표시하지 마세요.",
+    "example":"{\"user_question\":<사용자질문>,\"generated_text\":\"<생성된답변>\",\"source:[{\"file_name\":\"<참조한파일이름>\",\"text_id\":\"<참조한파일의 상세번호>\",\"content\":\"<참조한문서내용요약>\"}}]"
+  },
+  "input_data":"<제공된데이터>"
 }
 ```
-
-아래와 같이 질의에 대해서 답변하는 함수(generate_text_for_chat)로 생성합니다. 이 함수은 샘플 애플리케이션에서 호출하여 사용됩니다.
+ 
+문서 기반으로 답변을 생성하도록 사용자 정의 함수를 생성합니다. 
+문서명과 사용자 질의를 입력하면 생성형AI에게 요청하여 지식 기반 답변을 생성합니다.
+제공된 문서내용을 확인하기 위하여 프롬프트 내용을 같이 반환하도록 작성되었습니다. 
 
 {% include codeHeader.html copyable="true" codetype="sql"%}
 ```sql
-CREATE OR REPLACE FUNCTION generate_text_for_chat(p_user_question CLOB) 
+CREATE OR REPLACE FUNCTION generate_text_for_qa(p_model varchar2, p_question varchar2, p_docs varchar2, p_top_k number , p_prompt OUT CLOB ) 
 RETURN CLOB IS
- 
-  v_model json;
-  v_prompt clob;  
-  v_sys_instruction varchar2(1000);
-  v_user_question_vec vector; 
-  v_user_question varchar2(1000);  
-  v_message clob; 
+  v_retrieved_docs CLOB;
   output CLOB;  
-  v_doc_count number := 1;
-  v_top_k number := 3;
-  
+  v_doc_count number;
+
 BEGIN 
- 
- -- JSON형식에서 질의내용만 추출 : {"system":"Please answer with only facts based on the searched content.", "question":"What is the Oracle AI Vector Search?", "doc_id":[4]}
-  v_user_question := json_value (json(p_user_question),'$.question' returning varchar2(1000)); 
-  v_sys_instruction := json_value (json(p_user_question),'$.system' returning varchar2(1000)); 
-  v_model := json('
-    {
-      "provider":"huggingface",
-      "credential_name": "HF_CRED",
-      "url": "https://api-inference.huggingface.co/models/",
-      "model": "mistralai/Mistral-7B-Instruct-v0.1",
-      "wait_for_model": "true",  
-      "parameters": {
-         "max_new_tokens": 2000,
-         "return_full_text": false
-       }
-    }
-    ');
 
-  -- 질의내용에 대한 쿼리 벡터 생성
-  select to_vector(vector_embedding(doc_model_han USING v_user_question as data)) as embedding  into  v_user_question_vec ;
-  --dbms_output.put_line('Question : '||v_user_question);
-
-  -- 문서 개수 확인
-  select count(doc_id) into v_doc_count
-      from JSON_TABLE (json(p_user_question), '$[*]'  COLUMNS (
-                NESTED PATH '$.doc_id[*]' COLUMNS ( doc_id number PATH '$' )
+ -- 문서 개수 확인
+  select count(FILE_NAME) into v_doc_count
+      from JSON_TABLE (json(p_docs), '$[*]'  COLUMNS (
+                NESTED PATH '$.files[*]' COLUMNS ( FILE_NAME VARCHAR2(1000) PATH '$' )
   ));
-  
+
   -- 텍스트 유사도 검색 (Multi-Vector Similarity Search)
   select json_arrayagg(
-         json_object('doc_id' is doc_id, 'embed_id' is EMBED_ID, 'content' is EMBED_DATA) 
-         returning CLOB) into v_message
-    from (SELECT DOC_ID, EMBED_ID, EMBED_DATA 
-       FROM MY_VECTOR_STORE
-        WHERE DOC_ID in (select doc_id from JSON_TABLE (json(p_user_question), '$[*]'  COLUMNS (
-                NESTED PATH '$.doc_id[*]' COLUMNS ( doc_id number PATH '$' )
+             json_object('file_name' is file_name, 'text_id' is EMBED_ID, 'content' is EMBED_DATA) 
+         returning CLOB) into v_retrieved_docs
+    from (SELECT MD.file_name, mvs.EMBED_ID, mvs.EMBED_DATA 
+       FROM MY_VECTOR_STORE mvs, MY_DOCUMENTS md
+        WHERE md.FILE_NAME in (select FILE_NAME from JSON_TABLE (json(p_docs), '$[*]'  COLUMNS (
+                NESTED PATH '$.files[*]' COLUMNS ( FILE_NAME VARCHAR2(1000) PATH '$' )
             )))
-       ORDER BY vector_distance(EMBED_VECTOR, v_user_question_vec , COSINE) 
-      FETCH FIRST v_doc_count PARTITIONS BY DOC_ID, v_top_k ROWS ONLY);
+          AND mvs.DOC_ID  = md.DOC_ID
+       ORDER BY vector_distance(mvs.EMBED_VECTOR, vector_embedding(MULTILINGUAL_E5_SMALL USING p_question as data) , COSINE) 
+      FETCH FIRST v_doc_count PARTITIONS BY mvs.DOC_ID, p_top_k ROWS ONLY);
 
-  -- 프롬프트생성
-  v_prompt := ' 
-<s>[INST] {system_instruction}.
-
-Search Data:
-{insert_search_data_here}
-
-User Query:
-{user_query}
-
-Provide a detailed response based on the search data above. [/INST]
-  ';
-  
-  v_prompt := replace(replace(replace(v_prompt,'system_instruction',v_sys_instruction),'{insert_search_data_here}', v_message),'{user_query}',v_user_question);
-
-   --dbms_output.put_line(v_prompt);
- output := generate_text(v_model, v_prompt);
+  -- 프롬프트 작성
+  SELECT JSON_OBJECT(instruction, output_format FORMAT JSON,input_data FORMAT JSON, user_question returning CLOB ) into p_prompt
+  FROM (SELECT t.task_rules instruction, 
+               o.output_name,
+               JSON_OBJECT('format' value o.output_text, 'example' value o.output_sample) output_format,
+	           v_retrieved_docs input_data ,
+               p_question user_question
+          FROM my_task t, my_task_output o
+         WHERE t.task_name = '지식검색'
+           AND o.output_id = 4);
+  output := generate_text(p_model, p_prompt);
   RETURN output;
 END;
 /
 ```
 
-LLM을 통해서 질의를 수행할수 있습니다. 
-"What is the Oracle AI Vector Search?"질문을  4번 문서(DOC_ID = 4)에서 조회하여 답변을 합니다. 
-
-{% include codeHeader.html copyable="true" codetype="sql"%}
-```sql
-select generate_text_for_chat('{"system":"Please answer with only facts based on the searched content.", "question":"What is the Oracle AI Vector Search?", "doc_id":[4]}') response from dual;
-```
-
-답변결과입니다. 꽤 길게 답변을 했습니다. 
-LLM지시사항(프롬프트)으로 잘 작성하면 답변을 명료하게 개선할수 있습니다. 
+문서명을 지정하고, 사용자가 질의하면 관련 지식을 답변합니다. 
 
 ```sql
-SQL> select generate_text_for_chat('{"system":"Please answer with only facts based on the searched content.", "question":"What is the Oracle AI Vector Search?", "doc_id":[4]}') response from dual;
-
-RESPONSE
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-The Oracle AI Vector Search is a new classification of specialized indexes designed for Artificial Intelligence (AI) workloads that allow you to query data based on semantics, rather than keywords. It
- is a powerful tool that enables fast retrieval and similarity search of vector embeddings for unstructured data.
-
-Vector Indexes are a new classification of specialized indexes that are designed for AI workloads. They allow you to query data based on semantics, rather than keywords. This means that you can search
- for data based on the meaning of the words, rather than just the individual words themselves.
-
-The biggest benefit of Oracle AI Vector Search is that semantic search on unstructured data can be combined with relational search on business data in one single system. This means that you can search
- for both structured and unstructured data in the same system, making it easier to find the information you need.
-
-There are several examples of how Oracle AI Vector Search can be used. For example, you can search for business data in one single system, using vector embeddings to combine semantic search on unstruc
-tured data with relational search on structured data. This can be done using the BY words MAX 40 OVERLAP 0 SPLIT BY none syntax, which splits the text into three chunks at an absolute maximum word of
-40, the third line after wordloads, and the fifth line after with.
-
-Overall, Oracle AI Vector Search is a powerful tool that enables fast retrieval and similarity search of vector embeddings for unstructured data. It is a new classification of specialized indexes that
- are designed for AI workloads, and it allows you to query data based on semantics, rather than keywords.
+DECLARE
+  v_model_name varchar2(100) := 'gpt-4o-mini';
+  v_user_question varchar2(1000) := '2024년 AI 산업동향은 어떻게 되나요?';
+  v_docs varchar2(1000) := '{
+    "files": [
+        "SPRi AI Brief_11월호_산업동향_F.pdf",
+        "oracle-ai-vector-search-users-guide.pdf"
+    ]
+  }';
+  v_top_k number := 5;
+  v_prompt CLOB := EMPTY_CLOB();
+  v_anwser CLOB := EMPTY_CLOB();
+BEGIN
+    v_anwser  := generate_text_for_qa(v_model_name, v_user_question, v_docs, v_top_k, v_prompt);
+    DBMS_OUTPUT.PUT_LINE(json_object('prompt' value v_prompt FORMAT JSON, 'answer' value v_anwser FORMAT JSON));
+END;
 ```
 
-### 5. 샘플 애플리케이션
+답변 결과입니다.
+"prompt" 에는 프롬프트 작성내용을 확인할수 있고, "answer"에서는 생성형 AI에 생성된 텍스트 데이터입니다. 
 
-**Streamlit 코드**
-
-PDF파일 기반으로 질의 답변하는 간단한 Pytnon 애플리케이션을 작성하였습니다. 웹 UI을 위하여 Streamlit기반으로 작성하였습니다. 
-PDF파일을 업로드후에 PDF을 선택하여 질의를 하는 기능을 제공합니다. 이때 LLM은 PDF기반으로만 답변해야합니다. 
-
-{% include codeHeader.html copyable="true" name="sql_rag.py" codetype="python"%}
-```python
-import streamlit as st
-import oracledb
-import json
-import time
-from typing import List
-from datetime import datetime
-
-# 데이터베이스 연결 설정
-def get_db_connection():
-    dsn = oracledb.makedsn('localhost', '1521', service_name='FREEPDB1')
-    connection = oracledb.connect(user='VECTOR', password='VECTOR', dsn=dsn)
-    return connection
-
-# PDF 문서 목록 조회
-def fetch_documents(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT DOC_ID, FILE_NAME FROM my_documents")
-    documents = cursor.fetchall() 
-    cursor.close()
-    return documents
-
-# PDF 업로드 함수
-def upload_pdf(conn,file_name, file_size, file_type, file_content):
-    cursor = conn.cursor()
-    cursor.callproc('insert_my_doc', [file_name, file_size, file_type, file_content])
-    conn.commit()    
-
-# PDF 삭제 함수
-def delete_pdf(conn, doc_id):
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM my_documents WHERE DOC_ID = :1", [doc_id])
-    cursor.execute("DELETE FROM my_vector_store WHERE DOC_ID = :1", [doc_id])
-    conn.commit()
-    cursor.close()
-    
-# 질문 생성 함수
-def generate_answer(conn,system, user_question, doc_ids):
-    cursor = conn.cursor()
-    input_json = json.dumps({"system":system, "question": user_question, "doc_id": doc_ids})
-    print(f"input_josn : {input_json}");
-    result = cursor.callfunc('generate_text_for_chat', oracledb.CLOB, [input_json])
-    return result
-
-# Streamlit 애플리케이션 인터페이스
-def main():
-    st.set_page_config(page_title="PDF 문서 질의 응답 시스템", page_icon=":books:", layout="wide", initial_sidebar_state="expanded")
-    st.markdown("""
-        <style>
-            .main {
-                background-color: #333333;
-                color: #FFFFFF;
-            }
-            .user-bubble {
-                background-color: #1E90FF;
-                padding: 10px;
-                border-radius: 10px;
-                margin: 10px 0;
-                color: #FFFFFF;
-            }
-            .bot-bubble {
-                background-color: #696969;
-                padding: 10px;
-                border-radius: 10px;
-                margin: 10px 0;
-                color: #FFFFFF;
-            }
-            .timestamp {
-                font-size: 0.8em;
-                color: #B0B0B0;
-                text-align: right;
-                margin-top: -10px;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-    st.title("PDF문서 질의 응답 시스템 예제(Oracle AI Vector Search 활용)")
-    conn = get_db_connection()
-    # PDF 업로드 섹션
-    st.header("PDF 파일 업로드")
-    uploaded_file = st.file_uploader("PDF 파일을 업로드하세요.", type="pdf")
-    if uploaded_file is not None:
-        file_name = uploaded_file.name
-        file_size = uploaded_file.size
-        file_type = uploaded_file.type
-        file_content = uploaded_file.read()
-        upload_pdf(conn, file_name, file_size, file_type, file_content)
-        st.success(f"{file_name} 파일이 성공적으로 업로드되었습니다.")
-        # 업로드 후에는 uploaded_file을 None으로 초기화
-        uploaded_file = None
-
-    # PDF 문서 목록 조회 및 선택
-    st.header("PDF 문서 선택")
-    documents = fetch_documents(conn)
-    if documents:
-        doc_ids = []
-        for doc in documents:
-            if st.checkbox(doc[1], key=doc[0]):
-                doc_ids.append(doc[0])
-
-        if st.button("선택한 문서 삭제"):
-            if doc_ids:
-                for doc_id in doc_ids:
-                    delete_pdf(conn, doc_id)
-                st.success("선택한 문서가 삭제되었습니다.")
-                st.rerun()
-            else:
-                st.error("삭제할 문서를 선택하세요.")
-                
-        # 질문 입력 및 응답 생성
-        st.header("질의 및 응답")
-        if "chat_history" not in st.session_state:
-            st.session_state["chat_history"] = []
-             
-        user_question = st.text_input("질문을 입력하세요.")
-        system_instruction = "Please answer only based on searched content. If the searched data does not match the query content, respond with 'No Data'."
-        if st.button("질문 제출"):
-            if doc_ids and user_question:
-                start_time = time.time()
-                answer = generate_answer(conn,system_instruction, user_question, doc_ids)
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                st.session_state["chat_history"].insert(0, (user_question, answer.read(), timestamp))
-                elapsed_time = time.time() - start_time
-                st.caption(f"Total processing time: {round(elapsed_time, 1)} sec.")
-                st.rerun()
-            else:
-                st.error("질문과 선택된 문서가 필요합니다.")
-        if st.session_state["chat_history"]: 
-            for question, answer, timestamp  in st.session_state["chat_history"]:
-                st.markdown(f'<div class="user-bubble"><strong>질문:</strong> {question}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="timestamp">{timestamp}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="bot-bubble"><strong>응답:</strong> {answer}</div>', unsafe_allow_html=True)
-    else:
-        st.info("업로드된 PDF 문서가 없습니다.  PDF 파일을 업로드 해주세요.")
-
-if __name__ == "__main__":
-    main()
+```json
+{
+  "prompt":
+  {
+    "instruction":"당신은 질문에 답변하는 챗봇서비스입니다. 제공된 문서(input_data)기반으로 답변하고, 재공된 문서 외의 정보를 사용하지 않습니다. 문서에서 직접적으로 관련된 답변을 찾을 수 없는 경우 \"제공된 문서에는 질의와 관련된 내용이 없습니다.\"라고 작성하고 소스정보를 제공하지 않습니다. ",
+    "output_format":{
+      "format":"답변은 JSON형식으로만 생성합니다. JSON은 명확히 구조화되어야 하며, Markdown 형식으로 표시하지 마세요.",
+      "example":"{\"user_question\":<사용자질문>,\"generated_text\":\"<생성된답변>\",\"source:[{\"file_name\":\"<참조한파일이름>\",\"text_id\":\"<참조한파일의 상세번호>\",\"content\":\"<참조한문서내용요약>\"}}]"},"input_data":[
+        {"file_name":"SPRi AI Brief_11월호_산업동향_F.pdf","text_id":1,"content":"2024년 11월호2024년 11월호Ⅰ. 인공지능 산업 동향 브리프 1. 정책/법제 ▹ 미국 민권위원회, 연방정부의 얼굴인식 기술 사용에 따른 민권 영향 분석 ························1 ▹ 미국 백악관 예산관리국, 정부의 책임 있는 AI 조달을 위한 지침 발표 ·····························2 ▹ 유로폴, 법 집행에서 AI의 이점과 과제를 다룬 보고서 발간 ··············································3 ▹ OECD, 공공 부문의 AI 도입을 위한 G7 툴킷 발표"},{"file_name":"SPRi AI Brief_11월호_산업동향_F.pdf","text_id":49,"content":"응답도 36%로 여타 기술 전문가(22%) 대비 높은 수치를 기록 KEY Contents £ AI 전문가들, 일반적인 기술 전문가보다 직업 전망에 낙관적 n 미국 기술직 채용 플랫폼 다이스(Dice)의 조사에 따르면, AI 기술 전문가는 일반적인 기술 전문가 대비 기술 산업의 미래와 자기 경력에 대하여 낙관적 ∙ 이번 조사는 520명의 미국 정규직 기술 전문가와 390명의 인사 전문가의 응답을 토대로 기술 분야의 일자리 시장 환경을 분석 ∙ 2024년 동안 주요 빅테크가 기술직에 대한 정리해고를 단행하고 기술직 채용도 2021~2022년 대비 대폭 감소하는 등 일자리 시장의 침체에도 2024년 기술과 사업의 핵심 요소로 부상한 AI 분야의 전문가들은 직업 전망을 낙관 n AI 전문가의 73%는 2025년에 이직을 계획 중이며, 58%는 2024년 중 현재보다 더 나은 새로운 일자리를 찾을 자신이 있다고 응답∙ 일반적인 기술 전문가의 경우 65%가 2025년 중 이직을 계획 중이며, 2024년 더 나은 신규 일자리를 찾을 수 있다고 자신하는 비율은 36%에 불과 ∙ AI 전문가는 빅테크를 선호하는 비율이 29%로 일반적인 기술 전문가(18%) 대비 더 높게 나타났으며, 이는 예산 규모가 더 크고 중요한 AI 프로젝트에 관심이 있거나 빅테크의"},{"file_name":"SPRi AI Brief_11월호_산업동향_F.pdf","text_id":5,"content":"········································14 ▹ 구글 딥마인드, 반도체 칩 레이아웃 설계하는 AI 모델 '알파칩' 발표 ·····························15 ▹ AI21 CEO, AI 에이전트에 트랜스포머 아키텍처의 대안 필요성 강조 ····························16 4. 인력/교육 ▹ MIT 산업성과센터, 근로자 관점에서 자동화 기술의 영향 조사 ········································17 ▹ 다이스 조사, AI 전문가의 73%는 2025년 중 이직 고려"},{"file_name":"SPRi AI Brief_11월호_산업동향_F.pdf","text_id":6,"content":"················································18 ▹ 가트너 예측, AI로 인해 엔지니어링 인력의 80%가 역량 향상 필요 ·····························19 ▹ 인디드 조사 결과, 생성AI가 인간 근로자 대체할 가능성은 희박 ·····································20 Ⅱ. 주요 행사 ▹NeurIPS 2024"},{"file_name":"SPRi AI Brief_11월호_산업동향_F.pdf","text_id":46,"content":"때문이라고 지적 ∙ AI 에이전트가 상용화되려면 데이터 간 연관성을 파악해 확률적으로 가장 그럴듯한 답변을 생성하는 LLM의 신뢰성을 높여야 하며, 필요한 수준의 신뢰성 보장을 위해서는 추가적인 요소의 통합이 필요 ∙ 최근 서비스나우(ServiceNow), 세일즈포스 등 여러 기업이 AI 에이전트나 에이전트 구축을 지원하는 플랫폼을 출시하는 추세로, 고센 CEO는 이러한 추세가 적절한 기반모델과 아키텍처를 조합함으로써 더욱 확산될 것으로 예상 ☞ 출처: Venturebeat, AI21 CEO says transformers not right for AI agents due to error perpetuation, 2024.10.11.1. 정책/법제 2. 기업/산업 3. 기술/연구 4. 인력/교육17MIT 산업성과센터, 근로자 관점에서 자동화 기술의 영향 조사 n MIT 산업성과센터가 설문조사를 통해 근로자 관점의 자동화 기술의 영향을 조사한 결과, 근로자들은 직장 내 안전, 임금, 업무 자율성 등에서 자동화를 긍정적으로 평가 n 복잡한 문제 해결이 필요한 작업을 수행하는 근로자 및 자신의 직무에 만족하는 근로자일수록 자동화의 영향에 긍정적인 것으로 확인 KEY Contents £ 근로자들, 직장 내 안전, 임금, 업무 자율성 등에서 자동화의 영향에 긍정적 n MIT 산업성과센터(IPC)는 2024년 9월 30일 9개국* 9천 명 이상의 근로자에 대한"},{"file_name":"oracle-ai-vector-search-users-guide.pdf","text_id":282,"content":"doc_chunks order by results;ID RESULTS---- ---------3 1.074E+0004 1.086E+0005 1.212E+0005 1.296E+0001 1.304E+0006 1.309E+0001 1.365E+0007 rows selected.• Query about Generative AI:select id, vector_distance(vector,vector_embedding(doc_model using 'gen ai' as data),EUCLIDEAN) resultsFROM doc_chunks order by results;ID RESULTS---- ---------4 1.271E+0003 1.297E+0001 1.309E+0005 1.32E+0001 1.352E+0005 1.388E+0006 1.424E+0007 rows selected.• Query about Networks:select id, vector_distance(vector,vector_embedding(doc_model using 'computing networks' as"},{"file_name":"oracle-ai-vector-search-users-guide.pdf","text_id":360,"content":"json_object_t();jo.put('user_ocid','ocid1.user.oc1..aabbalbbaa1112233aabbaabb1111222aa1111bb');jo.put('tenancy_ocid','ocid1.tenancy.oc1..aaaaalbbbb1112233aaaabbaa1111222aaa111a');jo.put('compartment_ocid','ocid1.compartment.oc1..ababalabab1112233abababab1111222aba11ab');jo.put('private_key','AAAaaaBBB11112222333...AAA111AAABBB222aaa1a/+');jo.put('fingerprint','01:1a:a1:aa:12:a1:12:1a:ab:12:01:ab:a1:12:ab:1a');Chapter 4Vector Generation"},{"file_name":"oracle-ai-vector-search-users-guide.pdf","text_id":529,"content":"\"efConstruction\":300, \"shared_journal_change_log_objn\":74078,\"upcast_dtype\":0, \"rowid_vid_map_name\":\"VECTOR$GALAXIES_HNSW_IDX$HNSW_ROWID_VID_MAP\",\"distance\":\"COSINE\", \"shared_journal_transaction_commits_name\":\"VECTOR$GALAXIES_HNSW_IDX$HNSW_SHARED_JOURNAL_TRANSACTION_COMMITS\",\"accuracy\":95, \"shared_journal_change_log_name\":\"VECTOR$GALAXIES_HNSW_IDX$HNSW_SHARED_JOURNAL_CHANGE_LOG\"}Chapter 11Oracle AI Vector Search Views11-7\"vector_type\":\"INT8\",\"vector_dimension\":5,\"degree_of_parallelism\":1,\"indexed_col\":\"EMBEDDING\"}SQL>Oracle AI Vector Search Statistics These are a set of statistics related to Oracle AI"},{"file_name":"oracle-ai-vector-search-users-guide.pdf","text_id":136,"content":"\"VTIX_CENTRD\".\"CENTROID_ID\"[NUMBER,22]14 - \"VTIX_CENTRD\".\"CENTROID_ID\"[NUMBER,22], VECTOR_DISTANCE(\"VECTOR$GENVEC_IVF_IDX$87355_87370_0$IVF_FLAT_CENTROIDS\".\"CENTROID_VECTOR\" /*+ LOB_BY_VALUE */, VECTOR(:QUERY_VECTOR, *, * /*+ USEBLOBPCW_QVCGMD */ ), EUCLIDEAN)[BINARY_DOUBLE,8]15 - \"VTIX_CNPART\".\"BASE_TABLE_ROWID\"[ROWID,10], \"VTIX_CNPART\".\"CENTROID_ID\"[NUMBER,22], VECTOR_DISTANCE(\"VTIX_CNPART\".\"DATA_VECTOR\" /*+ LOB_BY_VALUE */ ,VECTOR(:QUERY_VECTOR, *, * /*+ USEBLOBPCW_QVCGMD */ ), EUCLIDEAN)[BINARY_DOUBLE,8]16"},{"file_name":"oracle-ai-vector-search-users-guide.pdf","text_id":17,"content":"Indexes8-3D:20240628094054-08'00' Optimizer Plans for Vector Indexes8-5D:20240628094054-08'00' Optimizer Plans for HNSW Vector Indexes8-6D:20240628094054-08'00' Optimizer Plans for IVF Vector Indexes8-8D:20240628094054-08'00' Approximate Similarity Search Examples8-9D:20240628094054-08'00' Approximate Search Using HNSW8-10D:20240628094054-08'00' Approximate Search Using IVF8-11D:20240628094054-08'00' Perform Multi-Vector Similarity Search8-139 Work with Retrieval Augmented GenerationComplement LLMs with Oracle AI Vector Search 9-1SQL RAG Example 9-310 Supported Clients and Languages11 Vector DiagnosticsOracle AI Vector Search Views 11-1Vector Utilities-Related Views 11-1ALL_VECTOR_ABBREV_TOKENS 11-2ALL_VECTOR_LANG 11-2USER_VECTOR_ABBREV_TOKENS 11-2USER_VECTOR_LANG 11-3USER_VECTOR_VOCAB"}],"user_question":"2024년 AI 산업동향은 어떻게 되나요?"},
+"answer":{
+  "user_question": "2024년 AI 산업동향은 어떻게 되나요?",
+  "generated_text": "2024년 AI 산업 동향에 따르면, AI 기술 전문가는 일반적인 기술 전문가보다 직업 전망에 대해 더 낙관적이며, 2024년 동안 주요 빅테크가 기술직에 대한 정리해고를 단행하고 채용이 감소하는 상황에서도 AI 분야의 전문가는 직업 전망을 긍정적으로 보고 있습니다. MIT 산업성과센터의 조사에 따르면, 근로자들은 자동화 기술의 영향을 직장 내 안전, 임금, 업무 자율성 등에서 긍정적으로 평가하고 있습니다. 또한, 유로폴은 법 집행에서 AI의 이점과 과제를 다룬 보고서를 발간하였고, OECD는 공공 부문의 AI 도입을 위한 G7 툴킷을 발표하였습니다.",
+  "source": [
+    {
+      "file_name": "SPRi AI Brief_11월호_산업동향_F.pdf",
+      "text_id": 49,
+      "content": "AI 전문가들은 일반적인 기술 전문가보다 직업 전망에 낙관적이며, 2024년 동안 주요 빅테크가 기술직에 대한 정리해고를 단행하고 기술직 채용도 2021~2022년 대비 대폭 감소하는 등 일자리 시장의 침체에도 AI 분야의 전문가들은 직업 전망을 낙관적으로 보고 있습니다."
+    },
+    {
+      "file_name": "SPRi AI Brief_11월호_산업동향_F.pdf",
+      "text_id": 6,
+      "content": "MIT 산업성과센터가 조사한 결과, 근로자들은 직장 내 안전, 임금, 업무 자율성 등에서 자동화의 영향을 긍정적으로 평가하고 있습니다."
+    },
+    {
+      "file_name": "SPRi AI Brief_11월호_산업동향_F.pdf",
+      "text_id": 1,
+      "content": "유로폴은 법 집행에서 AI의 이점과 과제를 다룬 보고서를 발간하였고, OECD는 공공 부문의 AI 도입을 위한 G7 툴킷을 발표하였습니다."
+    }
+  ]
+}}
 ```
-
-streamlit 명령어로 간단한 웹 애플리케이션을 실행할수 있습니다. 
-
-{% include codeHeader.html copyable="true" codetype="python"%}
-```python
-streamlit run sql_rag.py
-```
-
-**데모영상**
-
-애플리케이션 실행화면입니다. (약 1분 50초의 동영상입니다.)
-
-데모영상의 순서는 아래와 같습니다. 
-1. 두개의 파일을 업로드합니다
-  - Oracle AI Vector Search User Guide 문서
-  - Transaction Event Queue 문서
-2. 아래와 같이 문서를 선택후 질의를 합니다. 
-  1. 두개의 문서를 선택후 What is the Oracle Vector Search? 질의를 합니다. 질의 관련된 답변!!
-  2. Transaction Event Queue문서만 선택후 What is the Oracle Vector Search? 질의를 합니다. 검색된 결과가 없다고 답변!!
-  3. Oracle AI Vector Search User Guide문서만 선택후 What is the Transaction Event Queue? 질의를 합니다. 검색된 결과가 없다고 답변!!
-  4. Transaction Event Queue문서만 선택후 What is the Transaction Event Queue? 질의를 합니다. 질의 관련된 답변!! 
-  5. 두개의 문서를 선택후 What is the Transaction Event Queue? 질의를 합니다.  질의 관련된 답변!!
   
-{% include video id="On7Y5pQIGzU" provider="youtube" %}
 
 ## 마무리
 
 지금까지 SQL을 이용하여 RAG구현하는 방법에 대해서 알아보았습니다. 
-데이터베이스에 임베딩 모델을 로드하여 저장하여 백터 검색을 SQL로 간편하게 수행할수 있습니다. 
-외부 LLM모델은 인증정보(Access Token)만 있으면 데이터베이스에서 직접 호출할수도 있습니다.
+데이터베이스에 임베딩 모델을 로드하여 저장하여 백터 검색을 SQL로 간편하게 수행할수 있습니다. 데이터베이스에서 외부 생성형 AI와 직접 호출할수도 있습니다.
 
 위 두가지 기능을 연결하면 LLM에서 질의와 관련된 텍스트 정보를 제공하여 RAG를 구현할수 있습니다. 
-웹 UI를 위하여 Python코드를 작성하였지만, 
 오라클 데이터베이스에서 기업내 혹은 클라우드상에 있는 LLM을 PL/SQL을 통해서 직접 연동 할수 있습니다. 
 
 기업의 데이터를 LLM모델로 옮길것이 아니라, 기업의 데이터가 있는 데이터베이스에서 직접 LLM과 연동한다면 기존 애플리케이션 변경을 줄이면서 좀더 다양한 업무에 간편하게 적용할수 있지 않을까 싶습니다. 
