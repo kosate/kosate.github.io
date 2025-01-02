@@ -1,14 +1,12 @@
 ---
 layout: single
-title: Linux환경에서 Miniconda와 Jupyter설정하기
+title: "[Python] Miniconda와 Jupyter설정하기"
 date: 2024-06-03 21:00
 categories: 
-  - linux
+  - python
 author: 
 tags: 
-  - linux
-  - cloud
-  - noVNC
+  - Python
 excerpt : Python 실행환경을 관리하기 위하여 가상환경을 설정할수 있습니다. Miniconda로 가상환경을 설정하고 Jupyter로 가상환경을 사용할수 있도록 kernel추가하는 방법에 대해서 알아보겠습니다. 
 header :
   teaser: /assets/images/blog/cloud2.jpg
@@ -17,25 +15,17 @@ toc : true
 toc_sticky: true
 ---
 
-## 테스트 환경
-
-|서버환경|서버종류|OS종류|OS버전|
-|-|-|-|-|-|-|-|-|
-|OCI|VM(x86)|Oracle Linux(redhat계열)|8.9|
-
 ## 들어가며 
 
-Python 프로그램을 작성할경우 라이브러리간 Dependency가 복잡하게 연결되어 있어 관리하기 힘듦니다.
-그래서 애플리케이션별로 환경을 분리하여 운영하는것이 추후 변경관리할때 좋습니다. 
+Python 프로그램을 작성하다 보면 라이브러리 간 의존 관계(Dependency)가 복잡해져서 관리하기 어려울 때가 많습니다. 이런 문제를 해결하기 위해, 애플리케이션별로 독립된 환경을 만들어 운영하는 것이 나중에 수정하거나 업그레이드할 때 훨씬 유리합니다.
 
-개발환경을 구분하기 위하여 Python환경 관리자인 anaconda와 Miniconda를 고려해볼수 있습니다. 
-anaconda는 데이터과학 및 데이터 분석을 위한 패키지들을 제공하며 설치파일 크기가 상당히 큽니다.
-내가 개발하려는 환경을 경량하게 관리하고자 할경우 miniconda를 이용해서 관리할수 있습니다. 
-그외 virtualevn, poetry, pyenv등의 도구들도 있습니다.
+Python 환경을 효율적으로 관리하려면 여러 도구를 사용할 수 있습니다. 그중 대표적인 것이 Anaconda와 Miniconda입니다.
+-	Anaconda는 데이터 과학 및 데이터 분석에 필요한 다양한 패키지가 포함된 완전한 배포판입니다. 하지만 설치 파일 크기가 커서 용량이 부담스러울 수 있습니다.
+-	반면, Miniconda는 가벼운 버전으로, 필요한 패키지만 설치하여 효율적으로 환경을 관리할 수 있습니다.
 
-본 내용에서는 miniconda로 설치환경을 구성하고 jupyter에서 miniconda로 구성된 환경을 사용하도록 연결하는 절차에 대해서 알아보도록 하겠습니다. 
+이 외에도 virtualenv, poetry, pyenv와 같은 도구들이 있지만, 이번 내용에서는 Miniconda를 활용하여 Python 설치 환경을 구성하고, 이를 Jupyter Notebook과 연결하는 방법을 살펴보겠습니다.
 
-oracle OS유저가 있다고 가정하고 oracle OS유저영역에서 구성하도록 하겠습니다.설치하도록 하겠습니다.
+가정으로 Oracle OS 사용자를 기준으로 설정 과정을 진행하도록 하겠습니다. 이제 설치 및 설정 과정을 시작해 보겠습니다!
 
 ## Miniconda 설치 및 가상환경 추가
 
@@ -97,6 +87,18 @@ shell을 다시 접속하면 아래와 같이 보입니다. 쉘 프롬프트앞�
 sudo su – oracle
 (base) oracle>$
 ```
+
+패키지 설치 시 conda-forge 저장소를 우선적으로 사용하게 되어 라이선스 문제를 회피하도록 설정합니다.
+
+{% include codeHeader.html runas="oracle" copyable="true" codetype="shell" elapsedtime="5 sec" %}
+```bash
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda config --remove channels defaults
+``` 
+
+> Miniconda는 Anaconda의 경량화된 배포판으로, 기본적인 Python 환경과 패키지 관리 도구인 conda만을 포함하고 있습니다. Anaconda는 2020년 9월 30일부터 상업적 사용에 대한 라이선스 정책을 변경하여, 직원 수가 200명 이상인 기업에서  Anaconda의 공식 저장소를 사용하는 경우 유료 라이선스가 필요합니다. 그러나 Miniconda 자체는 무료로 사용할 수 있으며, 공식 저장소 대신 커뮤니티 기반의 패키지 저장소인 conda-forge를 활용하면 라이선스 문제를 피할 수 있습니다. Anaconda의 CEO인 피터 왕(Peter Wang)도 이러한 방법을 권장한 바 있습니다. 
+
 
 miniconda를 이용하여 python버전이 다른 두개의 환경을 구성하도록 하겠습니다. 
 
@@ -249,11 +251,11 @@ notebook을 임의적으로 만들고 오른쪽 상단에서 kernel값을 변경
 
 ## 마무리
 
-지금까지 miniconda를 설치하고 app1,app2의 가상 python환경을 생성하였습니다. 
-생성된 python가상환경을 jupyter에서 사용할수 있도록 kernel로 등록했습니다. 
+지금까지 Miniconda를 설치한 뒤, 각 애플리케이션에 맞춘 가상 Python 환경(예: app1, app2)을 생성하고, 이를 Jupyter Notebook에서 사용할 수 있도록 커널로 등록하는 과정을 살펴보았습니다.
 
-앞서 설명했듯이 python라이브러리 관리를 위해서 다양한 방식으로 관리할수 있습니다. 
-저처럼 처음 python을 접하신분들에게 유용한 tip이 되었으면 좋겠습니다.
+앞서 설명했듯이, Python 라이브러리는 다양한 방법으로 관리할 수 있습니다. 이번에 소개한 Miniconda는 처음 Python을 접하는 분들에게 가볍고 실용적인 선택지가 될 수 있습니다.
+
+이 글이 Python 환경 관리에 대해 고민하던 분들에게 유용한 팁이 되었기를 바랍니다. 여러분도 이제 Miniconda를 활용하여 효율적인 개발 환경을 만들어 보세요!
 
 ## 참고문서
 

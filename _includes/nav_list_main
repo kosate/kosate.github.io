@@ -39,6 +39,13 @@
                 {% endif %}
             {% endfor %}
         </ul> 
+        <ul> 
+            {% for category in site.categories %}
+                {% if category[0] == "python" %}
+                    <li><a href="/categories/python" class="">파이썬 ({{category[1].size}})</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul> 
         <span class="nav__sub-title">인공지능</span>
         <ul> 
             {% for category in site.categories %}
