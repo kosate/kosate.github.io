@@ -256,7 +256,7 @@ where a.id = b.id;
 X, Y좌표와 텍스트를 확인할수 있으므로 2차원 그래프로 시각화하면 아래와 같습니다. 
 (아래 그램은 오라클의 로우코드 플랫폼인 APEX를 사용하였습니다. Scatter Chart로 작성되었습니다.)
 
-![](/assets/images/blog/aivectorsearch/vector_Data_visual.png)
+![](/assets/images/blog/aivectorsearch/vector_data_visual.png)
 
 
 위 그래프를 통해서 확인했을때 "노트북을 사용하면서 불편했던 점이나 개선하고 싶은 점은 무엇인가요?" 질문에 가장 가까운 텍스트는 "노트북의 발열 문제 때문에 쿨링 패드를 따로 구입했다." 이 될것입니다. 
