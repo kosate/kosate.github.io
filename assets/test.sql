@@ -39,3 +39,24 @@ begin
   end loop;
 end;
 /
+
+
+
+- ONS 설정 확인
+```shell
+[oracle@racsharding1 ~]$ srvctl config ons
+ONS exists: Local port 6100, remote port 6200, EM port 2016, Uses SSL true, Allow unsecure YES
+ONS is enabled
+ONS is individually enabled on nodes: 
+ONS is individually disabled on nodes: 
+[oracle@racsharding1 ~]$   
+```
+
+UCP에서 ONS 아이피 설정
+```java
+PoolDataSource pds = PoolDataSourceFactory.getPoolDataSource();
+// ... other configurations (e.g., setURL, setUser, setPassword)
+
+// Set ONS configuration with host1:port1, host2:port2
+pds.setONSConfiguration("nodes=152.70.249.241:6100,129.154.219.98:6200");
+```
